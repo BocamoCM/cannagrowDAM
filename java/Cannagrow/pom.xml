@@ -54,7 +54,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version> <!-- Actualizada a la versión más reciente -->
+        <version>3.10.1</version> <!-- Versión más reciente -->
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
@@ -65,7 +65,7 @@
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.8</version> <!-- Versión estable del plugin -->
+        <version>0.0.8</version> <!-- Versión estable -->
         <executions>
           <execution>
             <id>default-cli</id>
@@ -80,11 +80,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.3.0</version> <!-- Versión funcional -->
+        <version>3.3.0</version> <!-- Versión estable y funcional -->
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.example.cannagrow.Main</mainClass>
+              <mainClass>com.example.cannagrow.Main</mainClass> <!-- Asegura que el Main Class esté configurado correctamente -->
             </manifest>
           </archive>
           <descriptorRefs>
