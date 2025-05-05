@@ -29,12 +29,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      # Cambiar al directorio donde se encuentra el pom.xml
+      - name: Change to the project directory
+        run: cd java/Cannagrow
+
+      # Instalar dependencias
       - name: Install dependencies
         run: mvn clean install
+        working-directory: java/Cannagrow
 
       # Verificar que el JAR ha sido generado en el directorio 'target'
       - name: List target directory
         run: dir ./target
+        working-directory: java/Cannagrow
 
       # Crear un ejecutable .exe con jpackage
       - name: Package with jpackage
@@ -47,6 +54,7 @@ jobs:
             --win-dir-chooser \
             --win-shortcut \
             --win-menu
+        working-directory: java/Cannagrow
         env:
           JAVA_HOME: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.4-7.0.LTS\x64
           JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.4-7.0.LTS\x64
