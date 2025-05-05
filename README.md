@@ -1,4 +1,3 @@
-# cannagrowDAM
 ## Tienda de Cannabis Legal de Confianza
 
 **Especialistas en productos para el cultivo y consumo de cannabis dentro del marco legal**
