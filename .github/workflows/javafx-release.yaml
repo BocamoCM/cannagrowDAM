@@ -1,45 +1,41 @@
-name: Build and Create .exe for Java App
+name: Build Cannagrow App on Windows
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - java  # Se ejecuta cuando hay un push a la rama "java"
   pull_request:
-    branches:
-      - java  # Se ejecuta cuando hay un pull request hacia la rama "java"
 
 jobs:
-  build:
-    runs-on: windows-latest  # Define que la ejecución será en Windows
-    
+  build-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./java/Cannagrow
     steps:
-      - name: Check out the code
-        uses: actions/checkout@v3  # Acción para obtener el código fuente del repositorio
+      
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Set up JDK 21.0.4
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21.0.4'  # Usamos la versión específica de Java 21.0.4
-          distribution: 'adoptopenjdk'  # Puedes usar otras distribuciones si lo prefieres
+    - name: Set up JDK 21.0.4
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21.0.4'  # Usamos Java 21.0.4
 
-      - name: Install Maven
-        uses: actions/setup-java@v3
-        with:
-          maven-version: '3.8.1'  # Especifica la versión de Maven que deseas usar
+    - name: Build with Maven
+      run: mvn clean package
 
-      - name: Build with Maven
-        run: mvn clean install  # Ejecuta Maven para compilar el proyecto
+    - name: Run Tests
+      run: mvn test
 
-      - name: Generate .exe with Launch4j
-        run: |
-          # Instalar Launch4j
-          choco install launch4j  # Usa Chocolatey para instalar Launch4j
-          
-          # Crear el archivo .exe
-          launch4j myApp.xml  # Reemplaza "myApp.xml" con la configuración específica de Launch4j
+    - name: Install Launch4j
+      run: choco install launch4j  # Instala Launch4j usando Chocolatey
 
-      - name: Upload .exe as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: my-app-exe  # Nombre del archivo de artefacto
-          path: target/mi-app.exe  # Ruta a donde se encuentra el archivo .exe
+    - name: Generate .exe with Launch4j
+      run: launch4j ./java/Cannagrow/launch4j-config.xml  # Asegúrate de tener el archivo de configuración adecuado
+
+    - name: Upload Windows Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-build
+        path: ./java/Cannagrow/target
