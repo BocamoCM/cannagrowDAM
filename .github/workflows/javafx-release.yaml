@@ -92,13 +92,80 @@ jobs:
             Copy-Item "target\Cannagrow-1.0-SNAPSHOT.jar" -Destination $jar 
           }
           
-          # Use the launch4j from the repository
-          $launch4jExe = "tools\launch4j-3.50-win32\launch4j.exe"
-          if (Test-Path $launch4jExe) {
-            Write-Host "Using Launch4j 3.50 from repository: $launch4jExe"
-            & $launch4jExe "src\launch4j\launch4j.xml"
+          # Look for launch4j in various potential locations
+          $repoRoot = Resolve-Path -Path "..\.." -ErrorAction SilentlyContinue
+          
+          Write-Host "Searching for launch4j.exe in repository..."
+          Write-Host "Current directory: $(Get-Location)"
+          Write-Host "Repository root should be: $repoRoot"
+          
+          # List directories to help debug
+          Write-Host "Repository content (top level):"
+          Get-ChildItem -Path $repoRoot -ErrorAction SilentlyContinue | Select-Object Name
+          
+          # Try different potential locations
+          $potentialLocations = @(
+            "tools\launch4j-3.50-win32\launch4j.exe",
+            "$repoRoot\tools\launch4j-3.50-win32\launch4j.exe",
+            "..\..\tools\launch4j-3.50-win32\launch4j.exe",
+            "..\tools\launch4j-3.50-win32\launch4j.exe",
+            "tools\launch4j\launch4j.exe",
+            "$repoRoot\tools\launch4j\launch4j.exe",
+            "..\..\tools\launch4j\launch4j.exe"
+          )
+          
+          $launch4jExe = $null
+          foreach ($location in $potentialLocations) {
+            Write-Host "Checking for Launch4j at: $location"
+            if (Test-Path $location) {
+              $launch4jExe = $location
+              Write-Host "Found Launch4j at: $launch4jExe"
+              break
+            }
+          }
+          
+          # If not found in predefined locations, search entire repo
+          if (-not $launch4jExe) {
+            Write-Host "Searching entire repository for launch4j.exe..."
+            $searchResult = Get-ChildItem -Path $repoRoot -Filter "launch4j.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($searchResult) {
+              $launch4jExe = $searchResult.FullName
+              Write-Host "Found Launch4j at: $launch4jExe"
+            }
+          }
+          
+          # If still not found, attempt to download
+          if (-not $launch4jExe) {
+            Write-Host "Launch4j not found in repository. Downloading from GitHub mirror..."
+            
+            # Create temporary directory
+            New-Item -Path "temp_launch4j" -ItemType Directory -Force
+            
+            # Download from mirror
+            $launch4jMirrorUrl = "https://github.com/DrOverbuild/launch4j-mirror/raw/main/launch4j-3.14-win32.zip"
+            curl.exe -L -o "temp_launch4j\launch4j.zip" $launch4jMirrorUrl
+            
+            # Extract
+            Expand-Archive -Path "temp_launch4j\launch4j.zip" -DestinationPath "temp_launch4j" -Force
+            
+            # Find executable
+            $launch4jExe = Get-ChildItem -Path "temp_launch4j" -Filter "launch4j.exe" -Recurse | Select-Object -First 1 -ExpandProperty FullName
+            
+            if (-not $launch4jExe) {
+              throw "Could not find or download launch4j.exe"
+            }
+          }
+          
+          # Run launch4j
+          Write-Host "Using Launch4j at: $launch4jExe"
+          Write-Host "Using configuration from src\launch4j\launch4j.xml"
+          & $launch4jExe "src\launch4j\launch4j.xml"
+          
+          # Verify the executable was created
+          if (Test-Path "target\windows-executable\Cannagrow.exe") {
+            Write-Host "EXE created successfully"
           } else {
-            throw "Could not find launch4j.exe in the repository at $launch4jExe"
+            throw "Failed to create Cannagrow.exe"
           }
           
           # Verify the executable was created
