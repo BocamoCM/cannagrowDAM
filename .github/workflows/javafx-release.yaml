@@ -33,16 +33,18 @@ jobs:
         java --version
         jpackage --version  # Verifica si jpackage está disponible
 
+    - name: List contents of target directory
+      run: |
+        # Asegúrate de que el archivo JAR con las dependencias está en la carpeta target
+        dir ./target  # Ajusta según la ubicación correcta del directorio 'target'
+
     - name: Create .exe with jpackage
       run: |
-        # Verifica si el JAR se generó en el directorio 'target'
-        dir ./java/Cannagrow/target
-
-        # Crea un ejecutable .exe con jpackage usando la ruta correcta
-        jpackage --input ./java/Cannagrow/target --name CannagrowApp --main-jar Cannagrow-<version>.jar --main-class com.cannagrow.Main --type exe --win-dir-chooser --win-shortcut --win-menu
+        # Crea un ejecutable .exe con jpackage usando el nombre correcto del archivo JAR
+        jpackage --input ./target --name CannagrowApp --main-jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar --main-class com.example.cannagrow.Main --type exe --win-dir-chooser --win-shortcut --win-menu
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: windows-build
-        path: ./java/Cannagrow/target
+        path: ./target
