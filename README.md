@@ -1,3 +1,11 @@
+[![Legal Compliance](https://img.shields.io/badge/Legal%20Compliance-✔️-2ECC71)](#)  
+[![Certified Quality](https://img.shields.io/badge/Certified%20Quality-A%2B-3498DB)](#)  
+[![10+ Years Experience](https://img.shields.io/badge/Experience-10%2B%20Years-F1C40F)](#)  
+[![Free Shipping](https://img.shields.io/badge/Free%20Shipping-✔️-9B59B6)](#)  
+[![Discreet Packaging](https://img.shields.io/badge/Discreet%20Packaging-✔️-E67E22)](#)  
+[![Secure Payment](https://img.shields.io/badge/Secure%20Payment-SSL%20Encrypted-E74C3C)](#)  
+[![24/7 Support](https://img.shields.io/badge/24%2F7%20Support-✔️-34495E)](#)  
+
 ## Tienda de Cannabis Legal de Confianza
 
 **Especialistas en productos para el cultivo y consumo de cannabis dentro del marco legal**
