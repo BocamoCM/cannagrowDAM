@@ -5,7 +5,6 @@ module com.example.cannagrow {
 
     // API JDBC estándar
     requires java.sql;
-    requires com.mysql.cj.jdbc;
 
 
     // Otros módulos de JDK si realmente los necesitas
