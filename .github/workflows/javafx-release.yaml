@@ -10,10 +10,6 @@ jobs:
     name: Build and Release on Windows
     runs-on: windows-latest
 
-    defaults:
-      run:
-        working-directory: java/Cannagrow
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,10 +21,12 @@ jobs:
           java-version: '23.0.1'
 
       - name: Build with Maven
+        working-directory: java/Cannagrow
         run: mvn clean package
 
       - name: Get version from pom.xml
         id: get_version
+        working-directory: java/Cannagrow
         shell: pwsh
         run: |
           $version = & mvn help:evaluate -Dexpression=project.version -q -DforceStdout
