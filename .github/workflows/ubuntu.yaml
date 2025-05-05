@@ -1,7 +1,7 @@
 name: Build and Package Cannagrow (Ubuntu)
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Esto permite ejecutar el flujo de trabajo manualmente desde la web de GitHub
 
 jobs:
   build:
@@ -24,12 +24,13 @@ jobs:
         run: mvn clean install
         working-directory: ./java/Cannagrow
         shell: bash
+        continue-on-error: false  # Asegura que el trabajo se detenga si hay un error
 
       # Paso 4: Verificar existencia del JAR
       - name: Find JAR file
         run: |
           echo "Buscando archivos JAR en ./java/Cannagrow/target"
-          find ./java/Cannagrow/target -name "*.jar"
+          find ./java/Cannagrow/target -name "*.jar" || exit 1  # Si no se encuentra JAR, termina el trabajo
         shell: bash
 
       # Paso 5: Descargar y extraer JavaFX jmods
@@ -37,15 +38,25 @@ jobs:
         run: |
           mkdir -p ./java/Cannagrow/jmods
           wget https://download2.gluonhq.com/openjfx/21/openjfx-21_linux-x64_bin-jmods.zip -O ./java/Cannagrow/javafx-jmods.zip
-          unzip -o ./java/Cannagrow/javafx-jmods.zip -d ./java/Cannagrow/jmods
-          echo "Contenido de jmods:"
-          ls -R ./java/Cannagrow/jmods
+          if [ $? -eq 0 ]; then
+            unzip -o ./java/Cannagrow/javafx-jmods.zip -d ./java/Cannagrow/jmods
+            echo "Contenido de jmods:"
+            ls -R ./java/Cannagrow/jmods
+          else
+            echo "Error al descargar los jmods"
+            exit 1
+          fi
         shell: bash
 
       # Paso 6: Crear runtime y empaquetar
       - name: Package with jpackage
         run: |
           jmods_path=$(find ./java/Cannagrow/jmods -type d -name "javafx-jmods-21")
+          if [ -z "$jmods_path" ]; then
+            echo "No se encontró la ruta de los jmods, abortando."
+            exit 1
+          fi
+
           echo "Ruta a los jmods: $jmods_path"
 
           cd ./java/Cannagrow
