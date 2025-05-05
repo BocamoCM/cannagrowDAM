@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - java
-  workflow_dispatch:  # Permite ejecución manual desde GitHub
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 23.0.1 (Temurin)
+      - name: Set up JDK 23.0.1
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -30,7 +30,6 @@ jobs:
         working-directory: java/Cannagrow
         shell: bash
         run: |
-          set -e
           version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "VERSION=$version" >> $GITHUB_ENV
           echo "version=$version" >> $GITHUB_OUTPUT
@@ -42,7 +41,7 @@ jobs:
           git config user.email "github-actions@github.com"
           git tag -a v${{ steps.get_version.outputs.version }} -m "Release v${{ steps.get_version.outputs.version }}"
 
-      - name: Push Git tag
+      - name: Push Git tag using PAT
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin v${{ steps.get_version.outputs.version }}
