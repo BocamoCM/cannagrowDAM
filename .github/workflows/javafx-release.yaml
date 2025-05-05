@@ -1,182 +1,45 @@
-name: Build Cannagrow App
+name: Build and Create .exe for Java App
 
 on:
-  workflow_dispatch:
   push:
-    branches: [ java ]
+    branches:
+      - java  # Se ejecuta cuando hay un push a la rama "java"
   pull_request:
-    branches: [ java ]
+    branches:
+      - java  # Se ejecuta cuando hay un pull request hacia la rama "java"
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./java/Cannagrow
+  build:
+    runs-on: windows-latest  # Define que la ejecución será en Windows
+    
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out the code
+        uses: actions/checkout@v3  # Acción para obtener el código fuente del repositorio
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - name: Set up JDK 21.0.4
+        uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
+          java-version: '21.0.4'  # Usamos la versión específica de Java 21.0.4
+          distribution: 'adoptopenjdk'  # Puedes usar otras distribuciones si lo prefieres
+
+      - name: Install Maven
+        uses: actions/setup-java@v3
+        with:
+          maven-version: '3.8.1'  # Especifica la versión de Maven que deseas usar
 
       - name: Build with Maven
-        run: mvn clean package assembly:single
+        run: mvn clean install  # Ejecuta Maven para compilar el proyecto
 
-      - name: Run Tests
-        run: mvn test
-
-      - name: Create Linux executable (.deb)
+      - name: Generate .exe with Launch4j
         run: |
-          mkdir -p target/linux-executable
-          if [ ! -f "target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar" ]; then
-            cp target/Cannagrow-1.0-SNAPSHOT.jar target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar
-          fi
-          sudo apt-get update && sudo apt-get install -y fakeroot binutils
-          jpackage --input target/ \
-                   --name Cannagrow \
-                   --main-jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar \
-                   --main-class com.example.cannagrow.Main \
-                   --type deb \
-                   --app-version 1.0.0 \
-                   --vendor "Your Company" \
-                   --description "Cannagrow Application" \
-                   --dest target/linux-executable
+          # Instalar Launch4j
+          choco install launch4j  # Usa Chocolatey para instalar Launch4j
+          
+          # Crear el archivo .exe
+          launch4j myApp.xml  # Reemplaza "myApp.xml" con la configuración específica de Launch4j
 
-      - name: Upload Linux Artifacts
-        uses: actions/upload-artifact@v4
+      - name: Upload .exe as Artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: linux-build
-          path: |
-            ./java/Cannagrow/target/*.jar
-            ./java/Cannagrow/target/linux-executable
-
-  build-windows:
-    runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: ./java/Cannagrow
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
-
-      - name: Build with Maven
-        run: mvn clean package assembly:single
-
-      - name: Run Tests
-        run: mvn test
-
-      - name: Create Windows executable
-        shell: powershell
-        run: |
-          mkdir -Path "target\windows-executable" -Force
-          
-          # Verify that launch4j config exists
-          if (-not (Test-Path "src\launch4j\launch4j.xml")) {
-            throw "Required configuration file src\launch4j\launch4j.xml does not exist"
-          }
-          
-          # Ensure the jar exists
-          $jar = "target\Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar"
-          if (-not (Test-Path $jar)) { 
-            Write-Host "JAR with dependencies not found, copying regular JAR"
-            Copy-Item "target\Cannagrow-1.0-SNAPSHOT.jar" -Destination $jar 
-          }
-          
-          # Look for launch4j in various potential locations
-          $repoRoot = Resolve-Path -Path "..\.." -ErrorAction SilentlyContinue
-          
-          Write-Host "Searching for launch4j.exe in repository..."
-          Write-Host "Current directory: $(Get-Location)"
-          Write-Host "Repository root should be: $repoRoot"
-          
-          # List directories to help debug
-          Write-Host "Repository content (top level):"
-          Get-ChildItem -Path $repoRoot -ErrorAction SilentlyContinue | Select-Object Name
-          
-          # Try different potential locations
-          $potentialLocations = @(
-            "tools\launch4j-3.50-win32\launch4j.exe",
-            "$repoRoot\tools\launch4j-3.50-win32\launch4j.exe",
-            "..\..\tools\launch4j-3.50-win32\launch4j.exe",
-            "..\tools\launch4j-3.50-win32\launch4j.exe",
-            "tools\launch4j\launch4j.exe",
-            "$repoRoot\tools\launch4j\launch4j.exe",
-            "..\..\tools\launch4j\launch4j.exe"
-          )
-          
-          $launch4jExe = $null
-          foreach ($location in $potentialLocations) {
-            Write-Host "Checking for Launch4j at: $location"
-            if (Test-Path $location) {
-              $launch4jExe = $location
-              Write-Host "Found Launch4j at: $launch4jExe"
-              break
-            }
-          }
-          
-          # If not found in predefined locations, search entire repo
-          if (-not $launch4jExe) {
-            Write-Host "Searching entire repository for launch4j.exe..."
-            $searchResult = Get-ChildItem -Path $repoRoot -Filter "launch4j.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-            if ($searchResult) {
-              $launch4jExe = $searchResult.FullName
-              Write-Host "Found Launch4j at: $launch4jExe"
-            }
-          }
-          
-          # If still not found, attempt to download
-          if (-not $launch4jExe) {
-            Write-Host "Launch4j not found in repository. Downloading from GitHub mirror..."
-            
-            # Create temporary directory
-            New-Item -Path "temp_launch4j" -ItemType Directory -Force
-            
-            # Download from mirror
-            $launch4jMirrorUrl = "https://github.com/DrOverbuild/launch4j-mirror/raw/main/launch4j-3.14-win32.zip"
-            curl.exe -L -o "temp_launch4j\launch4j.zip" $launch4jMirrorUrl
-            
-            # Extract
-            Expand-Archive -Path "temp_launch4j\launch4j.zip" -DestinationPath "temp_launch4j" -Force
-            
-            # Find executable
-            $launch4jExe = Get-ChildItem -Path "temp_launch4j" -Filter "launch4j.exe" -Recurse | Select-Object -First 1 -ExpandProperty FullName
-            
-            if (-not $launch4jExe) {
-              throw "Could not find or download launch4j.exe"
-            }
-          }
-          
-          # Run launch4j
-          Write-Host "Using Launch4j at: $launch4jExe"
-          Write-Host "Using configuration from src\launch4j\launch4j.xml"
-          & $launch4jExe "src\launch4j\launch4j.xml"
-          
-          # Verify the executable was created
-          if (Test-Path "target\windows-executable\Cannagrow.exe") {
-            Write-Host "EXE created successfully"
-          } else {
-            throw "Failed to create Cannagrow.exe"
-          }
-          
-          # Verify the executable was created
-          if (Test-Path "target\windows-executable\Cannagrow.exe") {
-            Write-Host "EXE created successfully"
-          } else {
-            throw "Failed to create Cannagrow.exe"
-          }
-
-      - name: Upload Windows EXE
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-exe
-          path: ./java/Cannagrow/target/windows-executable/Cannagrow.exe
+          name: my-app-exe  # Nombre del archivo de artefacto
+          path: target/mi-app.exe  # Ruta a donde se encuentra el archivo .exe
