@@ -5,4 +5,6 @@ module com.example.cannagrow {
 
     opens com.example.cannagrow to javafx.fxml;
     exports com.example.cannagrow;
+    requires java.sql;
+    requires mysql.connector.j;
 }
