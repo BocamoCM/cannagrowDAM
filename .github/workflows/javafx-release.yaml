@@ -28,22 +28,19 @@ jobs:
     - name: Run Tests
       run: mvn test
 
-    - name: Install Launch4j
-      run: choco install launch4j -y  # Instala Launch4j usando Chocolatey, -y para auto-confirmar
-
-    - name: Verify Launch4j Installation
+    - name: Install jpackage (if necessary)
       run: |
-        echo "Verificando la instalación de Launch4j..."
-        dir "C:\ProgramData\chocolatey\bin"  # Verifica si Launch4j está en esta ruta
+        choco install jdk21  # Esto instalará JDK 21, que debería incluir jpackage
 
-    - name: Show Launch4j in PATH
-      run: echo $Env:PATH  # Muestra el PATH para verificar si Launch4j está incluido
-
-    - name: Generate .exe with Launch4j
+    - name: Verify jpackage installation
       run: |
-        # Intenta ejecutar Launch4j usando la ruta completa
-        & "C:\ProgramData\chocolatey\bin\launch4j.exe" "./java/Cannagrow/launch4j-config.xml"  
-        # Si el paso anterior no funciona, asegúrate de que la ruta es la correcta
+        java --version
+        jpackage --version  # Verifica si jpackage está disponible
+
+    - name: Create .exe with jpackage
+      run: |
+        # Crea un ejecutable .exe con jpackage
+        jpackage --input ./java/Cannagrow/target --name CannagrowApp --main-jar Cannagrow.jar --main-class com.cannagrow.Main --type exe --win-dir-chooser --win-shortcut --win-menu
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v4
