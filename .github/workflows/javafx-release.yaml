@@ -1,9 +1,7 @@
 name: Build and Package Cannagrow
 
 on:
-  push:
-    branches:
-      - java
+  workflow_dispatch:
 
 jobs:
   build:
