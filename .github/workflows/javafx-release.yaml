@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Cannagrow-1.0-SNAPSHOT-linux
-          path: target/Cannagrow-1.0-SNAPSHOT.jar
+          path: target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar  # Nombre ajustado para que coincida con el JAR empaquetado
 
   build-windows:
     runs-on: windows-latest
@@ -52,4 +52,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Cannagrow-1.0-SNAPSHOT-windows
-          path: target/Cannagrow-1.0-SNAPSHOT.jar
+          path: target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar  # Nombre ajustado aquí también
