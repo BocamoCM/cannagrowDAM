@@ -1,14 +1,19 @@
 module com.example.cannagrow {
+    // Módulos JavaFX necesarios
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.graphics;
-    requires javafx.base;
+
+    // API JDBC estándar
     requires java.sql;
+    requires com.mysql.cj.jdbc;
+
+
+    // Otros módulos de JDK si realmente los necesitas
     requires java.desktop;
     requires java.logging;
     requires java.naming;
-    requires mysql.connector.java;  // Asegúrate de que este nombre sea correcto
 
+    // Abre tu paquete a JavaFX para la inyección de FXML
     opens com.example.cannagrow to javafx.fxml;
     exports com.example.cannagrow;
 }

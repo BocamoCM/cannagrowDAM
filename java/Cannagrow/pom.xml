@@ -51,7 +51,7 @@
 
   <build>
     <plugins>
-      <!-- Configuración del plugin de compilación -->
+      <!-- Plugin de compilación -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -62,19 +62,24 @@
         </configuration>
       </plugin>
 
-      <!-- Configuración del plugin de ensamblaje para generar JAR con dependencias -->
+      <!-- Plugin para crear un JAR con dependencias -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.3.0</version>
         <configuration>
-          <descriptors>
-            <descriptor>src/assembly/assembly.xml</descriptor>
-          </descriptors>
-          <finalName>${project.artifactId}-${project.version}-jar-with-dependencies</finalName>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>com.example.cannagrow.Main</mainClass>
+            </manifest>
+          </archive>
         </configuration>
         <executions>
           <execution>
+            <id>make-assembly</id>
             <phase>package</phase>
             <goals>
               <goal>single</goal>
@@ -83,7 +88,7 @@
         </executions>
       </plugin>
 
-      <!-- Configuración del plugin JavaFX para empaquetar y ejecutar -->
+      <!-- Plugin JavaFX -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
