@@ -3,10 +3,10 @@ name: Build and Deploy Cannagrow
 on:
   push:
     branches:
-      - java
+      - java  # Solo se ejecutará en la rama 'java'
   pull_request:
     branches:
-      - main
+      - java  # También en pull requests hacia 'java'
   workflow_dispatch:
 
 jobs:
@@ -26,11 +26,11 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Upload JAR Artifact
+      - name: Upload JAR Artifact (Linux)
         uses: actions/upload-artifact@v3
         with:
           name: Cannagrow-1.0-SNAPSHOT-linux
-          path: target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar  # Nombre ajustado para que coincida con el JAR empaquetado
+          path: target/Cannagrow-1.0-SNAPSHOT.jar  # Ruta del archivo JAR generado
 
   build-windows:
     runs-on: windows-latest
@@ -48,8 +48,8 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Upload JAR Artifact
+      - name: Upload JAR Artifact (Windows)
         uses: actions/upload-artifact@v3
         with:
           name: Cannagrow-1.0-SNAPSHOT-windows
-          path: target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar  # Nombre ajustado aquí también
+          path: target/Cannagrow-1.0-SNAPSHOT.jar  # Ruta del archivo JAR generado
