@@ -44,11 +44,4 @@ jobs:
         shell: pwsh
         env:
           JAVA_HOME: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
-          JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
-
-      # Paso 5: Subir los archivos generados a un release (opcional)
-      - name: Upload the executable
-        uses: actions/upload-artifact@v2
-        with:
-          name: CannagrowApp
-          path: ./target/CannagrowApp.exe
+          JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x_
