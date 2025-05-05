@@ -21,12 +21,12 @@ jobs:
           java-version: '23.0.1'
 
       - name: Build with Maven
-        working-directory: java
+        working-directory: java/Cannagrow
         run: mvn clean install
 
       - name: Get version from pom.xml
         id: get_version
-        working-directory: java
+        working-directory: java/Cannagrow
         run: |
           $version = mvn help:evaluate -Dexpression=project.version -q -DforceStdout
           echo "VERSION=$version" >> $env:GITHUB_ENV
@@ -44,6 +44,6 @@ jobs:
         with:
           tag_name: v${{ steps.get_version.outputs.version }}
           name: Release v${{ steps.get_version.outputs.version }}
-          files: java/target/*.jar
+          files: java/Cannagrow/target/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
