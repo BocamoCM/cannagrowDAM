@@ -78,29 +78,59 @@ jobs:
       - name: Download Launch4j
         shell: powershell
         run: |
-          $launch4jVersion = "3.14"
-          $downloadUrl = "https://sourceforge.net/projects/launch4j/files/launch4j-$launch4jVersion/launch4j-${launch4jVersion}-win32.zip/download"
-          
           # Create a directory for Launch4j
           New-Item -Path "launch4j" -ItemType Directory -Force
           
-          # Download using .NET WebClient (more reliable for SourceForge)
-          Write-Host "Downloading Launch4j from $downloadUrl"
-          $webClient = New-Object System.Net.WebClient
-          $webClient.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36")
-          $webClient.DownloadFile($downloadUrl, "$(Get-Location)\launch4j\launch4j.zip")
+          # Use GitHub directly as a mirror for Launch4j
+          $launch4jMirrorUrl = "https://github.com/DrOverbuild/launch4j-mirror/raw/main/launch4j-3.14-win32.zip"
+          
+          Write-Host "Downloading Launch4j from GitHub mirror"
+          
+          try {
+            # Try first method - Invoke-WebRequest
+            Invoke-WebRequest -Uri $launch4jMirrorUrl -OutFile "launch4j\launch4j.zip" -UseBasicParsing
+          }
+          catch {
+            Write-Host "First download method failed, trying alternative method..."
+            try {
+              # Alternative download method
+              [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+              $client = New-Object System.Net.WebClient
+              $client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+              $client.DownloadFile($launch4jMirrorUrl, "$(Get-Location)\launch4j\launch4j.zip")
+            }
+            catch {
+              Write-Host "Second download method failed, trying curl..."
+              # Last resort - use curl
+              curl.exe -L -o "launch4j\launch4j.zip" $launch4jMirrorUrl
+            }
+          }
+          
+          # Check if download succeeded
+          if (-not (Test-Path "launch4j\launch4j.zip")) {
+            throw "Failed to download Launch4j"
+          }
+          
+          Write-Host "Download successful, extracting Launch4j..."
           
           # Extract the downloaded zip
-          Write-Host "Extracting Launch4j"
-          Expand-Archive -Path "launch4j\launch4j.zip" -DestinationPath "launch4j" -Force
-          
-          # Verify extraction
-          if (Test-Path "launch4j\launch4j-$launch4jVersion") {
-            Write-Host "Launch4j extracted successfully"
-          } else {
-            Write-Host "Launch4j extraction failed. Checking directory content:"
-            Get-ChildItem -Path "launch4j" -Recurse
+          try {
+            Expand-Archive -Path "launch4j\launch4j.zip" -DestinationPath "launch4j" -Force
+          }
+          catch {
+            Write-Host "Error during extraction: $_"
             throw "Failed to extract Launch4j"
+          }
+          
+          # Verify extraction by finding the launch4j executable
+          $launch4jExe = Get-ChildItem -Path "launch4j" -Recurse -Filter "launch4j.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+          
+          if ($launch4jExe) {
+            Write-Host "Launch4j extracted successfully, found at: $($launch4jExe.FullName)"
+          } else {
+            Write-Host "Launch4j extraction verification failed. Directory contents:"
+            Get-ChildItem -Path "launch4j" -Recurse
+            throw "Failed to locate launch4j.exe after extraction"
           }
 
       - name: Create Windows executable
