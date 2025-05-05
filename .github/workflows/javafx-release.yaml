@@ -3,7 +3,7 @@ name: Build and Package Cannagrow
 on:
   push:
     branches:
-      - main
+      - java
 
 jobs:
   build:
