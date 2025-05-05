@@ -48,7 +48,7 @@ jobs:
 
       # Paso 5: Subir los archivos generados a un release (opcional)
       - name: Upload the executable
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: CannagrowApp
           path: ./target/CannagrowApp.exe
