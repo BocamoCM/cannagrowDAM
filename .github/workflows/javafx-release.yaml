@@ -1,13 +1,11 @@
 name: Build Cannagrow App (Windows)
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - java
+    branches: [java]
   pull_request:
-    branches:
-      - java
+    branches: [java]
+  workflow_dispatch:
 
 jobs:
   build-windows:
@@ -17,7 +15,7 @@ jobs:
         working-directory: ./java/Cannagrow
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 21.0.4
@@ -29,16 +27,13 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Run Tests
-        run: mvn test
+      - name: Show contents of target folder
+        run: dir target
 
-      - name: Show target directory contents
-        run: Get-ChildItem -Path ./target
-
-      - name: Create .exe with jpackage
+      - name: Package .exe with jpackage
         run: |
           jpackage `
-            --input ./target `
+            --input target `
             --name CannagrowApp `
             --main-jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar `
             --main-class com.example.cannagrow.Main `
@@ -48,11 +43,11 @@ jobs:
             --win-menu
         shell: pwsh
         env:
-          JAVA_HOME: ${{ env.JAVA_HOME }}
-          JAVA_HOME_21_X64: ${{ env.JAVA_HOME }}
+          JAVA_HOME: ${{ env.JAVA_HOME_21_X64 }}
+          JAVA_HOME_21_X64: ${{ env.JAVA_HOME_21_X64 }}
 
-      - name: Upload Windows Artifacts
+      - name: Upload .exe artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-build
-          path: ./java/Cannagrow/target
+          name: cannagrow-exe
+          path: ./java/Cannagrow/CannagrowApp.exe
