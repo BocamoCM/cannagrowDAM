@@ -14,6 +14,11 @@
     <restartOnCrash>false</restartOnCrash>
     <manifest></manifest>
     <icon>src\main\resources\icons\cannagrow.ico</icon>
+
+    <classPath>
+        <mainClass>com.example.cannagrow</mainClass>
+    </classPath>
+
     <jre>
         <path></path>
         <bundledJre64Bit>false</bundledJre64Bit>
@@ -28,12 +33,14 @@
             <opt>-Dfile.encoding=UTF-8</opt>
         </opts>
     </jre>
+
     <splash>
         <file>src\main\resources\images\splash.bmp</file>
         <waitForWindow>true</waitForWindow>
         <timeout>60</timeout>
         <timeoutErr>true</timeoutErr>
     </splash>
+
     <versionInfo>
         <fileVersion>1.0.0.0</fileVersion>
         <txtFileVersion>1.0.0</txtFileVersion>
@@ -48,6 +55,7 @@
         <trademarks></trademarks>
         <language>ENGLISH_US</language>
     </versionInfo>
+
     <messages>
         <startupErr>An error occurred while starting the application.</startupErr>
         <bundledJreErr>This application requires a Java Runtime Environment.</bundledJreErr>
