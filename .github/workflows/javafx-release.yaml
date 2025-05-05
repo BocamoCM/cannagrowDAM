@@ -36,9 +36,7 @@ jobs:
 
     - name: Generate .exe with Launch4j
       run: |
-        C:\ProgramData\chocolatey\bin\launch4j.exe ./java/Cannagrow/launch4j-config.xml  # Usamos la ruta completa
-        # O, si preferimos PowerShell:
-        # & "C:\ProgramData\chocolatey\bin\launch4j.exe" ./java/Cannagrow/launch4j-config.xml
+        & "C:\ProgramData\chocolatey\bin\launch4j.exe" "./java/Cannagrow/launch4j-config.xml"  # Ejecuta Launch4j usando PowerShell con &
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v4
