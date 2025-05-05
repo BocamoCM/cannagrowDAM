@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.example</groupId>
@@ -13,10 +14,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>23</java.version>
     <junit.version>5.10.2</junit.version>
+    <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
   </properties>
 
   <dependencies>
-    <!-- JavaFX Dependencies -->
+    <!-- JavaFX -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -27,13 +29,15 @@
       <artifactId>javafx-fxml</artifactId>
       <version>17.0.6</version>
     </dependency>
+
+    <!-- MySQL Connector -->
     <dependency>
       <groupId>com.mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
       <version>9.2.0</version>
     </dependency>
 
-    <!-- JUnit for testing -->
+    <!-- JUnit -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -50,22 +54,42 @@
 
   <build>
     <plugins>
-      <!-- Maven Compiler Plugin to compile source code -->
+      <!-- Timestamp plugin -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.4.0</version>
+        <executions>
+          <execution>
+            <id>timestamp</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>timestamp-property</goal>
+            </goals>
+            <configuration>
+              <name>build.timestamp</name>
+              <pattern>${maven.build.timestamp.format}</pattern>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Compiler plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version> <!-- Versión más reciente -->
+        <version>3.10.1</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
         </configuration>
       </plugin>
 
-      <!-- JavaFX Maven Plugin to run JavaFX applications -->
+      <!-- JavaFX plugin -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.8</version> <!-- Versión estable -->
+        <version>0.0.8</version>
         <executions>
           <execution>
             <id>default-cli</id>
@@ -76,15 +100,16 @@
         </executions>
       </plugin>
 
-      <!-- Maven Assembly Plugin to package the JAR with dependencies -->
+      <!-- Assembly plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.3.0</version> <!-- Versión estable y funcional -->
+        <version>3.3.0</version>
         <configuration>
+          <finalName>Cannagrow-1.0-${build.timestamp}</finalName>
           <archive>
             <manifest>
-              <mainClass>com.example.cannagrow.Main</mainClass> <!-- Asegura que el Main Class esté configurado correctamente -->
+              <mainClass>com.example.cannagrow.Main</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
@@ -102,5 +127,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
