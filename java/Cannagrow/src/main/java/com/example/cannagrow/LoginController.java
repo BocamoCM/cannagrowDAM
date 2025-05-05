@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class LoginController {
 
@@ -15,6 +17,16 @@ public class LoginController {
 
     @FXML
     private Label loginMessage;
+
+    @FXML
+    private ImageView logoImage;
+
+    @FXML
+    public void initialize() {
+        Image image = new Image(getClass().getResourceAsStream("/com/example/cannagrow/cannagrow_logo.png"));
+        logoImage.setImage(image);
+    }
+
 
     // Puedes cambiar esto por una verificación en base de datos
     private final String validUsername = "admin";

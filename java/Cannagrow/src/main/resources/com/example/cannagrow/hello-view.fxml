@@ -15,16 +15,18 @@
     <Insets top="30" right="30" bottom="30" left="30"/>
   </padding>
 
-  <Label text="CannaGrow" textFill="white" font="$xlarge">
+  <!-- Imagen del logo -->
+  <ImageView fx:id="logoImage" fitWidth="150" preserveRatio="true"/>
+
+
+
+  <Label text="CannaGrow" textFill="white">
     <font>
       <Font name="Arial Black" size="28"/>
     </font>
   </Label>
 
-  <ImageView fitWidth="100" fitHeight="100" pickOnBounds="true"
-             image="@cannagrow_logo.png" />
-
-  <Label text="Iniciar sesión" textFill="white" font="$large">
+  <Label text="Iniciar sesión" textFill="white">
     <font>
       <Font name="Arial" size="20"/>
     </font>
@@ -40,5 +42,9 @@
           style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 10;"
           maxWidth="150"/>
 
-  <Label fx:id="loginMessage" textFill="red" font="$small"/>
+  <Label fx:id="loginMessage" textFill="red">
+    <font>
+      <Font name="Arial" size="12"/>
+    </font>
+  </Label>
 </VBox>
