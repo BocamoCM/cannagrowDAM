@@ -35,8 +35,11 @@ jobs:
 
     - name: Create .exe with jpackage
       run: |
-        # Crea un ejecutable .exe con jpackage
-        jpackage --input ./java/Cannagrow/target --name CannagrowApp --main-jar Cannagrow.jar --main-class com.cannagrow.Main --type exe --win-dir-chooser --win-shortcut --win-menu
+        # Verifica si el JAR se generó en el directorio 'target'
+        dir ./java/Cannagrow/target
+
+        # Crea un ejecutable .exe con jpackage usando la ruta correcta
+        jpackage --input ./java/Cannagrow/target --name CannagrowApp --main-jar Cannagrow-<version>.jar --main-class com.cannagrow.Main --type exe --win-dir-chooser --win-shortcut --win-menu
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v4
