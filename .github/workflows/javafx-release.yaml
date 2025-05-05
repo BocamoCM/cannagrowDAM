@@ -23,13 +23,34 @@ jobs:
         run: mvn test
       - name: Create executable JAR
         run: |
-          mvn clean compile assembly:single
+          # Ejecutamos explícitamente el assembly plugin para asegurarnos que se crea el JAR con dependencias
+          mvn assembly:single
+          # Comprobamos que se creó correctamente
+          ls -la target/
       - name: Install required packages for jpackage
         run: |
           sudo apt-get update
           sudo apt-get install -y fakeroot binutils
       - name: Create Linux executable
         run: |
+          mkdir -p target/linux-executable
+          # Primero verificamos que el JAR existe
+          echo "Verificando archivos JAR en target:"
+          ls -la target/
+          
+          # Si el JAR con dependencias no existe, copiamos el JAR normal
+          if [ ! -f "target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar" ]; then
+            echo "JAR con dependencias no encontrado, verificando si existe el JAR principal"
+            if [ -f "target/Cannagrow-1.0-SNAPSHOT.jar" ]; then
+              echo "Copiando JAR principal para usarlo como JAR principal"
+              cp target/Cannagrow-1.0-SNAPSHOT.jar target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar
+            else
+              echo "No se encontró ningún JAR principal"
+              exit 1
+            fi
+          fi
+          
+          # Ejecutamos jpackage con el JAR que sabemos que existe
           jpackage --input target/ \
             --name Cannagrow \
             --main-jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar \
@@ -39,6 +60,22 @@ jobs:
             --vendor "Your Company" \
             --description "Cannagrow Application" \
             --dest target/linux-executable
+      - name: Create README for usage
+        run: |
+          echo "# Cannagrow Linux Application" > target/README.md
+          echo "" >> target/README.md
+          echo "## Cómo ejecutar la aplicación" >> target/README.md
+          echo "" >> target/README.md
+          echo "### Opción 1: Ejecutar el JAR directamente" >> target/README.md
+          echo "\`\`\`bash" >> target/README.md
+          echo "java -jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar" >> target/README.md
+          echo "\`\`\`" >> target/README.md
+          echo "" >> target/README.md
+          echo "### Opción 2: Instalar el paquete .deb" >> target/README.md
+          echo "\`\`\`bash" >> target/README.md
+          echo "sudo dpkg -i linux-executable/cannagrow_1.0.0-1_amd64.deb" >> target/README.md
+          echo "\`\`\`" >> target/README.md
+          echo "Luego ejecuta la aplicación desde el menú de aplicaciones o escribiendo \`Cannagrow\` en la terminal." >> target/README.md
       - name: Upload Linux Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -46,6 +83,7 @@ jobs:
           path: |
             ./java/Cannagrow/target/*.jar
             ./java/Cannagrow/target/linux-executable
+            ./java/Cannagrow/target/README.md
   build-windows:
     runs-on: windows-latest
     defaults:
@@ -65,7 +103,10 @@ jobs:
         run: mvn test
       - name: Create executable JAR
         run: |
-          mvn clean compile assembly:single
+          # Ejecutamos explícitamente el assembly plugin
+          mvn assembly:single
+          # Verificamos los archivos generados
+          dir target\*.jar
       - name: Download Launch4j
         run: |
           Invoke-WebRequest -Uri https://sourceforge.net/projects/launch4j/files/launch4j-3/3.14/launch4j-3.14-win32.zip/download -OutFile launch4j.zip
@@ -73,6 +114,23 @@ jobs:
       - name: Create Windows executable
         run: |
           mkdir -p target/windows-executable
+          
+          # Verificamos que el JAR existe
+          echo "Verificando archivos JAR en target:"
+          dir target\*.jar
+          
+          # Si el JAR con dependencias no existe, copiamos el JAR normal
+          if (-not (Test-Path "target\Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar")) {
+            echo "JAR con dependencias no encontrado, verificando si existe el JAR principal"
+            if (Test-Path "target\Cannagrow-1.0-SNAPSHOT.jar") {
+              echo "Copiando JAR principal para usarlo como JAR con dependencias"
+              Copy-Item "target\Cannagrow-1.0-SNAPSHOT.jar" -Destination "target\Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar"
+            } else {
+              echo "No se encontró ningún JAR principal"
+              exit 1
+            }
+          }
+          
           # Create a Launch4j configuration file
           @"
           <launch4jConfig>
@@ -104,6 +162,27 @@ jobs:
           
           # Run Launch4j to create the executable
           ./launch4j/launch4j.exe launch4j.xml
+      - name: Create README for usage
+        run: |
+          @"
+          # Cannagrow Windows Application
+
+          ## Cómo ejecutar la aplicación
+
+          ### Opción 1: Ejecutar el JAR directamente
+          ```
+          java -jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar
+          ```
+
+          ### Opción 2: Ejecutar el archivo .exe
+          Simplemente haz doble clic en `windows-executable/Cannagrow.exe`
+          
+          ### Solución de problemas
+          Si tienes problemas para ejecutar la aplicación:
+          1. Asegúrate de tener Java instalado (versión 11 o superior)
+          2. Verifica que estás en el directorio correcto al ejecutar el comando java
+          3. Ejecuta el comando desde la misma carpeta donde se encuentra el archivo JAR
+          "@ | Out-File -FilePath "target/README.md" -Encoding utf8
       - name: Upload Windows Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -111,3 +190,4 @@ jobs:
           path: |
             ./java/Cannagrow/target/*.jar
             ./java/Cannagrow/target/windows-executable
+            ./java/Cannagrow/target/README.md
