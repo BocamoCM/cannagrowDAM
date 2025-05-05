@@ -2,8 +2,8 @@
 <launch4jConfig>
     <dontWrapJar>false</dontWrapJar>
     <headerType>gui</headerType>
-    <jar>target\Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar</jar>
-    <outfile>target\windows-executable\Cannagrow.exe</outfile>
+    <jar>target\cannagrow-1.0-SNAPSHOT.jar</jar>
+    <outfile>C:\Users\borji\Desktop\final\cannagrowDAM\java\Cannagrow\target\Cannagrow.exe</outfile>
     <errTitle>Cannagrow</errTitle>
     <cmdLine></cmdLine>
     <chdir>.</chdir>
@@ -13,7 +13,6 @@
     <stayAlive>false</stayAlive>
     <restartOnCrash>false</restartOnCrash>
     <manifest></manifest>
-    <icon>src\main\resources\icons\cannagrow.ico</icon>
 
     <classPath>
         <mainClass>com.example.cannagrow.Main</mainClass>
@@ -23,23 +22,13 @@
         <path></path>
         <bundledJre64Bit>false</bundledJre64Bit>
         <bundledJreAsFallback>false</bundledJreAsFallback>
-        <minVersion>17.0.0</minVersion>
+        <minVersion>23.0.1</minVersion>
         <maxVersion></maxVersion>
         <jdkPreference>preferJre</jdkPreference>
         <runtimeBits>64/32</runtimeBits>
         <initialHeapSize>128</initialHeapSize>
         <maxHeapSize>512</maxHeapSize>
-        <opts>
-            <opt>-Dfile.encoding=UTF-8</opt>
-        </opts>
     </jre>
-
-    <splash>
-        <file>src\main\resources\images\splash.bmp</file>
-        <waitForWindow>true</waitForWindow>
-        <timeout>60</timeout>
-        <timeoutErr>true</timeoutErr>
-    </splash>
 
     <versionInfo>
         <fileVersion>1.0.0.0</fileVersion>
@@ -58,7 +47,6 @@
 
     <messages>
         <startupErr>An error occurred while starting the application.</startupErr>
-        <bundledJreErr>This application requires a Java Runtime Environment.</bundledJreErr>
         <jreVersionErr>This application requires a Java Runtime Environment</jreVersionErr>
         <launcherErr>The registry refers to a nonexistent Java Runtime Environment installation or the runtime is corrupted.</launcherErr>
         <instanceAlreadyExistsMsg>An application instance is already running.</instanceAlreadyExistsMsg>
