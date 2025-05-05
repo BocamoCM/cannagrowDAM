@@ -40,18 +40,31 @@ jobs:
       # Paso 5: Preparar módulos JavaFX
       - name: Download JavaFX jmods
         run: |
-          New-Item -ItemType Directory -Force -Path ./jmods
-          Invoke-WebRequest -Uri "https://download2.gluonhq.com/openjfx/21/openjfx-21_windows-x64_bin-jmods.zip" -OutFile "./javafx-jmods.zip"
-          Expand-Archive -Path "./javafx-jmods.zip" -DestinationPath "./jmods" -Force
-          Get-ChildItem -Path "./jmods" -Recurse
+          # Crear directorio para JavaFX dentro del directorio del proyecto
+          New-Item -ItemType Directory -Force -Path ./java/Cannagrow/jmods
+          # Descargar JavaFX jmods
+          Invoke-WebRequest -Uri "https://download2.gluonhq.com/openjfx/21/openjfx-21_windows-x64_bin-jmods.zip" -OutFile "./java/Cannagrow/javafx-jmods.zip"
+          # Extraer el archivo zip
+          Expand-Archive -Path "./java/Cannagrow/javafx-jmods.zip" -DestinationPath "./java/Cannagrow/jmods" -Force
+          # Listar archivos para verificar
+          Write-Host "Contenido del directorio jmods:"
+          Get-ChildItem -Path "./java/Cannagrow/jmods" -Recurse
+        shell: pwsh
 
       # Paso 6: Crear el ejecutable con jpackage
       - name: Package with jpackage
         run: |
-          # Crear un runtime image con JavaFX integrado
-          $jmods_path = Resolve-Path "../jmods/javafx-jmods-21"
+          # Verificar que los jmods existen
+          Write-Host "Verificando directorios:"
+          Get-ChildItem -Path "." -Directory
+          Write-Host "Verificando directorio jmods:"
+          Get-ChildItem -Path "./jmods" -Directory
+          
+          # Obtener la ruta completa a los jmods
+          $jmods_path = Resolve-Path "./jmods/javafx-jmods-21"
           Write-Host "JavaFX JMods path: $jmods_path"
           
+          # Crear runtime image
           jlink --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics `
                 --module-path "$jmods_path" `
                 --output runtime `
@@ -60,7 +73,11 @@ jobs:
                 --no-man-pages `
                 --compress=2
 
-          # Crear el instalador con la runtime image personalizada
+          # Verificar contenido del target
+          Write-Host "Contenido del directorio target:"
+          Get-ChildItem -Path "./target" -Filter "*.jar"
+          
+          # Crear el instalador
           jpackage --input ./target `
             --name CannagrowApp `
             --main-jar Cannagrow-1.0-SNAPSHOT.jar `
