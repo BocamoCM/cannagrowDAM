@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+    <!-- Tipo de encabezado: 'gui' para aplicaciones con interfaz gráfica o 'console' para consola -->
+    <headerType>gui</headerType>
+
+    <!-- JAR principal con todas las dependencias empaquetadas -->
+    <jar>target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar</jar>
+
+    <!-- Ruta y nombre del ejecutable resultante -->
+    <outfile>target/windows-executable/Cannagrow.exe</outfile>
+
+    <!-- Título de la ventana de error en caso de fallo -->
+    <errTitle>Cannagrow Error</errTitle>
+
+    <!-- Parámetros de línea de comandos adicionales (vacío si no aplica) -->
+    <cmdLine></cmdLine>
+
+    <!-- Directorio de trabajo para la aplicación -->
+    <chdir>.</chdir>
+
+    <!-- Prioridad del proceso al arrancar -->
+    <priority>normal</priority>
+
+    <!-- URL para descargar Java si el usuario no lo tiene instalado -->
+    <downloadUrl>https://adoptium.net/</downloadUrl>
+
+    <!-- ¿Mantener la aplicación viva tras cerrar la ventana? -->
+    <stayAlive>false</stayAlive>
+
+    <!-- ¿Reiniciar la aplicación si falla? -->
+    <restartOnCrash>false</restartOnCrash>
+
+    <!-- Archivo de manifiesto (opcional) -->
+    <manifest></manifest>
+
+    <!-- Ruta al icono del ejecutable (opcional) -->
+    <icon></icon>
+
+    <!-- Configuración del runtime de Java a embebir -->
+    <jre>
+        <!-- Versión mínima requerida -->
+        <minVersion>17</minVersion>
+        <!-- Preferencia de JRE vs JDK -->
+        <jdkPreference>preferJre</jdkPreference>
+        <!-- Bits del runtime (64 o 32) -->
+        <runtimeBits>64</runtimeBits>
+    </jre>
+</launch4jConfig>
