@@ -30,26 +30,35 @@ jobs:
           JAVA_HOME: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
           JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
 
-      # Paso 4: Crear el ejecutable con jpackage
+      # Paso 4: Verificar la existencia y ubicación del JAR
+      - name: Find JAR file
+        run: |
+          Write-Host "Checking for JAR files in target directory:"
+          Get-ChildItem -Path "./java/Cannagrow/target" -Filter "*.jar" | ForEach-Object { Write-Host $_.FullName }
+        shell: pwsh
+        
+      # Paso 5: Crear el ejecutable con jpackage
       - name: Package with jpackage
         run: |
-          jpackage --input target `
+          jpackage --input ./target `
             --name CannagrowApp `
-            --main-jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar `
+            --main-jar Cannagrow-1.0-SNAPSHOT.jar `
             --main-class com.example.cannagrow.Main `
             --type exe `
             --win-dir-chooser `
             --win-shortcut `
             --win-menu
         shell: pwsh
-        working-directory: ./java/Cannagrow  # Added working directory
+        working-directory: ./java/Cannagrow
         env:
           JAVA_HOME: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
           JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
 
-      # Paso 5: Subir los archivos generados como artefacto
+      # Paso 6: Subir los archivos generados como artefacto
       - name: Upload the executable
         uses: actions/upload-artifact@v4  # Updated to v4 (latest as of May 2025)
         with:
           name: CannagrowApp
-          path: ./java/Cannagrow/CannagrowApp.exe  # Updated path to match working directory
+          path: |
+            ./java/Cannagrow/*.exe
+            ./java/Cannagrow/CannagrowApp/**
