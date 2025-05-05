@@ -16,60 +16,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 23.0.1
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '23.0.1'
+          java-version: '17'
           cache: 'maven'
 
       - name: Build with Maven
-        run: mvn clean package
+        run: mvn clean package assembly:single
 
       - name: Run Tests
         run: mvn test
 
-      - name: Create executable JAR
-        run: |
-          mvn assembly:single
-          ls -la target/
-
-      - name: Install required packages for jpackage
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fakeroot binutils
-
-      - name: Create Linux executable
+      - name: Create Linux executable (.deb)
         run: |
           mkdir -p target/linux-executable
-          echo "Verificando archivos JAR en target:"
-          ls -la target/
           if [ ! -f "target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar" ]; then
-            if [ -f "target/Cannagrow-1.0-SNAPSHOT.jar" ]; then
-              cp target/Cannagrow-1.0-SNAPSHOT.jar target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar
-            else
-              exit 1
-            fi
+            cp target/Cannagrow-1.0-SNAPSHOT.jar target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar
           fi
-          jpackage \
-            --input target/ \
-            --name Cannagrow \
-            --main-jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar \
-            --main-class com.example.cannagrow.Main \
-            --type deb \
-            --app-version 1.0.0 \
-            --vendor "Your Company" \
-            --description "Cannagrow Application" \
-            --dest target/linux-executable
-
-      - name: Create README for usage
-        run: |
-          echo "# Cannagrow Linux Application" > target/README.md
-          echo "## Cómo ejecutar la aplicación" >> target/README.md
-          echo "### Opción 1: Ejecutar el JAR directamente" >> target/README.md
-          echo '\n```bash\njava -jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar\n```' >> target/README.md
-          echo "### Opción 2: Instalar el paquete .deb" >> target/README.md
-          echo '\n```bash\nsudo dpkg -i linux-executable/cannagrow_1.0.0-1_amd64.deb\n```' >> target/README.md
+          sudo apt-get update && sudo apt-get install -y fakeroot binutils
+          jpackage --input target/ \
+                   --name Cannagrow \
+                   --main-jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar \
+                   --main-class com.example.cannagrow.Main \
+                   --type deb \
+                   --app-version 1.0.0 \
+                   --vendor "Your Company" \
+                   --description "Cannagrow Application" \
+                   --dest target/linux-executable
 
       - name: Upload Linux Artifacts
         uses: actions/upload-artifact@v4
@@ -78,7 +53,6 @@ jobs:
           path: |
             ./java/Cannagrow/target/*.jar
             ./java/Cannagrow/target/linux-executable
-            ./java/Cannagrow/target/README.md
 
   build-windows:
     runs-on: windows-latest
@@ -88,11 +62,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 23.0.1
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '23.0.1'
+          java-version: '17'
           cache: 'maven'
 
       - name: Build with Maven
@@ -103,55 +77,19 @@ jobs:
 
       - name: Download and extract Launch4j
         run: |
-          Invoke-WebRequest -Uri "https://github.com/launch4j/launch4j/releases/download/3.14/launch4j-3.14-win32.zip" -OutFile launch4j.zip
-          Expand-Archive launch4j.zip -DestinationPath launch4j
+          Invoke-WebRequest -Uri "https://downloads.sourceforge.net/project/launch4j/launch4j-3/3.14/launch4j-3.14-win32.zip" -OutFile launch4j.zip
+          Expand-Archive -Path launch4j.zip -DestinationPath launch4j
 
       - name: Create Windows executable using repository config
         run: |
-          mkdir -p target/windows-executable
-          echo "Verificando archivos JAR en target:"
-          dir target\*.jar
+          mkdir target/windows-executable
+          Copy-Item "src/launch4j/launch4j.xml" .
+          $jar="target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar"
+          if (-not (Test-Path $jar)) { Copy-Item "target/Cannagrow-1.0-SNAPSHOT.jar" -Destination $jar }
+          & .\launch4j\launch4j-3.14\launch4j.exe "launch4j.xml" -Bfile.encoding=UTF8
 
-          # Ensure dependencies JAR exists
-          if (-not (Test-Path "target\Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar")) {
-            if (Test-Path "target\Cannagrow-1.0-SNAPSHOT.jar") {
-              Copy-Item "target\Cannagrow-1.0-SNAPSHOT.jar" -Destination "target\Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar"
-            } else {
-              exit 1
-            }
-          }
-
-          # Use config from src/launch4j
-          if (-not (Test-Path "src/launch4j/launch4j.xml")) {
-            Write-Host 'launch4j.xml not found in src/launch4j'
-            exit 1
-          }
-          Copy-Item "src/launch4j/launch4j.xml" -Destination "."
-
-          # Run Launch4j
-          & .\launch4j\launch4j.exe "launch4j.xml"
-
-      - name: Create README for usage
-        run: |
-          @"
-          # Cannagrow Windows Application
-
-          ## Cómo ejecutar la aplicación
-
-          ### Opción 1: Ejecutar el JAR directamente
-          ```
-          java -jar Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar
-          ```
-
-          ### Opción 2: Ejecutar el archivo .exe
-          Doble clic en `target\Cannagrow.exe`
-          "@ | Out-File -FilePath "target/README.md" -Encoding utf8
-
-      - name: Upload Windows Artifacts
+      - name: Upload Windows EXE
         uses: actions/upload-artifact@v4
         with:
-          name: windows-build
-          path: |
-            ./java/Cannagrow/target/*.jar
-            ./java/Cannagrow/target/windows-executable
-            ./java/Cannagrow/target/README.md
+          name: windows-exe
+          path: target/windows-executable/Cannagrow.exe
