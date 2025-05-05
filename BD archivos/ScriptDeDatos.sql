@@ -5,12 +5,12 @@
 -- VALUES ('NombreProducto', 'Flor', 18.5, 0.2, 25.99, 100);
 
 -- CLIENTE
--- INSERT INTO Cliente (nombre, fechaNacimiento, email, direccion)
--- VALUES ('Juan Pérez', '1990-03-25', 'juan.perez@email.com', 'Calle Falsa 123, Ciudad');
+-- INSERT INTO Cliente (nombre, contrasena, fechaNacimiento, email, direccion)
+-- VALUES ('Juan Pérez', 'as123sd','1990-03-25', 'juan.perez@email.com', 'Calle Falsa 123, Ciudad');
 
 -- EMPLEADO
--- INSERT INTO Empleado (nombre, rol, email, salario)
--- VALUES ('María Gómez', 'Vendedor', 'maria.gomez@email.com', 2500.00);
+-- INSERT INTO Empleado (nombre, contrasena, rol, email, salario)
+-- VALUES ('María Gómez', '55120', 'Vendedor', 'maria.gomez@email.com', 2500.00);
 
 -- PEDIDO
 -- INSERT INTO Pedido (fecha, total, estado, cliente_id)

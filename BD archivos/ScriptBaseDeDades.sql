@@ -19,7 +19,8 @@ CREATE TABLE Cliente (
     nombre VARCHAR(100) NOT NULL,
     fechaNacimiento DATE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    direccion VARCHAR(255) NOT NULL
+    direccion VARCHAR(255) NOT NULL,
+    contrasena_hash CHAR(60) NOT NULL
 );
 
 -- Tabla Empleado
@@ -28,7 +29,8 @@ CREATE TABLE Empleado (
     nombre VARCHAR(100) NOT NULL,
     rol ENUM('Vendedor', 'Cultivador', 'Gerente') NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    salario FLOAT NOT NULL
+    salario FLOAT NOT NULL,
+    contrasena_hash CHAR(60) NOT NULL
 );
 
 -- Tabla Pedido
