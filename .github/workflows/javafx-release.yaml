@@ -27,7 +27,7 @@ jobs:
         run: mvn clean package
 
       - name: Upload JAR Artifact (Linux)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2  # Usar la versión v2 en vez de v3
         with:
           name: Cannagrow-1.0-SNAPSHOT-linux
           path: target/Cannagrow-1.0-SNAPSHOT.jar  # Ruta del archivo JAR generado
@@ -49,7 +49,7 @@ jobs:
         run: mvn clean package
 
       - name: Upload JAR Artifact (Windows)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2  # Usar la versión v2 en vez de v3
         with:
           name: Cannagrow-1.0-SNAPSHOT-windows
           path: target/Cannagrow-1.0-SNAPSHOT.jar  # Ruta del archivo JAR generado
