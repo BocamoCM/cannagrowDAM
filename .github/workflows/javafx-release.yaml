@@ -111,9 +111,10 @@ jobs:
         run: |
           $url = "https://sourceforge.net/projects/launch4j/files/launch4j-3/3.14/launch4j-3.14-win32.zip/download"
           $output = "launch4j.zip"
-          $webClient = New-Object System.Net.WebClient
-          $webClient.DownloadFile($url, $output)
+          curl -L -o $output $url
           Expand-Archive -Path $output -DestinationPath . -Force
+    
+    # Descomprimir el archivo descargado
       - name: Create Windows executable
         run: |
           mkdir -p target/windows-executable
