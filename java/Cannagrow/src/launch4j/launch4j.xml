@@ -1,48 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch4jConfig>
-    <!-- Tipo de encabezado: 'gui' para aplicaciones con interfaz gráfica o 'console' para consola -->
+    <dontWrapJar>false</dontWrapJar>
     <headerType>gui</headerType>
-
-    <!-- JAR principal con todas las dependencias empaquetadas -->
-    <jar>target/Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar</jar>
-
-    <!-- Ruta y nombre del ejecutable resultante -->
-    <outfile>target/windows-executable/Cannagrow.exe</outfile>
-
-    <!-- Título de la ventana de error en caso de fallo -->
-    <errTitle>Cannagrow Error</errTitle>
-
-    <!-- Parámetros de línea de comandos adicionales (vacío si no aplica) -->
+    <jar>target\Cannagrow-1.0-SNAPSHOT-jar-with-dependencies.jar</jar>
+    <outfile>target\windows-executable\Cannagrow.exe</outfile>
+    <errTitle>Cannagrow</errTitle>
     <cmdLine></cmdLine>
-
-    <!-- Directorio de trabajo para la aplicación -->
     <chdir>.</chdir>
-
-    <!-- Prioridad del proceso al arrancar -->
     <priority>normal</priority>
-
-    <!-- URL para descargar Java si el usuario no lo tiene instalado -->
     <downloadUrl>https://adoptium.net/</downloadUrl>
-
-    <!-- ¿Mantener la aplicación viva tras cerrar la ventana? -->
+    <supportUrl>https://your-company-support-url.com</supportUrl>
     <stayAlive>false</stayAlive>
-
-    <!-- ¿Reiniciar la aplicación si falla? -->
     <restartOnCrash>false</restartOnCrash>
-
-    <!-- Archivo de manifiesto (opcional) -->
     <manifest></manifest>
-
-    <!-- Ruta al icono del ejecutable (opcional) -->
-    <icon></icon>
-
-    <!-- Configuración del runtime de Java a embebir -->
+    <icon>src\main\resources\icons\cannagrow.ico</icon>
     <jre>
-        <!-- Versión mínima requerida -->
-        <minVersion>17</minVersion>
-        <!-- Preferencia de JRE vs JDK -->
+        <path></path>
+        <bundledJre64Bit>false</bundledJre64Bit>
+        <bundledJreAsFallback>false</bundledJreAsFallback>
+        <minVersion>17.0.0</minVersion>
+        <maxVersion></maxVersion>
         <jdkPreference>preferJre</jdkPreference>
-        <!-- Bits del runtime (64 o 32) -->
-        <runtimeBits>64</runtimeBits>
+        <runtimeBits>64/32</runtimeBits>
+        <initialHeapSize>128</initialHeapSize>
+        <maxHeapSize>512</maxHeapSize>
+        <opts>
+            <opt>-Dfile.encoding=UTF-8</opt>
+        </opts>
     </jre>
+    <splash>
+        <file>src\main\resources\images\splash.bmp</file>
+        <waitForWindow>true</waitForWindow>
+        <timeout>60</timeout>
+        <timeoutErr>true</timeoutErr>
+    </splash>
+    <versionInfo>
+        <fileVersion>1.0.0.0</fileVersion>
+        <txtFileVersion>1.0.0</txtFileVersion>
+        <fileDescription>Cannagrow Application</fileDescription>
+        <copyright>Your Company © 2025</copyright>
+        <productVersion>1.0.0.0</productVersion>
+        <txtProductVersion>1.0.0</txtProductVersion>
+        <productName>Cannagrow</productName>
+        <companyName>Your Company</companyName>
+        <internalName>Cannagrow</internalName>
+        <originalFilename>Cannagrow.exe</originalFilename>
+        <trademarks></trademarks>
+        <language>ENGLISH_US</language>
+    </versionInfo>
+    <messages>
+        <startupErr>An error occurred while starting the application.</startupErr>
+        <bundledJreErr>This application requires a Java Runtime Environment.</bundledJreErr>
+        <jreVersionErr>This application requires a Java Runtime Environment</jreVersionErr>
+        <launcherErr>The registry refers to a nonexistent Java Runtime Environment installation or the runtime is corrupted.</launcherErr>
+        <instanceAlreadyExistsMsg>An application instance is already running.</instanceAlreadyExistsMsg>
+    </messages>
 </launch4jConfig>
