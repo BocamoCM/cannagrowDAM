@@ -28,11 +28,13 @@ jobs:
       - name: Get version from pom.xml
         id: get_version
         working-directory: java/Cannagrow
-        shell: pwsh
+        shell: bash
         run: |
-          $version = & mvn help:evaluate -Dexpression=project.version -q -DforceStdout
-          echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
-          echo "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          set -e
+          version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$version" >> $GITHUB_ENV
+          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "Detected version: $version"
 
       - name: Create Git tag
         run: |
