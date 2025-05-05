@@ -10,7 +10,7 @@
     <dependencySets>
         <dependencySet>
             <outputDirectory>/lib</outputDirectory>
-            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <useTransitiveDependencies>true</useTransitiveDependencies>
         </dependencySet>
     </dependencySets>
 </assembly>
