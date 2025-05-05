@@ -66,6 +66,7 @@
         </executions>
       </plugin>
 
+
       <!-- Plugin para crear un JAR ejecutable simple -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
