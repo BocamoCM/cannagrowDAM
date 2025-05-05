@@ -10,7 +10,7 @@ public class DBUtil {
 	
 	public Connection getConexion() {
 		
-		String cadenaConexion = "jdbc:mysql://localhost:3306/gestion_tabaco";
+		String cadenaConexion = "jdbc:mysql://localhost:3306/cannagrowBDA";
 		String usuario = "root";
 		String password = "";
 		
