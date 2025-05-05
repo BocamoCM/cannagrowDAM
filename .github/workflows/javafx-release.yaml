@@ -37,17 +37,42 @@ jobs:
           Get-ChildItem -Path "./java/Cannagrow/target" -Filter "*.jar" | ForEach-Object { Write-Host $_.FullName }
         shell: pwsh
         
-      # Paso 5: Crear el ejecutable con jpackage
+      # Paso 5: Preparar módulos JavaFX
+      - name: Download JavaFX jmods
+        run: |
+          New-Item -ItemType Directory -Force -Path ./jmods
+          Invoke-WebRequest -Uri "https://download2.gluonhq.com/openjfx/21/openjfx-21_windows-x64_bin-jmods.zip" -OutFile "./javafx-jmods.zip"
+          Expand-Archive -Path "./javafx-jmods.zip" -DestinationPath "./jmods" -Force
+          Get-ChildItem -Path "./jmods" -Recurse
+
+      # Paso 6: Crear el ejecutable con jpackage
       - name: Package with jpackage
         run: |
+          # Crear un runtime image con JavaFX integrado
+          $jmods_path = Resolve-Path "../jmods/javafx-jmods-21"
+          Write-Host "JavaFX JMods path: $jmods_path"
+          
+          jlink --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics `
+                --module-path "$jmods_path" `
+                --output runtime `
+                --strip-debug `
+                --no-header-files `
+                --no-man-pages `
+                --compress=2
+
+          # Crear el instalador con la runtime image personalizada
           jpackage --input ./target `
             --name CannagrowApp `
             --main-jar Cannagrow-1.0-SNAPSHOT.jar `
             --main-class com.example.cannagrow.Main `
             --type exe `
+            --runtime-image runtime `
             --win-dir-chooser `
             --win-shortcut `
-            --win-menu
+            --win-menu `
+            --app-version "1.0.0" `
+            --verbose `
+            --win-console
         shell: pwsh
         working-directory: ./java/Cannagrow
         env:
