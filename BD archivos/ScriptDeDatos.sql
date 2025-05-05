@@ -25,8 +25,7 @@
 -- VALUES ('Producto no debe exceder 20% de THC para venta libre.');
 
 -- DATOS EMPLEADOS
-INSERT INTO Empleado (nombre, rol, email, salario, contrasena_hash) 
-VALUES 
+INSERT INTO Empleado (nombre, rol, email, salario, contrasena_hash) VALUES 
   ('Joaquin Tena',   'Gerente',    'joaquin_tena@email.com',   4400.00, '<HASH_BCRYPT>'),
   ('Borja Carreres', 'Gerente',    'borja_carreres@email.com', 6400.00, '<HASH_BCRYPT>'),
   ('Andreu Rosell',  'Gerente',    'andreu_rosell@email.com', 10000.00, '<HASH_BCRYPT>'),
@@ -152,14 +151,6 @@ INSERT INTO Cliente (nombre, fechaNacimiento, email, direccion, contrasena_hash)
   ('Laura Hernández',        '1971-04-11', 'laura.hernandez@example.com',       'Calle de la tortosa 121, Sueca',                                 '<HASH_BCRYPT>'),
   ('Antonio Hernández',      '2000-09-15', 'antonio.hernandez8@example.com',    'Calle de la tortosa 163, Polinyà de Xúquer',                     '<HASH_BCRYPT>');
 
-
-
-
-
-
-
-
-
 -- PRODUCTOS
 INSERT INTO Producto (nombre, tipo, contenidoTHC, contenidoCBD, precio, stock) VALUES 
 ('SemillaSinSeleccionar', 'semilla', 18.5, 0.2, 15.99, 100),
@@ -183,6 +174,134 @@ INSERT INTO Producto (nombre, tipo, contenidoTHC, contenidoCBD, precio, stock) V
 ('Agua100Litro', 'recurso', 18.5, 0.2, 90.97, 15),
 ('SemillaSelecionadaBascica', 'semilla', 18.5, 0.2, 18.95, 150);
 
+INSERT INTO Regulacion (descripcion) VALUES
+  ('Producto no debe exceder 20% de THC para venta libre.'),
+  ('La concentración de CBD debe ser inferior al 30% para uso tópico.'),
+  ('Los comestibles no deben superar los 10mg de THC por porción.');
+  
+INSERT INTO Pedido (fecha, total, estado, cliente_id) VALUES
+  ('2025-04-01', 50.00, 'Entregado', 1),
+  ('2025-04-02', 75.00, 'Enviado', 2),
+  ('2025-04-03', 60.00, 'Pendiente', 3),
+  ('2025-04-04', 80.00, 'Cancelado', 4),
+  ('2025-04-05', 55.00, 'Entregado', 5),
+  ('2025-04-06', 70.00, 'Enviado', 6),
+  ('2025-04-07', 65.00, 'Pendiente', 7),
+  ('2025-04-08', 90.00, 'Cancelado', 8),
+  ('2025-04-09', 45.00, 'Entregado', 9),
+  ('2025-04-10', 85.00, 'Enviado', 10),
+  ('2025-04-11', 60.00, 'Pendiente', 11),
+  ('2025-04-12', 75.00, 'Cancelado', 12),
+  ('2025-04-13', 50.00, 'Entregado', 13),
+  ('2025-04-14', 70.00, 'Enviado', 14),
+  ('2025-04-15', 65.00, 'Pendiente', 15),
+  ('2025-04-16', 80.00, 'Cancelado', 16),
+  ('2025-04-17', 55.00, 'Entregado', 17),
+  ('2025-04-18', 90.00, 'Enviado', 18),
+  ('2025-04-19', 60.00, 'Pendiente', 19),
+  ('2025-04-20', 85.00, 'Cancelado', 20),
+  ('2025-04-21', 50.00, 'Entregado', 21),
+  ('2025-04-22', 75.00, 'Enviado', 22),
+  ('2025-04-23', 65.00, 'Pendiente', 23),
+  ('2025-04-24', 80.00, 'Cancelado', 24),
+  ('2025-04-25', 55.00, 'Entregado', 25),
+  ('2025-04-26', 70.00, 'Enviado', 26),
+  ('2025-04-27', 60.00, 'Pendiente', 27),
+  ('2025-04-28', 85.00, 'Cancelado', 28),
+  ('2025-04-29', 45.00, 'Entregado', 29),
+  ('2025-04-30', 90.00, 'Enviado', 30),
+  ('2025-05-01', 60.00, 'Pendiente', 31),
+  ('2025-05-02', 75.00, 'Cancelado', 32),
+  ('2025-05-03', 50.00, 'Entregado', 33),
+  ('2025-05-04', 70.00, 'Enviado', 34),
+  ('2025-05-05', 65.00, 'Pendiente', 35),
+  ('2025-05-06', 80.00, 'Cancelado', 36),
+  ('2025-05-07', 55.00, 'Entregado', 37),
+  ('2025-05-08', 90.00, 'Enviado', 38),
+  ('2025-05-09', 60.00, 'Pendiente', 39),
+  ('2025-05-10', 85.00, 'Cancelado', 40),
+  ('2025-05-11', 50.00, 'Entregado', 41),
+  ('2025-05-12', 75.00, 'Enviado', 42),
+  ('2025-05-13', 65.00, 'Pendiente', 43),
+  ('2025-05-14', 80.00, 'Cancelado', 44),
+  ('2025-05-15', 55.00, 'Entregado', 45),
+  ('2025-05-16', 70.00, 'Enviado', 46),
+  ('2025-05-17', 60.00, 'Pendiente', 47),
+  ('2025-05-18', 85.00, 'Cancelado', 48),
+  ('2025-05-19', 45.00, 'Entregado', 49),
+  ('2025-05-20', 90.00, 'Enviado', 50),
+  ('2025-05-21', 60.00, 'Pendiente', 51),
+  ('2025-05-22', 75.00, 'Cancelado', 52),
+  ('2025-05-23', 50.00, 'Entregado', 53),
+  ('2025-05-24', 70.00, 'Enviado', 54),
+  ('2025-05-25', 65.00, 'Pendiente', 55),
+  ('2025-05-26', 80.00, 'Cancelado', 56),
+  ('2025-05-27', 55.00, 'Entregado', 57),
+  ('2025-05-28', 90.00, 'Enviado', 58),
+  ('2025-05-29', 60.00, 'Pendiente', 59),
+  ('2025-05-30', 85.00, 'Cancelado', 60);
+
+INSERT INTO ItemPedido (pedido_id, producto_id, cantidad) VALUES
+  (1, 1, 2),
+  (2, 2, 1),
+  (3, 3, 3),
+  (4, 4, 2),
+  (5, 5, 1),
+  (6, 6, 4),
+  (7, 7, 2),
+  (8, 8, 3),
+  (9, 9, 1),
+  (10, 10, 2),
+  (11, 11, 3),
+  (12, 12, 1),
+  (13, 13, 2),
+  (14, 14, 4),
+  (15, 15, 2),
+  (16, 16, 3),
+  (17, 17, 1),
+  (18, 18, 2),
+  (19, 19, 3),
+  (20, 20, 1),
+  (21, 21, 2),
+  (22, 22, 4),
+  (23, 23, 2),
+  (24, 24, 3),
+  (25, 25, 1),
+  (26, 26, 2),
+  (27, 27, 3),
+  (28, 28, 1),
+  (29, 29, 2),
+  (30, 30, 4),
+  (31, 31, 2),
+  (32, 32, 3),
+  (33, 33, 1),
+  (34, 34, 2),
+  (35, 35, 3),
+  (36, 36, 1),
+  (37, 37, 2),
+  (38, 38, 4),
+  (39, 39, 2),
+  (40, 40, 3),
+  (41, 41, 1),
+  (42, 42, 2),
+  (43, 43, 3),
+  (44, 44, 1),
+  (45, 45, 2),
+  (46, 46, 4),
+  (47, 47, 2),
+  (48, 48, 3),
+  (49, 49, 1),
+  (50, 50, 2),
+  (51, 1, 3),
+  (52, 2, 1),
+  (53, 3, 2),
+  (54, 4, 3),
+  (55, 5, 1),
+  (56, 6, 2),
+  (57, 7, 3),
+  (58, 8, 1),
+  (59, 9, 2),
+  (60, 10, 4);
 
 
 
