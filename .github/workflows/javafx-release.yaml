@@ -28,10 +28,6 @@ jobs:
     - name: Run Tests
       run: mvn test
 
-    - name: Install jpackage (if necessary)
-      run: |
-        choco install jdk21  # Esto instalará JDK 21, que debería incluir jpackage
-
     - name: Verify jpackage installation
       run: |
         java --version
