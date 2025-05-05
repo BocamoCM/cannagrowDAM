@@ -3,7 +3,7 @@ name: Build and Deploy Cannagrow
 on:
   push:
     branches:
-      - main
+      - java
   pull_request:
     branches:
       - main
