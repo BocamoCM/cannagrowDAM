@@ -31,12 +31,14 @@ jobs:
     - name: Install Launch4j
       run: choco install launch4j  # Instala Launch4j usando Chocolatey
 
-    - name: Add Launch4j to PATH
-      run: |
-        $env:PATH += ";C:\ProgramData\chocolatey\bin"  # Añade la ruta de Launch4j al PATH
+    - name: Verify Launch4j Installation
+      run: dir "C:\ProgramData\chocolatey\bin"  # Verifica si Launch4j está en esta ruta
 
     - name: Generate .exe with Launch4j
-      run: launch4j ./java/Cannagrow/launch4j-config.xml  # Ejecuta Launch4j para generar el .exe
+      run: |
+        C:\ProgramData\chocolatey\bin\launch4j.exe ./java/Cannagrow/launch4j-config.xml  # Usamos la ruta completa
+        # O, si preferimos PowerShell:
+        # & "C:\ProgramData\chocolatey\bin\launch4j.exe" ./java/Cannagrow/launch4j-config.xml
 
     - name: Upload Windows Artifacts
       uses: actions/upload-artifact@v4
