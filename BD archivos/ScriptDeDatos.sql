@@ -150,6 +150,29 @@ INSERT INTO Cliente (nombre, fechaNacimiento, email, direccion) VALUES
 ('Laura Hernández', '1971-04-11', 'laura.hernandez@example.com', 'Calle de la tortosa 121, Sueca'),
 ('Antonio Hernández', '2000-09-15', 'antonio.hernandez8@example.com', 'Calle de la tortosa 163, Polinyà de Xúquer');
 
+-- PRODUCTOS
+INSERT INTO Producto (nombre, tipo, contenidoTHC, contenidoCBD, precio, stock) VALUES 
+('SemillaSinSeleccionar', 'semilla', 18.5, 0.2, 15.99, 100),
+('SemillaSelecionadaNormal', 'semilla', 18.5, 0.2, 22.45, 180),
+('SemillaSelecionadaPremium', 'semilla', 18.5, 0.2, 40.97, 25),
+('LamparaBasicaPersonal', 'Artilujos', 18.5, 0.2, 20.97, 15),
+('LamparaPersonal', 'Artilujos', 18.5, 0.2, 24.97, 18),
+('LamparaIndustrialBasica', 'Artilujos', 18.5, 0.2, 100.97, 15),
+('LamparaIndustrial', 'Artilujos', 18.5, 0.2, 170.97, 15),
+('LamparaIndustrialGrande', 'Artilujos', 18.5, 0.2, 365.97, 15),
+('PaqueteIndustriaBasico', 'Paquete', 18.5, 0.2, 752.97, 3),
+('PaquetePersonalBasico', 'Paquete', 18.5, 0.2, 60.97, 15),
+('PaquetePersonal', 'Paquete', 18.5, 0.2, 69.97, 15),
+('PaquetePersonalCompleto', 'Paquete', 18.5, 0.2, 123.00, 15),
+('CamisaBasicaNegra', 'ropa', 18.5, 0.2, 12.97, 15),
+('CamisaBasicaBlanca', 'ropa', 18.5, 0.2, 12.47, 15),
+('PantalonEmpresa', 'ropa', 18.5, 0.2, 19.97, 55),
+('Abono', 'recurso', 18.5, 0.2, 12.97, 15),
+('Agua5Litro', 'recurso', 18.5, 0.2, 3.97, 15),
+('Agua25Litro', 'recurso', 18.5, 0.2, 14.97, 15),
+('Agua100Litro', 'recurso', 18.5, 0.2, 90.97, 15),
+('SemillaSelecionadaBascica', 'semilla', 18.5, 0.2, 18.95, 150);
+
 
 
 
