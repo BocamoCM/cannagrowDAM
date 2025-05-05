@@ -29,10 +29,10 @@
 
     <!-- Dependencia de MySQL Connector -->
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.28</version> <!-- Asegúrate de usar la última versión estable -->
-    </dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.28</version> <!-- O la última versión -->
+  </dependency>
 
     <!-- Dependencias de JUnit para pruebas -->
     <dependency>
