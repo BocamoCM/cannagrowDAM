@@ -16,7 +16,7 @@
     <icon>src\main\resources\icons\cannagrow.ico</icon>
 
     <classPath>
-        <mainClass>com.example.cannagrow</mainClass>
+        <mainClass>com.example.cannagrow.Main</mainClass>
     </classPath>
 
     <jre>
