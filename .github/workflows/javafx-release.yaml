@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - java
+  workflow_dispatch:  # Permite ejecución manual desde GitHub
 
 jobs:
   build:
@@ -27,10 +28,11 @@ jobs:
       - name: Get version from pom.xml
         id: get_version
         working-directory: java/Cannagrow
+        shell: pwsh
         run: |
-          $version = mvn help:evaluate -Dexpression=project.version -q -DforceStdout
-          echo "VERSION=$version" >> $env:GITHUB_ENV
-          echo "version=$version" >> $env:GITHUB_OUTPUT
+          $version = & mvn help:evaluate -Dexpression=project.version -q -DforceStdout
+          echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
       - name: Create Git tag
         run: |
