@@ -75,7 +75,7 @@ jobs:
           Write-Host "Contenido del directorio target:"
           Get-ChildItem -Path "./target" -Filter "*.jar"
           
-          # Crear el instalador
+          # Crear el instalador con terminal para debug
           jpackage --input ./target `
             --name CannagrowApp `
             --main-jar Cannagrow-1.0-SNAPSHOT.jar `
@@ -85,6 +85,7 @@ jobs:
             --win-dir-chooser `
             --win-shortcut `
             --win-menu `
+            --win-console `
             --app-version "1.0.0" `
             --verbose
         shell: pwsh
@@ -93,7 +94,7 @@ jobs:
           JAVA_HOME: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
           JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
 
-      # Paso 6: Subir los archivos generados como artefacto
+      # Paso 7: Subir los archivos generados como artefacto
       - name: Upload the executable
         uses: actions/upload-artifact@v4  # Updated to v4 (latest as of May 2025)
         with:
