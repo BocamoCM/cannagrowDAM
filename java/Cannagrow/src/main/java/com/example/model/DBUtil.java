@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DBUtil {
 
-	private static final String URL = "jdbc:mysql://localhost:3306/cannagrowBDA";
-	private static final String USER = "root";
-	private static final String PASS = "";
+	private static final String URL = "jdbc:mysql://192.168.50.189:3306/exampledb";
+	private static final String USER = "user";
+	private static final String PASS = "userpassword";
 
 	static {
 		try {
