@@ -1,5 +1,6 @@
 package com.example.cannagrow;
 
+import com.example.model.UsuarioModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,28 +28,27 @@ public class LoginController {
     @FXML
     private ImageView logoImage;
 
+    private final UsuarioModel usuarioModel = new UsuarioModel();
+
     @FXML
     public void initialize() {
         Image image = new Image(getClass().getResourceAsStream("/com/example/cannagrow/cannagrow_logo.png"));
         logoImage.setImage(image);
     }
 
-
-    // Puedes cambiar esto por una verificación en base de datos
-    private final String validUsername = "admin";
-    private final String validPassword = "12345";
-
     @FXML
     protected void onLoginClick() {
-        String user = usernameField.getText();
+        String email = usernameField.getText();
         String pass = passwordField.getText();
 
-        if (user.isEmpty() || pass.isEmpty()) {
+        if (email.isEmpty() || pass.isEmpty()) {
             loginMessage.setText("Por favor, completa todos los campos.");
             return;
         }
 
-        if (user.equals(validUsername) && pass.equals(validPassword)) {
+        boolean autenticado = usuarioModel.autenticarUsuario(email, pass);
+
+        if (autenticado) {
             loginMessage.setStyle("-fx-text-fill: green;");
             loginMessage.setText("Inicio de sesión exitoso.");
 
@@ -67,5 +67,4 @@ public class LoginController {
             loginMessage.setText("Usuario o contraseña incorrectos.");
         }
     }
-
 }

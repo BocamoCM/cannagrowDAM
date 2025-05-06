@@ -7,4 +7,5 @@ module com.example.cannagrow {
     exports com.example.cannagrow;
     requires java.sql;
     requires mysql.connector.j;
+    requires jbcrypt;
 }
