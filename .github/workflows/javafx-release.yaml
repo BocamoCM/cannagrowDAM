@@ -9,7 +9,7 @@ jobs:
     steps:
       # Paso 1: Revisar el código del repositorio
       - name: Check out code
-        uses: actions/checkout@v3  # Updated to v3
+        uses: actions/checkout@v3
 
       # Paso 2: Configurar JDK (temurin)
       - name: Set up JDK 21
@@ -19,9 +19,9 @@ jobs:
           distribution: 'temurin'
           architecture: 'x64'
 
-      # Paso 3: Ejecutar mvn clean install
+      # Paso 3: Ejecutar mvn clean install con opciones de depuración
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn clean install -X
         working-directory: ./java/Cannagrow
         shell: pwsh
         env:
@@ -49,7 +49,7 @@ jobs:
           Get-ChildItem -Path "./java/Cannagrow/jmods" -Recurse
         shell: pwsh
 
-      # Paso 6: Crear el ejecutable con jpackage
+      # Paso 6: Crear el ejecutable con jpackage con todos los módulos JavaFX necesarios
       - name: Package with jpackage
         run: |
           # Verificar que los jmods existen
@@ -62,8 +62,8 @@ jobs:
           $jmods_path = Resolve-Path "./jmods/javafx-jmods-21"
           Write-Host "JavaFX JMods path: $jmods_path"
           
-          # Crear runtime image
-          jlink --add-modules java.base,java.desktop,javafx.controls,javafx.fxml,javafx.graphics `
+          # Crear runtime image con módulos JavaFX completos y soporte para SQL
+          jlink --add-modules java.base,java.desktop,java.logging,java.sql,java.naming,java.security.jgss,javafx.controls,javafx.fxml,javafx.graphics,javafx.web,javafx.media,javafx.swing `
                 --module-path "$jmods_path" `
                 --output runtime `
                 --strip-debug `
@@ -75,7 +75,18 @@ jobs:
           Write-Host "Contenido del directorio target:"
           Get-ChildItem -Path "./target" -Filter "*.jar"
           
-          # Crear el instalador con terminal para debug
+          # Preparar directorio para bibliotecas externas
+          New-Item -ItemType Directory -Force -Path ./libs
+          
+          # Copiar MySQL Connector y BCrypt desde la carpeta .m2
+          Copy-Item "$HOME/.m2/repository/mysql/mysql-connector-java/8.0.33/mysql-connector-java-8.0.33.jar" -Destination "./libs/"
+          Copy-Item "$HOME/.m2/repository/org/mindrot/jbcrypt/0.4/jbcrypt-0.4.jar" -Destination "./libs/"
+          
+          # Listar el contenido del directorio de bibliotecas
+          Write-Host "Contenido del directorio libs:"
+          Get-ChildItem -Path "./libs"
+          
+          # Crear el instalador con terminal para debug y opciones de memoria
           jpackage --input ./target `
             --name CannagrowApp `
             --main-jar Cannagrow-1.0-SNAPSHOT.jar `
@@ -86,7 +97,10 @@ jobs:
             --win-shortcut `
             --win-menu `
             --win-console `
+            --java-options "-Xms256m -Xmx512m -XX:+ShowCodeDetailsInExceptionMessages -Djavafx.verbose=true -Djava.security.manager=allow" `
             --app-version "1.0.0" `
+            --add-modules java.sql,java.naming `
+            --module-path "./libs" `
             --verbose
         shell: pwsh
         working-directory: ./java/Cannagrow
@@ -96,7 +110,7 @@ jobs:
 
       # Paso 7: Subir los archivos generados como artefacto
       - name: Upload the executable
-        uses: actions/upload-artifact@v4  # Updated to v4 (latest as of May 2025)
+        uses: actions/upload-artifact@v4
         with:
           name: CannagrowApp
           path: |
