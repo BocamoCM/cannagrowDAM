@@ -18,6 +18,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           architecture: 'x64'
+          cache: 'maven'  # Enable Maven cache to speed up builds
 
       # Paso 3: Ejecutar mvn clean install con opciones de depuración
       - name: Build with Maven
@@ -49,7 +50,7 @@ jobs:
           Get-ChildItem -Path "./java/Cannagrow/jmods" -Recurse
         shell: pwsh
 
-      # Paso 6: Crear el ejecutable con jpackage con todos los módulos JavaFX necesarios
+      # Paso 6: Crear el ejecutable con jpackage usando el JAR con dependencias
       - name: Package with jpackage
         run: |
           # Verificar que los jmods existen
@@ -70,38 +71,48 @@ jobs:
                 --no-header-files `
                 --no-man-pages `
                 --compress=2
-
+          
           # Verificar contenido del target
           Write-Host "Contenido del directorio target:"
           Get-ChildItem -Path "./target" -Filter "*.jar"
           
-          # Preparar directorio para bibliotecas externas
-          New-Item -ItemType Directory -Force -Path ./libs
-          
-          # Copiar MySQL Connector y BCrypt desde la carpeta .m2
-          Copy-Item "$HOME/.m2/repository/mysql/mysql-connector-java/8.0.33/mysql-connector-java-8.0.33.jar" -Destination "./libs/"
-          Copy-Item "$HOME/.m2/repository/org/mindrot/jbcrypt/0.4/jbcrypt-0.4.jar" -Destination "./libs/"
-          
-          # Listar el contenido del directorio de bibliotecas
-          Write-Host "Contenido del directorio libs:"
-          Get-ChildItem -Path "./libs"
-          
-          # Crear el instalador con terminal para debug y opciones de memoria
-          jpackage --input ./target `
-            --name CannagrowApp `
-            --main-jar Cannagrow-1.0-SNAPSHOT.jar `
-            --main-class com.example.cannagrow.Main `
-            --type exe `
-            --runtime-image runtime `
-            --win-dir-chooser `
-            --win-shortcut `
-            --win-menu `
-            --win-console `
-            --java-options "-Xms256m -Xmx512m -XX:+ShowCodeDetailsInExceptionMessages -Djavafx.verbose=true -Djava.security.manager=allow" `
-            --app-version "1.0.0" `
-            --add-modules java.sql,java.naming `
-            --module-path "./libs" `
-            --verbose
+          # Crear el instalador usando el JAR con dependencias
+          # Buscamos el JAR con dependencias
+          $jarWithDependencies = Get-ChildItem -Path "./target" -Filter "*with-dependencies*.jar" | Select-Object -First 1
+          if ($jarWithDependencies) {
+            Write-Host "Using JAR with dependencies: $($jarWithDependencies.Name)"
+            
+            jpackage --input ./target `
+              --name CannagrowApp `
+              --main-jar $jarWithDependencies.Name `
+              --main-class com.example.cannagrow.Main `
+              --type exe `
+              --runtime-image runtime `
+              --win-dir-chooser `
+              --win-shortcut `
+              --win-menu `
+              --win-console `
+              --java-options "-Xms256m -Xmx512m -XX:+ShowCodeDetailsInExceptionMessages -Djavafx.verbose=true -Djava.security.manager=allow" `
+              --app-version "1.0.0" `
+              --add-modules java.sql,java.naming `
+              --verbose
+          } else {
+            Write-Host "JAR with dependencies not found. Using standard JAR."
+            jpackage --input ./target `
+              --name CannagrowApp `
+              --main-jar Cannagrow-1.0-SNAPSHOT.jar `
+              --main-class com.example.cannagrow.Main `
+              --type exe `
+              --runtime-image runtime `
+              --win-dir-chooser `
+              --win-shortcut `
+              --win-menu `
+              --win-console `
+              --java-options "-Xms256m -Xmx512m -XX:+ShowCodeDetailsInExceptionMessages -Djavafx.verbose=true -Djava.security.manager=allow" `
+              --app-version "1.0.0" `
+              --add-modules java.sql,java.naming `
+              --verbose
+          }
         shell: pwsh
         working-directory: ./java/Cannagrow
         env:
