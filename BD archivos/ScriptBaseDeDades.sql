@@ -1,12 +1,12 @@
 -- Crear la base de datos
-CREATE DATABASE CannabisStore;
-USE CannabisStore;
+CREATE DATABASE CannaGrowBD;
+USE CannaGrowBD;
 
 -- Tabla Producto
 CREATE TABLE Producto (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(100) NOT NULL,
-    tipo ENUM('Flor', 'Aceite', 'Comestible', 'Extracto') NOT NULL,
+    nombre VARCHAR(250) NOT NULL,
+    tipo ENUM('Flor','Aceite','Comestible','Extracto', 'Semilla','Artilujos','Paquete','Ropa', 'Recurso','Bebida','Cosmético','Mascotas') NOT NULL,
     contenidoTHC FLOAT NOT NULL,
     contenidoCBD FLOAT NOT NULL,
     precio FLOAT NOT NULL,
