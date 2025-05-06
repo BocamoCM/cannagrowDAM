@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.cannagrow.MenuController"
+            prefWidth="800" prefHeight="600"
+            style="-fx-background-color: #121212;">
+
+    <!-- MENÚ LATERAL -->
+    <left>
+        <VBox spacing="15" style="-fx-background-color: #1f1f1f;" prefWidth="200" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="20" left="10" right="10" bottom="10"/>
+            </padding>
+
+            <ImageView fx:id="logoImage" fitWidth="150" preserveRatio="true"/>
+
+            <Label text="CannaGrow" textFill="white">
+                <font>
+                    <Font name="Arial Black" size="20"/>
+                </font>
+            </Label>
+
+            <Button text="Inicio" onAction="#onInicioClick" maxWidth="180"/>
+            <Button text="Productos" onAction="#onProductosClick" maxWidth="180"/>
+            <Button text="Carrito" onAction="#onCarritoClick" maxWidth="180"/>
+            <Button text="Pedidos" onAction="#onPedidosClick" maxWidth="180"/>
+            <Button text="Cerrar sesión" onAction="#onLogoutClick" maxWidth="180" style="-fx-background-color: #d32f2f; -fx-text-fill: white;"/>
+        </VBox>
+    </left>
+
+    <!-- CONTENIDO CENTRAL -->
+    <center>
+        <Label text="Bienvenido a CannaGrow" textFill="white" style="-fx-font-size: 24px;"/>
+    </center>
+</BorderPane>
