@@ -25,7 +25,7 @@
 -- VALUES ('Producto no debe exceder 20% de THC para venta libre.');
 
 -- DATOS EMPLEADOS
-INSERT INTO Empleado (nombre, rol, email, salario, contrasena_hash) VALUES 
+INSERT INTO Empleado (nombre, rol, email, salario, contrasena_hash, imagen_empleado) VALUES 
 ('Joaquin Tena', 'Gerente', 'joaquin_tena@email.com', 4400.00, NULL),
 ('Borja Carreres', 'Gerente', 'borja_carreres@email.com', 6400.00, NULL),
 ('Andreu Rosell', 'Gerente', 'andreu_rosell@email.com', 10000.00, NULL),
@@ -66,7 +66,7 @@ INSERT INTO Empleado (nombre, rol, email, salario, contrasena_hash) VALUES
 
 
 -- Clientes
-INSERT INTO Cliente (nombre, fechaNacimiento, email, direccion, contrasena_hash) VALUES
+INSERT INTO Cliente (nombre, fechaNacimiento, email, direccion, contrasena_hash, imagen_empleado) VALUES
 ('Juan Pérez', '1990-03-25', 'juan.perez@email.com', 'Calle de la tortosa, Llauri', NULL),
 ('Sara García', '1954-11-13', 'sara.garcia@example.com', 'Calle de la tortosa 79, Benifaió', NULL),
 ('Miguel Gómez', '1969-01-23', 'miguel.gomez@example.com', 'Calle de la tortosa 104, Turís', NULL),
@@ -154,7 +154,7 @@ INSERT INTO Cliente (nombre, fechaNacimiento, email, direccion, contrasena_hash)
 
 
 -- PRODUCTOS
-INSERT INTO Producto (nombre, tipo, contenidoTHC, contenidoCBD, precio, stock, imagen_url) VALUES 
+INSERT INTO Producto (nombre, tipo, contenidoTHC, contenidoCBD, precio, stock, imagen_producto) VALUES 
 ('SemillaSinSeleccionar', 'semilla', 18.5, 0.2, 15.99, 100, NULL),
 ('SemillaSelecionadaNormal', 'semilla', 18.5, 0.2, 22.45, 180, NULL),
 ('SemillaSelecionadaPremium', 'semilla', 18.5, 0.2, 40.97, 25, NULL),
