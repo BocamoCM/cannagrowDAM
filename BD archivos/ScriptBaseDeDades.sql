@@ -10,7 +10,8 @@ CREATE TABLE Producto (
     contenidoTHC FLOAT NOT NULL,
     contenidoCBD FLOAT NOT NULL,
     precio FLOAT NOT NULL,
-    stock INT NOT NULL
+    stock INT NOT NULL,
+    imagen_producto VARCHAR(255)
 );
 
 -- Tabla Cliente
@@ -20,7 +21,8 @@ CREATE TABLE Cliente (
     fechaNacimiento DATE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     direccion VARCHAR(255) NOT NULL,
-    contrasena_hash CHAR(60) NOT NULL
+    contrasena_hash CHAR(60) NOT NULL,
+    imagen_cliente VARCHAR(255)
 );
 
 -- Tabla Empleado
@@ -30,7 +32,8 @@ CREATE TABLE Empleado (
     rol ENUM('Vendedor', 'Cultivador', 'Gerente') NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     salario FLOAT NOT NULL,
-    contrasena_hash CHAR(60) NOT NULL
+    contrasena_hash CHAR(60) NOT NULL,
+    imagen_empleado VARCHAR(255)
 );
 
 -- Tabla Pedido
