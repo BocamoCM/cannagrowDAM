@@ -43,7 +43,9 @@ CREATE TABLE Pedido (
     total FLOAT DEFAULT 0,
     estado ENUM('Pendiente', 'Enviado', 'Entregado', 'Cancelado') NOT NULL,
     cliente_id INT,
-    FOREIGN KEY (cliente_id) REFERENCES Cliente(id)
+    empleado_id INT,
+    FOREIGN KEY (cliente_id) REFERENCES Cliente(id),
+    FOREIGN KEY (empleado_id) REFERENCES Empleado(id)
 );
 
 -- Tabla ItemPedido
