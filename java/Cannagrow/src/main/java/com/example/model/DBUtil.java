@@ -5,36 +5,41 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBUtil {
-	
-	Connection conexion = null;
-	
-	public Connection getConexion() {
-		
-		String cadenaConexion = "jdbc:mysql://localhost:3306/cannagrowBDA";
-		String usuario = "root";
-		String password = "";
-		
-		try {
-			
-			DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-			this.conexion = DriverManager.getConnection(cadenaConexion, usuario, password);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();			
-		} 
-		
-		return conexion;
 
+	private static final String URL = "jdbc:mysql://localhost:3306/cannagrowBDA";
+	private static final String USER = "root";
+	private static final String PASS = "";
+
+	static {
+		try {
+			// Registra el driver MySQL una sola vez
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// Falla la inicialización si no se encuentra el driver
+			throw new ExceptionInInitializerError("No se pudo cargar el driver de MySQL: " + e.getMessage());
+		}
 	}
 
-	public void cerrarConexion() {
-		if (this.conexion != null) {
+	/**
+	 * Obtiene una nueva conexión JDBC.
+	 * @return Connection abierta; el llamador debe cerrarla.
+	 * @throws SQLException si ocurre un error al conectar.
+	 */
+	public Connection getConexion() throws SQLException {
+		return DriverManager.getConnection(URL, USER, PASS);
+	}
+
+	/**
+	 * Cierra una conexión si no es null.
+	 * @param conexion la conexión a cerrar.
+	 */
+	public static void cerrarConexion(Connection conexion) {
+		if (conexion != null) {
 			try {
-				this.conexion.close();
+				conexion.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-
 }

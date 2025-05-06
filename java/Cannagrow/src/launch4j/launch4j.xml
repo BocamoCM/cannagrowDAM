@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+    <dontWrapJar>false</dontWrapJar>
+    <headerType>gui</headerType>
+    <jar>target\cannagrow-1.0-SNAPSHOT.jar</jar>
+    <outfile>C:\Users\borji\Desktop\final\cannagrowDAM\java\Cannagrow\target\Cannagrow.exe</outfile>
+    <errTitle>Cannagrow</errTitle>
+    <cmdLine></cmdLine>
+    <chdir>.</chdir>
+    <priority>normal</priority>
+    <downloadUrl>https://adoptium.net/</downloadUrl>
+    <supportUrl>https://your-company-support-url.com</supportUrl>
+    <stayAlive>false</stayAlive>
+    <restartOnCrash>false</restartOnCrash>
+    <manifest></manifest>
+
+    <classPath>
+        <mainClass>com.example.cannagrow.Main</mainClass>
+    </classPath>
+
+    <jre>
+        <path></path>
+        <bundledJre64Bit>false</bundledJre64Bit>
+        <bundledJreAsFallback>false</bundledJreAsFallback>
+        <minVersion>23.0.1</minVersion>
+        <maxVersion></maxVersion>
+        <jdkPreference>preferJre</jdkPreference>
+        <runtimeBits>64/32</runtimeBits>
+        <initialHeapSize>128</initialHeapSize>
+        <maxHeapSize>512</maxHeapSize>
+    </jre>
+
+    <versionInfo>
+        <fileVersion>1.0.0.0</fileVersion>
+        <txtFileVersion>1.0.0</txtFileVersion>
+        <fileDescription>Cannagrow Application</fileDescription>
+        <copyright>Your Company © 2025</copyright>
+        <productVersion>1.0.0.0</productVersion>
+        <txtProductVersion>1.0.0</txtProductVersion>
+        <productName>Cannagrow</productName>
+        <companyName>Your Company</companyName>
+        <internalName>Cannagrow</internalName>
+        <originalFilename>Cannagrow.exe</originalFilename>
+        <trademarks></trademarks>
+        <language>ENGLISH_US</language>
+    </versionInfo>
+
+    <messages>
+        <startupErr>An error occurred while starting the application.</startupErr>
+        <jreVersionErr>This application requires a Java Runtime Environment</jreVersionErr>
+        <launcherErr>The registry refers to a nonexistent Java Runtime Environment installation or the runtime is corrupted.</launcherErr>
+        <instanceAlreadyExistsMsg>An application instance is already running.</instanceAlreadyExistsMsg>
+    </messages>
+</launch4jConfig>

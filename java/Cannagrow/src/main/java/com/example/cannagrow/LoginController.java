@@ -36,7 +36,7 @@ public class LoginController {
 
     // Puedes cambiar esto por una verificación en base de datos
     private final String validUsername = "admin";
-    private final String validPassword = "1234";
+    private final String validPassword = "12345";
 
     @FXML
     protected void onLoginClick() {
