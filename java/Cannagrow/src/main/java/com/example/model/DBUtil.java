@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBUtil {
 
-	private static final String URL = "jdbc:mysql://192.168.50.189:3306/CannaGrowBD";
+	private static final String URL = "jdbc:mysql://192.168.50.189:3306/CannaGrowBD?useSSL=false";
 	private static final String USER = "root";
 	private static final String PASS = "rootpassword";
 
