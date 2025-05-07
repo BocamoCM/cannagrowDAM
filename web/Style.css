@@ -74,3 +74,9 @@ body {
 .footer-social a:hover {
   color: white;
 }
+
+.card-img-top {
+  height: 250px;       /* Ajusta según tu preferencia */
+  object-fit: cover;   /* Rellena el espacio sin deformar la imagen */
+  width: 100%;         /* Ocupa todo el ancho del contenedor */
+}
