@@ -58,3 +58,51 @@ Ofrecer a nuestros clientes productos de la más alta calidad para el cultivo y 
 
 **Visítanos** en nuestra tienda física o explora nuestro catálogo online y descubre todos los productos que necesitas para tu proyecto de cultivo o consumo de cannabis de forma 100% legal.
 
+---
+
+### ¿Cómo se compra?
+
+1. **Web**  
+    En nuestra web podrás ver los beneficios del **CBD**, información sobre nuestros productos, tutoriales y videotutoriales de cómo funciona nuestra aplicación. También podrás descargarte el ejecutable de nuestra aplicación o contactarnos, y te ayudaremos en lo imposible si es posible.
+
+2. **APP**  
+    Una vez en nuestra aplicación, solo tendrás que iniciar sesión y comprar.
+
+---
+### 🚀 Tecnología utilizada
+
+1. **HTML y CSS**  
+   Utilizadas para el diseño y estructura de la página web. 🎨
+
+2. **Java**  
+   Lenguaje principal para el desarrollo de la aplicación. ☕
+
+3. **MySQL**  
+   Base de datos utilizada para almacenar y gestionar la información del proyecto. 🗄️
+
+4. **Docker**  
+   Usado para contenerizar y gestionar la base de datos de forma eficiente. 🐳
+
+5. **Raspberry Pi**  
+   Utilizada como servidor físico para el despliegue del proyecto. 🍓🖥️
+
+6. **Git**  
+   Sistema de control de versiones que nos permite trabajar en equipo de manera organizada. 🛠️
+
+---
+
+### 📄 Licencia
+
+**Licencia:** GPL (General Public License) 🔓
+
+---
+
+### 👨‍💻 Creadores
+
+Los **creadores** de este **proyecto** son:
+
+- Andreu Rosell  
+- Joaquín Tena  
+- Borja Carreres  
+- Mario Mas  
+- Ignacio Piles
