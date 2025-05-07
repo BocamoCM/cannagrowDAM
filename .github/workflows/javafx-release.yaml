@@ -2,102 +2,68 @@ name: Build and Package Cannagrow
 
 on:
   workflow_dispatch:
+    branches:
+      - java  # <- Solo se ejecuta si el workflow se lanza desde la rama 'java'
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      # Paso 1: Revisar el código del repositorio
       - name: Check out code
         uses: actions/checkout@v3
 
-      # Paso 2: Configurar JDK (temurin)
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
           distribution: 'temurin'
-          architecture: 'x64'
-          cache: 'maven'  # Enable Maven cache to speed up builds
+          java-version: '21'
+          cache: 'maven'
 
-      # Paso 3: Ejecutar mvn clean install para crear el JAR con dependencias
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn clean install -X
         working-directory: ./java/Cannagrow
-        shell: pwsh
-        env:
-          JAVA_HOME: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
-          JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
 
-      # Paso 4: Verificar la existencia del JAR con dependencias
-      - name: Find JAR files
+      - name: Download and extract JavaFX jmods
         run: |
-          Write-Host "Verificando JAR con dependencias:"
-          Get-ChildItem -Path "./java/Cannagrow/target" -Filter "*with-dependencies*.jar" | ForEach-Object { Write-Host $_.FullName }
-        shell: pwsh
-        
-      # Paso 5: Preparar módulos JavaFX
-      - name: Download JavaFX jmods
-        run: |
-          # Crear directorio para JavaFX dentro del directorio del proyecto
-          New-Item -ItemType Directory -Force -Path ./java/Cannagrow/jmods
-          # Descargar JavaFX jmods
-          Invoke-WebRequest -Uri "https://download2.gluonhq.com/openjfx/21/openjfx-21_windows-x64_bin-jmods.zip" -OutFile "./java/Cannagrow/javafx-jmods.zip"
-          # Extraer el archivo zip
-          Expand-Archive -Path "./java/Cannagrow/javafx-jmods.zip" -DestinationPath "./java/Cannagrow/jmods" -Force
-          # Listar archivos para verificar
-          Write-Host "Contenido del directorio jmods:"
-          Get-ChildItem -Path "./java/Cannagrow/jmods" -Recurse
+          $zipPath = "./java/Cannagrow/javafx-jmods.zip"
+          $destPath = "./java/Cannagrow/jmods"
+          Invoke-WebRequest -Uri "https://download2.gluonhq.com/openjfx/21/openjfx-21_windows-x64_bin-jmods.zip" -OutFile $zipPath
+          Expand-Archive -Path $zipPath -DestinationPath $destPath -Force
         shell: pwsh
 
-      # Paso 6: Crear el ejecutable con jpackage usando exclusivamente el JAR con dependencias
-      - name: Package with jpackage
+      - name: Create executable with jpackage
         run: |
-          # Verificar que los jmods existen
-          $jmods_path = Resolve-Path "./jmods/javafx-jmods-21"
-          Write-Host "JavaFX JMods path: $jmods_path"
-          
-          # Crear runtime image con módulos JavaFX y dependencias necesarias
-          jlink --add-modules java.base,java.desktop,java.logging,java.sql,java.naming,java.security.jgss,javax.crypto,java.security.sasl,java.net.http,javafx.controls,javafx.fxml,javafx.graphics,javafx.web,javafx.media,javafx.swing `
-                --module-path "$jmods_path" `
-                --output runtime `
-                --strip-debug `
-                --no-header-files `
-                --no-man-pages `
-                --compress=2
-          
-          # Buscar el JAR con dependencias
-          $jarWithDependencies = Get-ChildItem -Path "./target" -Filter "*with-dependencies*.jar" | Select-Object -First 1
-          
-          if ($jarWithDependencies) {
-            Write-Host "Using JAR with dependencies: $($jarWithDependencies.FullName)"
-            
-            # Crear el instalador usando el JAR con dependencias
-            jpackage --input ./target `
-              --name CannagrowApp `
-              --main-jar $($jarWithDependencies.Name) `
-              --main-class com.example.cannagrow.Main `
-              --type exe `
-              --runtime-image runtime `
-              --win-dir-chooser `
-              --win-shortcut `
-              --win-menu `
-              --win-console `
-              --java-options "-Xms256m -Xmx512m -XX:+ShowCodeDetailsInExceptionMessages -Djavafx.verbose=true" `
-              --app-version "1.0.0" `
-              --verbose
-          } else {
-            Write-Host "ERROR: No se encontró el JAR con dependencias. El empaquetado no incluirá todas las dependencias necesarias."
+          $jmodsPath = Get-ChildItem -Path "./jmods" -Directory | Select-Object -ExpandProperty FullName
+          jlink `
+            --add-modules java.base,java.desktop,java.logging,java.sql,java.naming,javafx.controls,javafx.fxml `
+            --module-path "$jmodsPath" `
+            --output runtime `
+            --strip-debug --no-header-files --no-man-pages --compress=2
+
+          $jar = Get-ChildItem -Path "./target" -Filter "*with-dependencies*.jar" | Select-Object -First 1
+          if (-not $jar) {
+            Write-Host "No se encontró el JAR con dependencias. Abortando."
             exit 1
           }
+
+          jpackage `
+            --input ./target `
+            --name CannagrowApp `
+            --main-jar $jar.Name `
+            --main-class com.example.cannagrow.Main `
+            --type exe `
+            --runtime-image runtime `
+            --win-dir-chooser `
+            --win-shortcut `
+            --win-menu `
+            --win-console `
+            --java-options "-Xms256m -Xmx512m" `
+            --app-version "1.0.0" `
+            --verbose
         shell: pwsh
         working-directory: ./java/Cannagrow
-        env:
-          JAVA_HOME: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
-          JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
 
-      # Paso 7: Subir los archivos generados como artefacto
-      - name: Upload the executable
+      - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
           name: CannagrowApp
