@@ -27,16 +27,18 @@
                 </font>
             </Label>
 
-            <Button text="Inicio" onAction="#onInicioClick" maxWidth="180"/>
-            <Button text="Productos" onAction="#onProductosClick" maxWidth="180"/>
-            <Button text="Carrito" onAction="#onCarritoClick" maxWidth="180"/>
-            <Button text="Pedidos" onAction="#onPedidosClick" maxWidth="180"/>
-            <Button text="Cerrar sesión" onAction="#onLogoutClick" maxWidth="180" style="-fx-background-color: #d32f2f; -fx-text-fill: white;"/>
+            <Button text="Inicio" onAction="#onInicioClick" fx:id="inicioButton" maxWidth="180"/>
+            <Button text="Productos" onAction="#onProductosClick" fx:id="productosButton" maxWidth="180"/>
+            <Button text="Carrito" onAction="#onCarritoClick" fx:id="carritoButton" maxWidth="180"/>
+            <Button text="Pedidos" onAction="#onPedidosClick" fx:id="pedidosButton" maxWidth="180"/>
+            <Button text="Cerrar sesión" onAction="#onLogoutClick" maxWidth="180"
+                    style="-fx-background-color: #d32f2f; -fx-text-fill: white;"
+                    fx:id="logoutButton"/>
         </VBox>
     </left>
 
     <!-- CONTENIDO CENTRAL -->
     <center>
-        <Label text="Bienvenido a CannaGrow" textFill="white" style="-fx-font-size: 24px;"/>
+        <Label text="Bienvenido a CannaGrow" textFill="white" style="-fx-font-size: 24px;" fx:id="bienvenidaLabel"/>
     </center>
 </BorderPane>

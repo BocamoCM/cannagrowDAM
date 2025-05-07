@@ -7,8 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UsuarioModel {
+    private String nombre;
+    private String email;
+    private String rol;
+    private double salario;
 
-    public boolean autenticarUsuario(String nombre, String contrasena) {
+    public UsuarioModel autenticarUsuario(String nombre, String contrasena) {
         String query = "SELECT contrasena_hash, email, rol, salario FROM Empleado WHERE nombre = ?";
 
         try (Connection conn = DBUtil.getConexion();
@@ -17,36 +21,37 @@ public class UsuarioModel {
             stmt.setString(1, nombre);
             ResultSet rs = stmt.executeQuery();
 
-            // Comprobamos si existe un resultado con ese nombre
             if (rs.next()) {
                 String hashGuardado = rs.getString("contrasena_hash");
 
                 try {
-                    // Verificamos la contraseña proporcionada
                     boolean passwordCorrecta = BCrypt.checkpw(contrasena, hashGuardado);
                     if (passwordCorrecta) {
-                        return true;
+                        UsuarioModel usuario = new UsuarioModel();
+                        usuario.setNombre(nombre);
+                        usuario.setEmail(rs.getString("email"));
+                        usuario.setRol(rs.getString("rol"));
+                        usuario.setSalario(rs.getDouble("salario"));
+                        return usuario;
                     } else {
-                        return false;
+                        return null;
                     }
                 } catch (IllegalArgumentException e) {
-                    // Si el hash es incompatible, actualizamos la contraseña
                     System.out.println("Error con el formato del hash de la contraseña. Actualizando...");
-
-                    // Actualizamos solo el hash de la contraseña sin intentar registrar al usuario de nuevo
-                    actualizarContrasena(nombre, contrasena); // Método que actualiza solo el hash de la contraseña
-                    return BCrypt.checkpw(contrasena, BCrypt.hashpw(contrasena, BCrypt.gensalt()));
+                    actualizarContrasena(nombre, contrasena);
+                    // Puedes decidir si aquí también devuelves el usuario o no. Por ahora devuelvo null:
+                    return null;
                 }
             } else {
-                // No existe ningún empleado con ese nombre
-                return false;
+                return null;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
+
 
 
     // Método para registrar un nuevo usuario
@@ -75,7 +80,7 @@ public class UsuarioModel {
         return false;
     }
 
-    // Método para actualizar la contraseña de un usuario (en caso de ser necesario)
+
     public void actualizarContrasena(String nombre, String nuevaContrasena) {
         String query = "UPDATE Empleado SET contrasena_hash = ? WHERE nombre = ?";
 
@@ -98,5 +103,37 @@ public class UsuarioModel {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    public double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(double salario) {
+        this.salario = salario;
     }
 }

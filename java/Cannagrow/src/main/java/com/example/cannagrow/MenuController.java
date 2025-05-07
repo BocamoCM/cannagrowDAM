@@ -1,21 +1,72 @@
 package com.example.cannagrow;
 
+import com.example.model.Session;
+import com.example.model.UsuarioModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class MenuController {
 
+    @FXML
+    private Label bienvenidaLabel;
+
+    @FXML
+    private Button carritoButton;
+
+    @FXML
+    private Button pedidosButton;
+
+    @FXML
+    private Button productosButton;
+
+    @FXML
+    private Button inicioButton;
+
+    @FXML
+    private Button logoutButton;
 
     @FXML
     private ImageView logoImage;
 
     @FXML
     public void initialize() {
-        Image image = new Image(getClass().getResourceAsStream("/com/example/cannagrow/cannagrow_logo.png"));
-        logoImage.setImage(image);
+        UsuarioModel usuario = Session.getUsuarioActual();
+
+        if (usuario != null) {
+            bienvenidaLabel.setText("Bienvenido, " + usuario.getNombre());
+
+            String rol = usuario.getRol().toLowerCase();
+
+            // Cargar logo
+            Image image = new Image(getClass().getResourceAsStream("/com/example/cannagrow/cannagrow_logo.png"));
+            logoImage.setImage(image);
+
+            // Control de permisos por rol
+            switch (rol) {
+                case "admin":
+                    // Admin puede ver todo
+                    carritoButton.setVisible(true);
+                    pedidosButton.setVisible(true);
+                    productosButton.setVisible(true);
+                    break;
+                case "usuario":
+                    // Usuario solo puede acceder a ciertas partes
+                    carritoButton.setVisible(true);
+                    pedidosButton.setVisible(false);
+                    productosButton.setVisible(false);
+                    break;
+                default:
+                    // Rol desconocido, ocultar todo por seguridad
+                    carritoButton.setVisible(false);
+                    pedidosButton.setVisible(false);
+                    productosButton.setVisible(false);
+                    break;
+            }
+        }
     }
 
     @FXML
@@ -41,16 +92,14 @@ public class MenuController {
     @FXML
     private void onLogoutClick() {
         mostrarMensaje("Cerrar sesión", "Sesión cerrada. Vuelve pronto.");
-        // Aquí podrías cambiar a la vista de login, si lo deseas
+        // Aquí podrías redirigir al login
     }
 
     private void mostrarMensaje(String titulo, String contenido) {
-        Alert alert = new Alert(AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(contenido);
         alert.showAndWait();
     }
 }
-
-

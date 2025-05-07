@@ -1,5 +1,6 @@
 package com.example.cannagrow;
 
+import com.example.model.Session;
 import com.example.model.UsuarioModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,11 +47,15 @@ public class LoginController {
             return;
         }
 
-        boolean autenticado = usuarioModel.autenticarUsuario(email, pass);
+        // Usamos la nueva versión del método
+        UsuarioModel usuarioAutenticado = usuarioModel.autenticarUsuario(email, pass);
 
-        if (autenticado) {
+        if (usuarioAutenticado != null) {
             loginMessage.setStyle("-fx-text-fill: green;");
             loginMessage.setText("Inicio de sesión exitoso.");
+
+            // Guardamos el usuario autenticado en la sesión
+            Session.setUsuarioActual(usuarioAutenticado);
 
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/menu.fxml"));
@@ -58,10 +63,12 @@ public class LoginController {
                 Scene menuScene = new Scene(menuRoot);
                 Stage currentStage = (Stage) usernameField.getScene().getWindow();
                 currentStage.setScene(menuScene);
+                currentStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
                 loginMessage.setText("Error al cargar el menú.");
             }
+
         } else {
             loginMessage.setStyle("-fx-text-fill: red;");
             loginMessage.setText("Usuario o contraseña incorrectos.");
