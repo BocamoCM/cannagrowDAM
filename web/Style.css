@@ -1,49 +1,49 @@
 body {
-    font-family: 'Segoe UI', sans-serif;
-  }
+  font-family: 'Segoe UI', sans-serif;
+}
 
-  .navbar {
-    transition: all 0.3s ease-in-out;
-  }
+.navbar {
+  transition: all 0.3s ease-in-out;
+}
 
-  .navbar.scrolled {
-    background-color: #fff !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
+.navbar.scrolled {
+  background-color: #fff !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-  .hero {
-    background: url('https://images.unsplash.com/photo-1598970434795-0c54fe7c0642') no-repeat center center/cover;
-    height: 100vh;
-    color: white;
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
+.hero {
+  background: url('https://images.unsplash.com/photo-1598970434795-0c54fe7c0642') no-repeat center center/cover;
+  height: 100vh;
+  color: white;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
 
-  .overlay {
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 4rem;
-    border-radius: 1rem;
-  }
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 4rem;
+  border-radius: 1rem;
+}
 
-  .product-card img {
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px;
-  }
+.product-card img {
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
 
-  .icon-circle {
-    font-size: 2rem;
-    color: #198754;
-  }
+.icon-circle {
+  font-size: 2rem;
+  color: #198754;
+}
 
-  .footer-social a {
-    color: #ccc;
-    margin: 0 10px;
-    font-size: 1.3rem;
-    transition: 0.3s;
-  }
+.footer-social a {
+  color: #ccc;
+  margin: 0 10px;
+  font-size: 1.3rem;
+  transition: 0.3s;
+}
 
-  .footer-social a:hover {
-    color: white;
-  }
+.footer-social a:hover {
+  color: white;
+}
