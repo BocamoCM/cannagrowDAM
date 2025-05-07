@@ -207,7 +207,8 @@ INSERT INTO Cliente (nombre, fechaNacimiento, email, direccion, contrasena_hash,
 -- PRODUCTOS
 INSERT INTO Producto (nombre, tipo, contenidoTHC, contenidoCBD, precio, stock, imagen_producto) VALUES 
 ('SemillaSinSeleccionar', 'semilla', 18.5, 0.2, 15.99, 100, NULL),
-('DildoCBD', 'Artilujos', 59.5, 4, 0.99, 999, NULL),
+('CBDildo', 'Artilujos', 59.5, 4, 0.99, 999, NULL),
+('CBDildo Liquido', 'comestibles', 59.5, 4, 5.99, 999, NULL),
 ('SemillaSelecionadaNormal', 'semilla', 18.5, 0.2, 22.45, 180, NULL),
 ('SemillaSelecionadaPremium', 'semilla', 18.5, 0.2, 40.97, 25, NULL),
 ('LamparaBasicaPersonal', 'Artilujos', 18.5, 0.2, 20.97, 15, NULL),
