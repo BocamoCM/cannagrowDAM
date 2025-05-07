@@ -20,7 +20,7 @@ jobs:
           cache: 'maven'
 
       - name: Build with Maven
-        run: mvn clean package -DskipTests
+        run: mvn clean install -X
         working-directory: ./java/Cannagrow
 
       - name: Download and extract JavaFX jmods
@@ -34,30 +34,28 @@ jobs:
       - name: Create executable with jpackage
         run: |
           $jmodsPath = Get-ChildItem -Path "./jmods" -Directory | Select-Object -ExpandProperty FullName
-          jlink `  
-            --add-modules java.base,java.desktop,java.logging,java.sql,java.naming,javafx.controls,javafx.fxml ` 
-            --module-path "$jmodsPath" ` 
-            --output runtime ` 
-            --strip-debug --no-header-files --no-man-pages --compress=2
+          jlink --add-modules java.base,java.desktop,java.logging,java.sql,java.naming,javafx.controls,javafx.fxml `
+                --module-path "$jmodsPath" `
+                --output runtime `
+                --strip-debug --no-header-files --no-man-pages --compress=2
           $jar = Get-ChildItem -Path "./target" -Filter "*with-dependencies*.jar" | Select-Object -First 1
           if (-not $jar) {
             Write-Host "No se encontró el JAR con dependencias. Abortando."
             exit 1
           }
-          jpackage `  
-            --input ./target `  
-            --name CannagrowApp `  
-            --main-jar $jar.Name `  
-            --main-class com.example.cannagrow.Main `  
-            --type exe `  
-            --runtime-image runtime `  
-            --win-dir-chooser `  
-            --win-shortcut `  
-            --win-menu `  
-            --win-console `  
-            --java-options "-Xms256m -Xmx512m" `  
-            --app-version "1.0.0" `  
-            --verbose
+          jpackage --input ./target `
+                   --name CannagrowApp `
+                   --main-jar $jar.Name `
+                   --main-class com.example.cannagrow.Main `
+                   --type exe `
+                   --runtime-image runtime `
+                   --win-dir-chooser `
+                   --win-shortcut `
+                   --win-menu `
+                   --win-console `
+                   --java-options "-Xms256m -Xmx512m" `
+                   --app-version "1.0.0" `
+                   --verbose
         shell: pwsh
         working-directory: ./java/Cannagrow
 
