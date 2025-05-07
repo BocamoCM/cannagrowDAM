@@ -10,7 +10,7 @@ import java.io.File;
 
 public class DBUtil {
 	// Default values - will be used if properties file is not found
-	private static String URL = "jdbc:mysql://192.168.50.189:3306/CannaGrowBD";
+	private static String URL = "jdbc:mysql://192.168.50.189:3306/CannaGrowBD?useSSL=false&allowPublicKeyRetrieval=true";
 	private static String USER = "root";
 	private static String PASS = "rootpassword";
 
