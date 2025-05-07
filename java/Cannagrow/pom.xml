@@ -1,106 +1,122 @@
-name: Build and Package Cannagrow
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-on:
-  workflow_dispatch:
+  <modelVersion>4.0.0</modelVersion>
 
-jobs:
-  build:
-    runs-on: windows-latest
-    steps:
-      # Paso 1: Revisar el código del repositorio
-      - name: Check out code
-        uses: actions/checkout@v3
+  <groupId>com.example</groupId>
+  <artifactId>Cannagrow</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>Cannagrow</name>
 
-      # Paso 2: Configurar JDK (temurin)
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          architecture: 'x64'
-          cache: 'maven'  # Enable Maven cache to speed up builds
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <junit.version>5.10.2</junit.version>
+    <!-- Actualiza las propiedades de JDK a la versión 21 -->
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+  </properties>
 
-      # Paso 3: Ejecutar mvn clean install para crear el JAR con dependencias
-      - name: Build with Maven
-        run: mvn clean install
-        working-directory: ./java/Cannagrow
-        shell: pwsh
-        env:
-          JAVA_HOME: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
-          JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
+  <dependencies>
+    <!-- Dependencias JavaFX -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>17.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>17.0.6</version>
+    </dependency>
 
-      # Paso 4: Verificar la existencia del JAR con dependencias
-      - name: Find JAR files
-        run: |
-          Write-Host "Verificando JAR con dependencias:"
-          Get-ChildItem -Path "./java/Cannagrow/target" -Filter "*with-dependencies*.jar" | ForEach-Object { Write-Host $_.FullName }
-        shell: pwsh
-        
-      # Paso 5: Preparar módulos JavaFX
-      - name: Download JavaFX jmods
-        run: |
-          # Crear directorio para JavaFX dentro del directorio del proyecto
-          New-Item -ItemType Directory -Force -Path ./java/Cannagrow/jmods
-          # Descargar JavaFX jmods
-          Invoke-WebRequest -Uri "https://download2.gluonhq.com/openjfx/21/openjfx-21_windows-x64_bin-jmods.zip" -OutFile "./java/Cannagrow/javafx-jmods.zip"
-          # Extraer el archivo zip
-          Expand-Archive -Path "./java/Cannagrow/javafx-jmods.zip" -DestinationPath "./java/Cannagrow/jmods" -Force
-          # Listar archivos para verificar
-          Write-Host "Contenido del directorio jmods:"
-          Get-ChildItem -Path "./java/Cannagrow/jmods" -Recurse
-        shell: pwsh
+    <!-- Dependencias JUnit para pruebas -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
 
-      # Paso 6: Crear el ejecutable con jpackage usando exclusivamente el JAR con dependencias
-      - name: Package with jpackage
-        run: |
-          # Verificar que los jmods existen
-          $jmods_path = Resolve-Path "./jmods/javafx-jmods-21"
-          Write-Host "JavaFX JMods path: $jmods_path"
-          
-          # Crear runtime image con módulos JavaFX y dependencias necesarias
-          jlink --add-modules java.base,java.desktop,java.logging,java.sql,java.naming,java.security.jgss,javax.crypto,java.security.sasl,java.net.http,javafx.controls,javafx.fxml,javafx.graphics,javafx.web,javafx.media,javafx.swing `
-                --module-path "$jmods_path" `
-                --output runtime `
-                --strip-debug `
-                --no-header-files `
-                --no-man-pages `
-                --compress=2
-          
-          # Buscar el JAR con dependencias
-          $jarWithDependencies = Get-ChildItem -Path "./target" -Filter "*with-dependencies*.jar" | Select-Object -First 1
-          
-          if ($jarWithDependencies) {
-            Write-Host "Using JAR with dependencies: $($jarWithDependencies.FullName)"
-            
-            # Crear el instalador usando el JAR con dependencias
-            jpackage --input ./target `
-              --name CannagrowApp `
-              --main-jar $($jarWithDependencies.Name) `
-              --main-class com.example.cannagrow.Main `
-              --type exe `
-              --runtime-image runtime `
-              --win-dir-chooser `
-              --win-shortcut `
-              --win-menu `
-              --win-console `
-              --java-options "-Xms256m -Xmx512m -XX:+ShowCodeDetailsInExceptionMessages -Djavafx.verbose=true" `
-              --app-version "1.0.0" `
-              --verbose
-          } else {
-            Write-Host "ERROR: No se encontró el JAR con dependencias. El empaquetado no incluirá todas las dependencias necesarias."
-            exit 1
-          }
-        shell: pwsh
-        working-directory: ./java/Cannagrow
-        env:
-          JAVA_HOME: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
-          JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
+    <dependency>
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>0.4</version>
+    </dependency>
 
-      # Paso 7: Subir los archivos generados como artefacto
-      - name: Upload the executable
-        uses: actions/upload-artifact@v4
-        with:
-          name: CannagrowApp
-          path: |
-            ./java/Cannagrow/*.exe
-            ./java/Cannagrow/CannagrowApp/**
+    <!-- Dependencia MySQL Connector -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>9.2.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Plugin de compilación para JDK 21 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <source>21</source> <!-- Cambiado a 21 -->
+          <target>21</target> <!-- Cambiado a 21 -->
+        </configuration>
+      </plugin>
+
+      <!-- Plugin para crear un JAR con dependencias -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <finalName>Cannagrow-1.0-SNAPSHOT-jar-with-dependencies</finalName> <!-- Agrega esto -->
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>com.example.cannagrow.Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Plugin JavaFX -->
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <configuration>
+              <mainClass>com.example.cannagrow.Main</mainClass>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
