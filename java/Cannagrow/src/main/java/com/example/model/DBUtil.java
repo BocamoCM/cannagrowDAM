@@ -1,15 +1,14 @@
 package com.example.model;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.io.File;
 
 public class DBUtil {
-	// Default values - will be used if properties file is not found
+	// Valores predeterminados, en caso de no encontrar el archivo properties
 	private static String URL = "jdbc:mysql://192.168.50.189:3306/CannaGrowBD?useSSL=false&allowPublicKeyRetrieval=true";
 	private static String USER = "root";
 	private static String PASS = "rootpassword";
@@ -18,10 +17,10 @@ public class DBUtil {
 	private static boolean configLoaded = false;
 
 	static {
-		// Try to load custom configuration first
+		// Cargar la configuración del archivo properties
 		loadConfig();
 
-		// Then load MySQL driver
+		// Cargar el driver de MySQL
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -31,7 +30,7 @@ public class DBUtil {
 	}
 
 	/**
-	 * Carga configuración desde archivo properties si existe
+	 * Carga la configuración desde el archivo properties si existe.
 	 */
 	private static void loadConfig() {
 		if (configLoaded) return;
@@ -39,40 +38,25 @@ public class DBUtil {
 		Properties props = new Properties();
 		boolean loaded = false;
 
-		// Try current directory
-		File currentDirConfig = new File(CONFIG_FILE);
-		if (currentDirConfig.exists()) {
-			try (FileInputStream fis = new FileInputStream(currentDirConfig)) {
-				props.load(fis);
+		// Intentar cargar desde el classpath
+		try (InputStream inputStream = DBUtil.class.getClassLoader().getResourceAsStream(CONFIG_FILE)) {
+			if (inputStream != null) {
+				props.load(inputStream);
 				loaded = true;
-				System.out.println("Cargando configuración de base de datos desde: " + currentDirConfig.getAbsolutePath());
-			} catch (IOException e) {
-				System.err.println("Error leyendo " + CONFIG_FILE + ": " + e.getMessage());
+				System.out.println("Cargando configuración de base de datos desde el classpath.");
 			}
+		} catch (IOException e) {
+			System.err.println("Error leyendo " + CONFIG_FILE + ": " + e.getMessage());
 		}
 
-		// Try application directory
-		if (!loaded) {
-			File appDirConfig = new File(System.getProperty("user.dir"), CONFIG_FILE);
-			if (appDirConfig.exists()) {
-				try (FileInputStream fis = new FileInputStream(appDirConfig)) {
-					props.load(fis);
-					loaded = true;
-					System.out.println("Cargando configuración de base de datos desde: " + appDirConfig.getAbsolutePath());
-				} catch (IOException e) {
-					System.err.println("Error leyendo " + CONFIG_FILE + ": " + e.getMessage());
-				}
-			}
-		}
-
-		// Apply properties if loaded
+		// Si se cargó, aplicar las propiedades
 		if (loaded) {
 			URL = props.getProperty("db.url", URL);
 			USER = props.getProperty("db.user", USER);
 			PASS = props.getProperty("db.password", PASS);
 			configLoaded = true;
 
-			// Log connection details (remove in production)
+			// Log de los detalles de la conexión (puedes quitar esto en producción)
 			System.out.println("Conexión de base de datos configurada:");
 			System.out.println("URL: " + URL);
 			System.out.println("Usuario: " + USER);
@@ -88,7 +72,7 @@ public class DBUtil {
 	 */
 	public static Connection getConexion() throws SQLException {
 		try {
-			// Add connection timeout to avoid long hangs
+			// Añadir tiempo de espera para evitar bloqueos largos
 			String urlWithTimeout = URL;
 			if (!URL.contains("connectTimeout")) {
 				urlWithTimeout += (URL.contains("?") ? "&" : "?") +
@@ -101,7 +85,7 @@ public class DBUtil {
 			System.err.println("URL: " + URL);
 			System.err.println("Error: " + e.getMessage());
 
-			// Provide more detailed error message
+			// Mensajes con posibles soluciones
 			if (e.getMessage().contains("Communications link failure") ||
 					e.getMessage().contains("Connection refused")) {
 				System.err.println("\nPOSIBLES SOLUCIONES:");
@@ -116,8 +100,8 @@ public class DBUtil {
 	}
 
 	/**
-	 * Prueba la conexión a la base de datos
-	 * @return true si la conexión fue exitosa, false en caso contrario
+	 * Prueba la conexión a la base de datos.
+	 * @return true si la conexión fue exitosa, false en caso contrario.
 	 */
 	public static boolean testConnection() {
 		try (Connection conn = getConexion()) {
