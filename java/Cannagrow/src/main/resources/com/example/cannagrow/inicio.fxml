@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.cannagrow.MenuController"
+            prefWidth="800" prefHeight="600"
+            style="-fx-background-color: #121212;">
+
+    <!-- MENÚ LATERAL -->
+    <left>
+        <VBox spacing="15" style="-fx-background-color: #1f1f1f;" prefWidth="200" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="20" left="10" right="10" bottom="10"/>
+            </padding>
+
+            <ImageView fx:id="logoImage" fitWidth="150" preserveRatio="true"/>
+
+            <Label text="CannaGrow" textFill="white">
+                <font>
+                    <Font name="Arial Black" size="20"/>
+                </font>
+            </Label>
+
+            <Button text="Inicio" onAction="#onInicioClick" maxWidth="180"/>
+            <Button text="Productos" onAction="#onProductosClick" maxWidth="180"/>
+            <Button text="Carrito" onAction="#onCarritoClick" maxWidth="180"/>
+            <Button text="Pedidos" onAction="#onPedidosClick" maxWidth="180"/>
+            <Button text="Cerrar sesión" onAction="#onLogoutClick" maxWidth="180"
+                    style="-fx-background-color: #d32f2f; -fx-text-fill: white;"/>
+        </VBox>
+    </left>
+
+    <!-- CONTENIDO CENTRAL -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <content>
+                <VBox spacing="30" alignment="TOP_CENTER"
+                      style="-fx-background-color: #121212;" maxWidth="Infinity">
+                    <padding>
+                        <Insets top="30" left="30" right="30" bottom="30"/>
+                    </padding>
+
+                    <!-- Sección de bienvenida -->
+                    <VBox spacing="15" maxWidth="800"
+                          style="-fx-background-color: #1f1f1f; -fx-padding: 25; -fx-background-radius: 12;">
+                        <Label text="Bienvenido a CannaGrow" textFill="white"
+                               style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+                        <Label wrapText="true" textFill="#cccccc" style="-fx-font-size: 15px;">
+                            Explora nuestro amplio catálogo de productos para el cultivo y consumo responsable de cannabis.
+                            Desde semillas y fertilizantes hasta productos con CBD, ofrecemos soluciones para cultivadores novatos y expertos.
+                            ¡Calidad, discreción y servicio profesional garantizados!
+                        </Label>
+                    </VBox>
+
+                    <!-- Categorías -->
+                    <VBox spacing="10" alignment="TOP_CENTER" maxWidth="1000">
+                        <Label text="Categorías Destacadas" textFill="white"
+                               style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+                        <FlowPane hgap="25" vgap="25" alignment="CENTER" prefWrapLength="900">
+                            <padding>
+                                <Insets top="10" right="10" bottom="10" left="10"/>
+                            </padding>
+
+                            <!-- Tarjeta de categoría -->
+                            <VBox alignment="CENTER" spacing="10"
+                                  style="-fx-background-color: #1f1f1f; -fx-padding: 15; -fx-background-radius: 8;"
+                                  prefWidth="200">
+                                <ImageView fitWidth="120" fitHeight="80">
+                                    <image><Image url="@img/semillas.png"/></image>
+                                </ImageView>
+                                <Label text="Semillas Feminizadas" textFill="#dddddd" style="-fx-font-size: 14px;" wrapText="true"/>
+                            </VBox>
+
+                            <VBox alignment="CENTER" spacing="10"
+                                  style="-fx-background-color: #1f1f1f; -fx-padding: 15; -fx-background-radius: 8;"
+                                  prefWidth="200">
+                                <ImageView fitWidth="120" fitHeight="80">
+                                    <image><Image url="@img/cbd.png"/></image>
+                                </ImageView>
+                                <Label text="CBD Shop" textFill="#dddddd" style="-fx-font-size: 14px;" wrapText="true"/>
+                            </VBox>
+
+                            <VBox alignment="CENTER" spacing="10"
+                                  style="-fx-background-color: #1f1f1f; -fx-padding: 15; -fx-background-radius: 8;"
+                                  prefWidth="200">
+                                <ImageView fitWidth="120" fitHeight="80">
+                                    <image><Image url="@img/fertilizantes.png"/></image>
+                                </ImageView>
+                                <Label text="Fertilizantes" textFill="#dddddd" style="-fx-font-size: 14px;" wrapText="true"/>
+                            </VBox>
+
+                            <VBox alignment="CENTER" spacing="10"
+                                  style="-fx-background-color: #1f1f1f; -fx-padding: 15; -fx-background-radius: 8;"
+                                  prefWidth="200">
+                                <ImageView fitWidth="120" fitHeight="80">
+                                    <image><Image url="@img/iluminacion.png"/></image>
+                                </ImageView>
+                                <Label text="Iluminación" textFill="#dddddd" style="-fx-font-size: 14px;" wrapText="true"/>
+                            </VBox>
+
+                            <VBox alignment="CENTER" spacing="10"
+                                  style="-fx-background-color: #1f1f1f; -fx-padding: 15; -fx-background-radius: 8;"
+                                  prefWidth="200">
+                                <ImageView fitWidth="120" fitHeight="80">
+                                    <image><Image url="@img/macetas.png"/></image>
+                                </ImageView>
+                                <Label text="Macetas" textFill="#dddddd" style="-fx-font-size: 14px;" wrapText="true"/>
+                            </VBox>
+
+                            <VBox alignment="CENTER" spacing="10"
+                                  style="-fx-background-color: #1f1f1f; -fx-padding: 15; -fx-background-radius: 8;"
+                                  prefWidth="200">
+                                <ImageView fitWidth="120" fitHeight="80">
+                                    <image><Image url="@img/pan.png"/></image>
+                                </ImageView>
+                                <Label text="Pan de Setas" textFill="#dddddd" style="-fx-font-size: 14px;" wrapText="true"/>
+                            </VBox>
+
+                            <VBox alignment="CENTER" spacing="10"
+                                  style="-fx-background-color: #1f1f1f; -fx-padding: 15; -fx-background-radius: 8;"
+                                  prefWidth="200">
+                                <ImageView fitWidth="120" fitHeight="80">
+                                    <image><Image url="@img/peladoras.png"/></image>
+                                </ImageView>
+                                <Label text="Peladoras de Cogollos" textFill="#dddddd" style="-fx-font-size: 14px;" wrapText="true"/>
+                            </VBox>
+
+                            <VBox alignment="CENTER" spacing="10"
+                                  style="-fx-background-color: #1f1f1f; -fx-padding: 15; -fx-background-radius: 8;"
+                                  prefWidth="200">
+                                <ImageView fitWidth="120" fitHeight="80">
+                                    <image><Image url="@img/armarios.png"/></image>
+                                </ImageView>
+                                <Label text="Armarios de Cultivo" textFill="#dddddd" style="-fx-font-size: 14px;" wrapText="true"/>
+                            </VBox>
+                        </FlowPane>
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>
