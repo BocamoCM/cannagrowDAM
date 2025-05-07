@@ -36,6 +36,19 @@ CREATE TABLE Empleado (
     imagen_empleado VARCHAR(255)
 );
 
+-- Tabla Vehiculo (debe ir antes que Pedido)
+CREATE TABLE Vehiculo (
+    matricula VARCHAR(15) PRIMARY KEY,
+    color VARCHAR(50) NOT NULL,
+    conductor_id INT NOT NULL,
+    marca VARCHAR(100) NOT NULL,
+    estado ENUM('Activo', 'En mantenimiento', 'Fuera de servicio') NOT NULL,
+    kilometros_totales INT NOT NULL,
+    consumo_100km FLOAT NOT NULL,
+    cv_motor INT NOT NULL,
+    FOREIGN KEY (conductor_id) REFERENCES Empleado(id)
+);
+
 -- Tabla Pedido
 CREATE TABLE Pedido (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -64,16 +77,4 @@ CREATE TABLE ItemPedido (
 CREATE TABLE Regulacion (
     id INT PRIMARY KEY AUTO_INCREMENT,
     descripcion TEXT NOT NULL
-);
-
-CREATE TABLE Vehiculo (
-    matricula VARCHAR(15) PRIMARY KEY,
-    color VARCHAR(50) NOT NULL,
-    conductor_id INT NOT NULL,
-    marca VARCHAR(100) NOT NULL,
-    estado ENUM('Activo', 'En mantenimiento', 'Fuera de servicio') NOT NULL,
-    kilometros_totales INT NOT NULL,
-    consumo_100km FLOAT NOT NULL,
-    cv_motor INT NOT NULL,
-    FOREIGN KEY (conductor_id) REFERENCES Empleado(id)
 );
