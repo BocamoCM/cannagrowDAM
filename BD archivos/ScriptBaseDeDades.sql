@@ -58,6 +58,7 @@ CREATE TABLE Pedido (
     cliente_id INT,
     empleado_id INT,
     vehiculo_matricula VARCHAR(15) NOT NULL,
+    notificado BOOLEAN default false,
     FOREIGN KEY (cliente_id) REFERENCES Cliente(id),
     FOREIGN KEY (empleado_id) REFERENCES Empleado(id),
     FOREIGN KEY (vehiculo_matricula) REFERENCES Vehiculo(matricula)
