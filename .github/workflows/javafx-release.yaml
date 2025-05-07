@@ -20,20 +20,20 @@ jobs:
           architecture: 'x64'
           cache: 'maven'  # Enable Maven cache to speed up builds
 
-      # Paso 3: Ejecutar mvn clean install con opciones de depuración
+      # Paso 3: Ejecutar mvn clean install para crear el JAR con dependencias
       - name: Build with Maven
-        run: mvn clean install -X
+        run: mvn clean install
         working-directory: ./java/Cannagrow
         shell: pwsh
         env:
           JAVA_HOME: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
           JAVA_HOME_21_X64: C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\21.0.7-6.0\x64
 
-      # Paso 4: Verificar la existencia y ubicación del JAR
-      - name: Find JAR file
+      # Paso 4: Verificar la existencia del JAR con dependencias
+      - name: Find JAR files
         run: |
-          Write-Host "Checking for JAR files in target directory:"
-          Get-ChildItem -Path "./java/Cannagrow/target" -Filter "*.jar" | ForEach-Object { Write-Host $_.FullName }
+          Write-Host "Verificando JAR con dependencias:"
+          Get-ChildItem -Path "./java/Cannagrow/target" -Filter "*with-dependencies*.jar" | ForEach-Object { Write-Host $_.FullName }
         shell: pwsh
         
       # Paso 5: Preparar módulos JavaFX
@@ -50,21 +50,15 @@ jobs:
           Get-ChildItem -Path "./java/Cannagrow/jmods" -Recurse
         shell: pwsh
 
-      # Paso 6: Crear el ejecutable con jpackage usando el JAR con dependencias
+      # Paso 6: Crear el ejecutable con jpackage usando exclusivamente el JAR con dependencias
       - name: Package with jpackage
         run: |
           # Verificar que los jmods existen
-          Write-Host "Verificando directorios:"
-          Get-ChildItem -Path "." -Directory
-          Write-Host "Verificando directorio jmods:"
-          Get-ChildItem -Path "./jmods" -Directory
-          
-          # Obtener la ruta completa a los jmods
           $jmods_path = Resolve-Path "./jmods/javafx-jmods-21"
           Write-Host "JavaFX JMods path: $jmods_path"
           
-          # Crear runtime image con módulos JavaFX completos y soporte para SQL
-          jlink --add-modules java.base,java.desktop,java.logging,java.sql,java.naming,java.security.jgss,javafx.controls,javafx.fxml,javafx.graphics,javafx.web,javafx.media,javafx.swing `
+          # Crear runtime image con módulos JavaFX y dependencias necesarias
+          jlink --add-modules java.base,java.desktop,java.logging,java.sql,java.naming,java.security.jgss,javax.crypto,java.security.sasl,java.net.http,javafx.controls,javafx.fxml,javafx.graphics,javafx.web,javafx.media,javafx.swing `
                 --module-path "$jmods_path" `
                 --output runtime `
                 --strip-debug `
@@ -72,19 +66,16 @@ jobs:
                 --no-man-pages `
                 --compress=2
           
-          # Verificar contenido del target
-          Write-Host "Contenido del directorio target:"
-          Get-ChildItem -Path "./target" -Filter "*.jar"
-          
-          # Crear el instalador usando el JAR con dependencias
-          # Buscamos el JAR con dependencias
+          # Buscar el JAR con dependencias
           $jarWithDependencies = Get-ChildItem -Path "./target" -Filter "*with-dependencies*.jar" | Select-Object -First 1
+          
           if ($jarWithDependencies) {
-            Write-Host "Using JAR with dependencies: $($jarWithDependencies.Name)"
+            Write-Host "Using JAR with dependencies: $($jarWithDependencies.FullName)"
             
+            # Crear el instalador usando el JAR con dependencias
             jpackage --input ./target `
               --name CannagrowApp `
-              --main-jar $jarWithDependencies.Name `
+              --main-jar $($jarWithDependencies.Name) `
               --main-class com.example.cannagrow.Main `
               --type exe `
               --runtime-image runtime `
@@ -92,26 +83,12 @@ jobs:
               --win-shortcut `
               --win-menu `
               --win-console `
-              --java-options "-Xms256m -Xmx512m -XX:+ShowCodeDetailsInExceptionMessages -Djavafx.verbose=true -Djava.security.manager=allow" `
+              --java-options "-Xms256m -Xmx512m -XX:+ShowCodeDetailsInExceptionMessages -Djavafx.verbose=true" `
               --app-version "1.0.0" `
-              --add-modules java.sql,java.naming `
               --verbose
           } else {
-            Write-Host "JAR with dependencies not found. Using standard JAR."
-            jpackage --input ./target `
-              --name CannagrowApp `
-              --main-jar Cannagrow-1.0-SNAPSHOT.jar `
-              --main-class com.example.cannagrow.Main `
-              --type exe `
-              --runtime-image runtime `
-              --win-dir-chooser `
-              --win-shortcut `
-              --win-menu `
-              --win-console `
-              --java-options "-Xms256m -Xmx512m -XX:+ShowCodeDetailsInExceptionMessages -Djavafx.verbose=true -Djava.security.manager=allow" `
-              --app-version "1.0.0" `
-              --add-modules java.sql,java.naming `
-              --verbose
+            Write-Host "ERROR: No se encontró el JAR con dependencias. El empaquetado no incluirá todas las dependencias necesarias."
+            exit 1
           }
         shell: pwsh
         working-directory: ./java/Cannagrow
