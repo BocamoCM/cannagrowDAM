@@ -30,6 +30,13 @@ public class RegisterController {
     @FXML
     private Label registerMessage;
 
+    @FXML
+    private javafx.scene.control.DatePicker fechaNacimientoPicker;
+
+
+    @FXML
+    private ComboBox<String> tipoUsuarioComboBox;
+
     private UsuarioModel usuarioModel;
 
     public RegisterController() {
@@ -37,7 +44,30 @@ public class RegisterController {
     }
 
     @FXML
+    public void initialize() {
+        tipoUsuarioComboBox.getItems().addAll("Empleado", "Cliente");
+        rolComboBox.getItems().addAll("Admin", "Vendedor", "Gerente"); // Agrega aquí los roles disponibles
+
+        // Ocultar salario y roles inicialmente
+        salarioField.setVisible(false);
+        salarioField.setManaged(false);
+        rolComboBox.setDisable(true);
+        rolComboBox.setManaged(true); // Mostrar espacio del ComboBox aunque esté desactivado
+
+        tipoUsuarioComboBox.setOnAction(event -> {
+            String tipo = tipoUsuarioComboBox.getValue();
+            boolean esEmpleado = "Empleado".equalsIgnoreCase(tipo);
+
+            salarioField.setVisible(esEmpleado);
+            salarioField.setManaged(esEmpleado);
+
+            rolComboBox.setDisable(!esEmpleado);
+        });
+    }
+
+    @FXML
     public void onRegisterClick() {
+        String tipoUsuario = tipoUsuarioComboBox.getValue();
         String nombre = nombreField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
@@ -45,9 +75,8 @@ public class RegisterController {
         String rol = rolComboBox.getValue();
         String salarioStr = salarioField.getText();
 
-        // Validaciones
-        if (nombre.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || rol == null || salarioStr.isEmpty()) {
-            registerMessage.setText("Por favor, complete todos los campos.");
+        if (tipoUsuario == null || nombre.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            registerMessage.setText("Por favor, complete todos los campos obligatorios.");
             return;
         }
 
@@ -56,21 +85,31 @@ public class RegisterController {
             return;
         }
 
-        double salario;
-        try {
-            salario = Double.parseDouble(salarioStr);
-        } catch (NumberFormatException e) {
-            registerMessage.setText("Salario no válido.");
-            return;
+
+        if ("Empleado".equalsIgnoreCase(tipoUsuario)) {
+            if (rol == null || salarioStr.isEmpty()) {
+                registerMessage.setText("Rol y salario son obligatorios para empleados.");
+                return;
+            }
+
+            try {
+                double salario = Double.parseDouble(salarioStr);
+                boolean success = usuarioModel.registrarUsuario(nombre, email, password, rol, salario);
+                registerMessage.setText(success ? "Empleado registrado." : "Error al registrar empleado.");
+            } catch (NumberFormatException e) {
+                registerMessage.setText("Salario no válido.");
+            }
+
+        } else if ("Cliente".equalsIgnoreCase(tipoUsuario)) {
+            if (fechaNacimientoPicker.getValue() == null) {
+                registerMessage.setText("La fecha de nacimiento es obligatoria para clientes.");
+                return;
+            }
+
+            java.sql.Date fechaNacimiento = java.sql.Date.valueOf(fechaNacimientoPicker.getValue());
+            boolean success = usuarioModel.registrarCliente(nombre, email, password, fechaNacimiento);
+            registerMessage.setText(success ? "Cliente registrado." : "Error al registrar cliente.");
         }
 
-        // Llamada al modelo para registrar al usuario
-        boolean success = usuarioModel.registrarUsuario(nombre, email, password, rol, salario);
-
-        if (success) {
-            registerMessage.setText("Usuario registrado exitosamente.");
-        } else {
-            registerMessage.setText("Error al registrar usuario.");
-        }
     }
 }

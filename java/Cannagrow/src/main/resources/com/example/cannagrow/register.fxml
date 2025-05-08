@@ -35,6 +35,16 @@
                 </font>
             </Label>
 
+            <ComboBox fx:id="tipoUsuarioComboBox" promptText="Tipo de usuario" maxWidth="250">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Empleado"/>
+                        <String fx:value="Cliente"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+
             <TextField fx:id="nombreField" promptText="Nombre" maxWidth="250"
                        style="-fx-background-radius: 10; -fx-padding: 10;"/>
 
@@ -47,12 +57,16 @@
             <PasswordField fx:id="confirmPasswordField" promptText="Confirmar contraseña" maxWidth="250"
                            style="-fx-background-radius: 10; -fx-padding: 10;"/>
 
+            <DatePicker fx:id="fechaNacimientoPicker" promptText="Fecha de nacimiento" maxWidth="250"
+                        style="-fx-background-radius: 10; -fx-padding: 10;"/>
+
             <ComboBox fx:id="rolComboBox" maxWidth="250">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Vendedor"/>
                         <String fx:value="Cultivador"/>
                         <String fx:value="Gerente"/>
+                        <String fx:value="Cliente"/>
                     </FXCollections>
                 </items>
             </ComboBox>

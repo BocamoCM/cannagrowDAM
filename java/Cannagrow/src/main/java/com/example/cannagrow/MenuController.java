@@ -52,40 +52,57 @@ public class MenuController {
         UsuarioModel usuario = Session.getUsuarioActual();
 
         if (usuario != null) {
-            bienvenidaLabel.setText("Bienvenido, " + usuario.getNombre());
+            // Si tiene rol es Empleado, si no es Cliente
+            String tipoUsuario = (usuario.getRol() != null) ? capitalizar(usuario.getRol()) : "Cliente";
+            bienvenidaLabel.setText("Bienvenido, " + usuario.getNombre() + " (" + tipoUsuario + ")");
 
-            String rol = usuario.getRol().toLowerCase();
-
-            // Cargar logo
             Image image = new Image(getClass().getResourceAsStream("/com/example/cannagrow/cannagrow_logo.png"));
             logoImage.setImage(image);
 
-            // Control de permisos por rol
-            switch (rol) {
-                case "gerente":
-                    // Admin puede ver todo
-                    carritoButton.setVisible(true);
-                    pedidosButton.setVisible(true);
-                    productosButton.setVisible(true);
-                    adminButton.setVisible(true);
-                    break;
-                case "usuario":
-                    // Usuario solo puede acceder a ciertas partes
-                    carritoButton.setVisible(true);
-                    pedidosButton.setVisible(true);
-                    productosButton.setVisible(true);
-                    adminButton.setVisible(false);
-                    break;
-                default:
-                    // Rol desconocido, ocultar todo por seguridad
-                    carritoButton.setVisible(false);
-                    pedidosButton.setVisible(false);
-                    productosButton.setVisible(false);
-                    adminButton.setVisible(false);
-                    break;
+            if (usuario.getRol() == null || usuario.getRol().equalsIgnoreCase("cliente")) {
+                // CLIENTE
+                carritoButton.setVisible(true);
+                pedidosButton.setVisible(true);
+                productosButton.setVisible(true); // OCULTAR productos
+                adminButton.setVisible(false);
+            } else {
+                // EMPLEADO
+                String rol = usuario.getRol().toLowerCase();
+
+                switch (rol) {
+                    case "gerente":
+                        carritoButton.setVisible(true);
+                        pedidosButton.setVisible(true);
+                        productosButton.setVisible(true);
+                        adminButton.setVisible(true);
+                        break;
+                    case "vendedor":
+                        carritoButton.setVisible(false);
+                        pedidosButton.setVisible(true);
+                        productosButton.setVisible(true);
+                        adminButton.setVisible(false);
+                        break;
+                    default:
+                        // Si el rol no está bien definido, mejor mostrarlo todo excepto admin
+                        carritoButton.setVisible(true);
+                        pedidosButton.setVisible(false);
+                        productosButton.setVisible(true);
+                        adminButton.setVisible(false);
+                        break;
+                }
             }
         }
     }
+
+
+    // Método auxiliar para capitalizar el rol (ej. "gerente" → "Gerente")
+    private String capitalizar(String texto) {
+        if (texto == null || texto.isEmpty()) return texto;
+        return texto.substring(0, 1).toUpperCase() + texto.substring(1).toLowerCase();
+    }
+
+
+
 
     @FXML
     private void onMostrarRegistroClick() {
