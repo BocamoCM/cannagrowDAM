@@ -5,65 +5,100 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.cannagrow.RegisterController"
-      alignment="CENTER" spacing="15.0" style="-fx-background-color: #1f1f1f;"
-      prefWidth="400" prefHeight="500">
 
-    <padding>
-        <Insets top="30" right="30" bottom="30" left="30"/>
-    </padding>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.cannagrow.MenuController"
+            prefWidth="800" prefHeight="600"
+            style="-fx-background-color: #121212;">
 
-    <!-- Imagen del logo -->
-    <ImageView fx:id="logoImage" fitWidth="150" preserveRatio="true"/>
+    <!-- MENÚ LATERAL -->
+    <left>
+        <VBox spacing="15" style="-fx-background-color: #1f1f1f;" prefWidth="200" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="20" left="10" right="10" bottom="10"/>
+            </padding>
 
-    <Label text="CannaGrow" textFill="white">
-        <font>
-            <Font name="Arial Black" size="28"/>
-        </font>
-    </Label>
+            <ImageView fx:id="logoImage" fitWidth="150" preserveRatio="true"/>
 
-    <Label text="Registrarse" textFill="white">
-        <font>
-            <Font name="Arial" size="20"/>
-        </font>
-    </Label>
+            <Label text="CannaGrow" textFill="white">
+                <font>
+                    <Font name="Arial Black" size="20"/>
+                </font>
+            </Label>
 
-    <TextField fx:id="nombreField" promptText="Nombre" maxWidth="250"
-               style="-fx-background-radius: 10; -fx-padding: 10;"/>
+            <Button text="Inicio" onAction="#onInicioClick" fx:id="inicioButton" maxWidth="180"/>
+            <Button text="Productos" onAction="#onProductosClick" fx:id="productosButton" maxWidth="180"/>
+            <Button text="Carrito" onAction="#onCarritoClick" fx:id="carritoButton" maxWidth="180"/>
+            <Button text="Pedidos" onAction="#onPedidosClick" fx:id="pedidosButton" maxWidth="180"/>
+            <Button text="Cerrar sesión" onAction="#onLogoutClick" maxWidth="180"
+                    style="-fx-background-color: #d32f2f; -fx-text-fill: white;"
+                    fx:id="logoutButton"/>
+            <Button text="administrador" onAction="#onAdminClick" maxWidth="180"
+                    style="-fx-background-color: #d32f2f; -fx-text-fill: white;"
+                    fx:id="adminButton"/>
+        </VBox>
+    </left>
 
-    <TextField fx:id="emailField" promptText="Correo electrónico" maxWidth="250"
-               style="-fx-background-radius: 10; -fx-padding: 10;"/>
+    <!-- CONTENIDO CENTRAL -->
+    <center>
+        <VBox alignment="CENTER" spacing="15.0" style="-fx-background-color: #1f1f1f;"
+              prefWidth="400" prefHeight="500"
+              fx:controller="com.example.cannagrow.RegisterController">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
 
-    <PasswordField fx:id="passwordField" promptText="Contraseña" maxWidth="250"
-                   style="-fx-background-radius: 10; -fx-padding: 10;"/>
+            <ImageView fx:id="logoImage" fitWidth="150" preserveRatio="true"/>
 
-    <PasswordField fx:id="confirmPasswordField" promptText="Confirmar contraseña" maxWidth="250"
-                   style="-fx-background-radius: 10; -fx-padding: 10;"/>
+            <Label text="CannaGrow" textFill="white">
+                <font>
+                    <Font name="Arial Black" size="28"/>
+                </font>
+            </Label>
 
-    <ComboBox fx:id="rolComboBox" maxWidth="250">
-        <items>
-            <FXCollections fx:factory="observableArrayList">
-                <String fx:value="Vendedor"/>
-                <String fx:value="Cultivador"/>
-                <String fx:value="Gerente"/>
-            </FXCollections>
-        </items>
-    </ComboBox>
+            <Label text="Registrarse" textFill="white">
+                <font>
+                    <Font name="Arial" size="20"/>
+                </font>
+            </Label>
 
-    <TextField fx:id="salarioField" promptText="Salario" maxWidth="250"
-               style="-fx-background-radius: 10; -fx-padding: 10;"/>
+            <TextField fx:id="nombreField" promptText="Nombre" maxWidth="250"
+                       style="-fx-background-radius: 10; -fx-padding: 10;"/>
 
-    <Button text="Registrarse" onAction="#onRegisterClick"
-            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 10;"
-            maxWidth="150"/>
+            <TextField fx:id="emailField" promptText="Correo electrónico" maxWidth="250"
+                       style="-fx-background-radius: 10; -fx-padding: 10;"/>
 
-    <Label fx:id="registerMessage" textFill="red">
-        <font>
-            <Font name="Arial" size="12"/>
-        </font>
-    </Label>
-</VBox>
+            <PasswordField fx:id="passwordField" promptText="Contraseña" maxWidth="250"
+                           style="-fx-background-radius: 10; -fx-padding: 10;"/>
+
+            <PasswordField fx:id="confirmPasswordField" promptText="Confirmar contraseña" maxWidth="250"
+                           style="-fx-background-radius: 10; -fx-padding: 10;"/>
+
+            <ComboBox fx:id="rolComboBox" maxWidth="250">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Vendedor"/>
+                        <String fx:value="Cultivador"/>
+                        <String fx:value="Gerente"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <TextField fx:id="salarioField" promptText="Salario" maxWidth="250"
+                       style="-fx-background-radius: 10; -fx-padding: 10;"/>
+
+            <Button text="Registrarse" onAction="#onRegisterClick"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 10;"
+                    maxWidth="150"/>
+
+            <Label fx:id="registerMessage" textFill="red">
+                <font>
+                    <Font name="Arial" size="12"/>
+                </font>
+            </Label>
+        </VBox>
+    </center>
+</BorderPane>
