@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.cannagrow.ProductosController"
+            style="-fx-background-color: #121212;">
+
+    <children>
+        <FlowPane fx:id="contenedorProductos" hgap="15" vgap="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+        </FlowPane>
+
+    </children>
+</AnchorPane>
