@@ -6,6 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="b5e16704-1089-401c-a82c-da0072c73cdb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/Cannagrow/src/main/java/com/example/cannagrow/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/java/Cannagrow/src/main/java/com/example/cannagrow/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/Cannagrow/target/classes/com/example/cannagrow/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/java/Cannagrow/target/classes/com/example/cannagrow/LoginController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/Cannagrow/target/classes/com/example/cannagrow/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/java/Cannagrow/target/classes/com/example/cannagrow/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/Cannagrow/target/classes/com/example/cannagrow/MenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/java/Cannagrow/target/classes/com/example/cannagrow/MenuController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/Cannagrow/target/classes/com/example/cannagrow/menu.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/java/Cannagrow/target/classes/com/example/cannagrow/menu.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/Cannagrow/target/classes/com/example/cannagrow/register.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/java/Cannagrow/target/classes/com/example/cannagrow/register.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
