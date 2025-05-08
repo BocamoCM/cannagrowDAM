@@ -97,7 +97,7 @@ public class MenuAdminController {
 
     @FXML
     private void onPedidosClick() {
-        mostrarMensaje("Pedidos", "Aquí podrás revisar tus pedidos.a");
+        mostrarMensaje("Pedidos", "Aquí podrás revisar tus pedidos.");
     }
 
 
