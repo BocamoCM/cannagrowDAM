@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -41,6 +42,10 @@ public class MenuController {
 
     @FXML
     private Button adminButton;
+
+    @FXML
+    private BorderPane mainBorderPane; // ID que pondrás en el BorderPane del menú
+
 
     @FXML
     public void initialize() {
@@ -79,6 +84,18 @@ public class MenuController {
                     adminButton.setVisible(false);
                     break;
             }
+        }
+    }
+
+    @FXML
+    private void onMostrarRegistroClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/register-view.fxml"));
+            Parent registroVista = loader.load();
+            mainBorderPane.setCenter(registroVista);
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo cargar la vista de registro.");
         }
     }
 
