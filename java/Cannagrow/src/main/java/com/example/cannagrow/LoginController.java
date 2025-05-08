@@ -39,16 +39,16 @@ public class LoginController {
 
     @FXML
     protected void onLoginClick() {
-        String email = usernameField.getText();
+        String user = usernameField.getText();
         String pass = passwordField.getText();
 
-        if (email.isEmpty() || pass.isEmpty()) {
+        if (user.isEmpty() || pass.isEmpty()) {
             loginMessage.setText("Por favor, completa todos los campos.");
             return;
         }
 
         // Usamos la nueva versión del método
-        UsuarioModel usuarioAutenticado = usuarioModel.autenticarUsuario(email, pass);
+        UsuarioModel usuarioAutenticado = usuarioModel.autenticarUsuario(user, pass);
 
         if (usuarioAutenticado != null) {
             loginMessage.setStyle("-fx-text-fill: green;");
