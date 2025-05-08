@@ -16,13 +16,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MenuController {
+public class MenuAdminController {
 
     @FXML
     private Label bienvenidaLabel;
 
-    @FXML
-    private Button carritoButton;
 
     @FXML
     private Button pedidosButton;
@@ -59,21 +57,18 @@ public class MenuController {
             switch (rol) {
                 case "gerente":
                     // Admin puede ver todo
-                    carritoButton.setVisible(true);
                     pedidosButton.setVisible(true);
                     productosButton.setVisible(true);
                     adminButton.setVisible(true);
                     break;
                 case "usuario":
                     // Usuario solo puede acceder a ciertas partes
-                    carritoButton.setVisible(true);
                     pedidosButton.setVisible(true);
                     productosButton.setVisible(true);
                     adminButton.setVisible(false);
                     break;
                 default:
                     // Rol desconocido, ocultar todo por seguridad
-                    carritoButton.setVisible(false);
                     pedidosButton.setVisible(false);
                     productosButton.setVisible(false);
                     adminButton.setVisible(false);
@@ -93,10 +88,6 @@ public class MenuController {
         mostrarMensaje("Productos", "Aquí irán los productos disponibles.");
     }
 
-    @FXML
-    private void onCarritoClick() {
-        mostrarMensaje("Carrito", "Aquí se mostrarán los productos en tu carrito.");
-    }
 
     @FXML
     private void onPedidosClick() {

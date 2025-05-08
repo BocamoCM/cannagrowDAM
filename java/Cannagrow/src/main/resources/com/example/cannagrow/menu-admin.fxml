@@ -8,7 +8,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.cannagrow.MenuController"
+            fx:controller="com.example.cannagrow.MenuAdminController"
             prefWidth="800" prefHeight="600"
             style="-fx-background-color: #121212;">
 
@@ -29,7 +29,6 @@
 
             <Button text="Inicio" onAction="#onInicioClick" fx:id="inicioButton" maxWidth="180"/>
             <Button text="Productos" onAction="#onProductosClick" fx:id="productosButton" maxWidth="180"/>
-            <Button text="Carrito" onAction="#onCarritoClick" fx:id="carritoButton" maxWidth="180"/>
             <Button text="Pedidos" onAction="#onPedidosClick" fx:id="pedidosButton" maxWidth="180"/>
             <Button text="Cerrar sesión" onAction="#onLogoutClick" maxWidth="180"
                     style="-fx-background-color: #d32f2f; -fx-text-fill: white;"
