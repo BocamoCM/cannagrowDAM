@@ -8,9 +8,11 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
+            fx:id="adminBorderPane"
             fx:controller="com.example.cannagrow.MenuAdminController"
             prefWidth="800" prefHeight="600"
             style="-fx-background-color: #121212;">
+
 
     <!-- MENÚ LATERAL -->
     <left>
@@ -30,17 +32,19 @@
             <Button text="Inicio" onAction="#onInicioClick" fx:id="inicioButton" maxWidth="180"/>
             <Button text="Productos" onAction="#onProductosClick" fx:id="productosButton" maxWidth="180"/>
             <Button text="Pedidos" onAction="#onPedidosClick" fx:id="pedidosButton" maxWidth="180"/>
+            <Button text="Registrar User" onAction="#onRegisterClick" fx:id="registerButton" maxWidth="180"/>
             <Button text="Cerrar sesión" onAction="#onLogoutClick" maxWidth="180"
                     style="-fx-background-color: #d32f2f; -fx-text-fill: white;"
                     fx:id="logoutButton"/>
-            <Button text="administrador" onAction="#onAdminClick" maxWidth="180"
-                    style="-fx-background-color: #d32f2f; -fx-text-fill: white;"
-                    fx:id="adminButton"/>
+
         </VBox>
     </left>
 
     <!-- CONTENIDO CENTRAL -->
     <center>
-        <Label text="Bienvenido a CannaGrow" textFill="white" style="-fx-font-size: 24px;" fx:id="bienvenidaLabel"/>
+        <Label text="Bienvenido al panel de administración de CannaGrow"
+               textFill="white"
+               style="-fx-font-size: 24px;"
+               fx:id="bienvenidaLabel"/>
     </center>
 </BorderPane>

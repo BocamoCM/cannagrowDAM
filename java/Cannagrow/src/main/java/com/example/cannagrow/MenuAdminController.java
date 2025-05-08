@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -41,6 +42,11 @@ public class MenuAdminController {
     private Button adminButton;
 
     @FXML
+    private BorderPane adminBorderPane;
+
+
+
+    @FXML
     public void initialize() {
         UsuarioModel usuario = Session.getUsuarioActual();
 
@@ -59,7 +65,7 @@ public class MenuAdminController {
                     // Admin puede ver todo
                     pedidosButton.setVisible(true);
                     productosButton.setVisible(true);
-                    adminButton.setVisible(true);
+
                     break;
                 case "usuario":
                     // Usuario solo puede acceder a ciertas partes
@@ -94,6 +100,19 @@ public class MenuAdminController {
         mostrarMensaje("Pedidos", "Aquí podrás revisar tus pedidos.");
     }
 
+
+    @FXML
+    private void onRegisterClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/register.fxml"));
+            Parent registroVista = loader.load();
+            adminBorderPane.setCenter(registroVista);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @FXML
     private void onLogoutClick(javafx.event.ActionEvent event) {
         mostrarMensaje("Cerrar sesión", "Sesión cerrada. Vuelve pronto.");
@@ -104,12 +123,6 @@ public class MenuAdminController {
         SceneChanger.changeScene("/com/example/cannagrow/hello-view.fxml", stage); // Te lleva de vuelta al login
     }
 
-    @FXML
-    private void onAdminClick(javafx.event.ActionEvent event) {
-        mostrarMensaje("Admin", "Bienvenido Administrador de Cannagrow.");
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        SceneChanger.changeScene("/com/example/cannagrow/menu-admin.fxml", stage);
-    }
 
     private void mostrarMensaje(String titulo, String contenido) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
