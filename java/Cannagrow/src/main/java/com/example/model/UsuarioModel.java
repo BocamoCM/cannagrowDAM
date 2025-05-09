@@ -10,7 +10,8 @@ public class UsuarioModel {
     private String nombre;
     private String email;
     private String rol;
-    private double salario; // Solo se usará para empleados
+    private double salario;
+    private int id;// Solo se usará para empleados
 
     public UsuarioModel autenticarUsuario(String nombre, String contrasena) {
         UsuarioModel usuario = autenticarDesdeTabla("Empleado", nombre, contrasena);
@@ -23,7 +24,7 @@ public class UsuarioModel {
     }
 
     private UsuarioModel autenticarDesdeTabla(String tabla, String nombre, String contrasena) {
-        String query = "SELECT contrasena_hash, email" +
+        String query = "SELECT id, contrasena_hash, email" +
                 (tabla.equals("Empleado") ? ", rol, salario" : "") +
                 " FROM " + tabla + " WHERE nombre = ?";
 
@@ -39,6 +40,7 @@ public class UsuarioModel {
                 try {
                     if (BCrypt.checkpw(contrasena, hashGuardado)) {
                         UsuarioModel usuario = new UsuarioModel();
+                        usuario.setId(rs.getInt("id"));
                         usuario.setNombre(nombre);
                         usuario.setEmail(rs.getString("email"));
 
@@ -152,4 +154,12 @@ public class UsuarioModel {
 
     public double getSalario() { return salario; }
     public void setSalario(double salario) { this.salario = salario; }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

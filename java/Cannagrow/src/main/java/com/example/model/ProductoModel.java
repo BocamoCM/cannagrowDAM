@@ -6,6 +6,10 @@ import java.util.List;
 
 public class ProductoModel {
 
+    /**
+     * Obtiene todos los productos de la base de datos
+     * @return Lista de productos
+     */
     public static List<Producto> obtenerTodos() {
         List<Producto> productos = new ArrayList<>();
         String sql = "SELECT * FROM Producto";
@@ -29,6 +33,121 @@ public class ProductoModel {
             }
 
         } catch (SQLException e) {
+            System.err.println("Error al obtener productos: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return productos;
+    }
+
+    /**
+     * Obtiene productos filtrados por tipo
+     * @param tipo El tipo de producto a filtrar
+     * @return Lista de productos del tipo especificado
+     */
+    public static List<Producto> obtenerPorTipo(String tipo) {
+        List<Producto> productos = new ArrayList<>();
+        String sql = "SELECT * FROM Producto WHERE tipo = ?";
+
+        try (Connection conn = DBUtil.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, tipo);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Producto p = new Producto(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("tipo"),
+                            rs.getFloat("contenidoTHC"),
+                            rs.getFloat("contenidoCBD"),
+                            rs.getFloat("precio"),
+                            rs.getInt("stock"),
+                            rs.getString("imagen_producto")
+                    );
+                    productos.add(p);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al filtrar productos por tipo: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return productos;
+    }
+
+    /**
+     * Obtiene todos los tipos de productos disponibles
+     * @return Lista de tipos de productos
+     */
+    public static List<String> obtenerTiposDisponibles() {
+        List<String> tipos = new ArrayList<>();
+        String sql = "SELECT DISTINCT tipo FROM Producto ORDER BY tipo";
+
+        try (Connection conn = DBUtil.getConexion();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                tipos.add(rs.getString("tipo"));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener tipos de productos: " + e.getMessage());
+            e.printStackTrace();
+
+            // Si hay error, devolvemos los tipos fijos como fallback
+            tipos.add("Flor");
+            tipos.add("Aceite");
+            tipos.add("Comestible");
+            tipos.add("Extracto");
+            tipos.add("Semilla");
+            tipos.add("Artilujos");
+            tipos.add("Paquete");
+            tipos.add("Ropa");
+            tipos.add("Recurso");
+            tipos.add("Bebida");
+            tipos.add("Cosmético");
+            tipos.add("Mascotas");
+        }
+
+        return tipos;
+    }
+
+    /**
+     * Busca productos por nombre
+     * @param termino Término de búsqueda
+     * @return Lista de productos que coinciden con la búsqueda
+     */
+    public static List<Producto> buscarPorNombre(String termino) {
+        List<Producto> productos = new ArrayList<>();
+        String sql = "SELECT * FROM Producto WHERE nombre LIKE ?";
+
+        try (Connection conn = DBUtil.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, "%" + termino + "%");
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Producto p = new Producto(
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("tipo"),
+                            rs.getFloat("contenidoTHC"),
+                            rs.getFloat("contenidoCBD"),
+                            rs.getFloat("precio"),
+                            rs.getInt("stock"),
+                            rs.getString("imagen_producto")
+                    );
+                    productos.add(p);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al buscar productos: " + e.getMessage());
             e.printStackTrace();
         }
 

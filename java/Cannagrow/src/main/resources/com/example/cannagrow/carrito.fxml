@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.cannagrow.CarritoController"
+            style="-fx-background-color: #121212;">
+
+    <BorderPane fx:id="rootPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <center>
+            <VBox spacing="20" style="-fx-padding: 20;">
+                <!-- Vista de carrito vacío -->
+                <VBox fx:id="carritoVacioView" alignment="CENTER" spacing="20" visible="true">
+                    <ImageView fx:id="carritoVacioIcon" fitWidth="100" fitHeight="100" preserveRatio="true"/>
+                    <Label text="Tu carrito está vacío" textFill="white" style="-fx-font-size: 24px;"/>
+                    <Label text="Agrega productos para comenzar a comprar" textFill="#9e9e9e" style="-fx-font-size: 16px;"/>
+                    <Button fx:id="irTiendaBtn" text="Ir a la tienda" onAction="#irATienda"
+                            style="-fx-background-color: #7cb342; -fx-text-fill: white; -fx-font-size: 14px;"/>
+                </VBox>
+
+                <!-- Vista de carrito con contenido -->
+                <VBox fx:id="carritoContenidoView" spacing="20" visible="false">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Mi Carrito" textFill="white" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                        <Button fx:id="vaciarCarritoBtn" text="Vaciar carrito" onAction="#vaciarCarrito"
+                                style="-fx-background-color: #e53935; -fx-text-fill: white;"/>
+                    </HBox>
+
+                    <!-- Cabecera de la tabla de productos -->
+                    <HBox spacing="10" style="-fx-padding: 10; -fx-background-color: #1a1a1a;">
+                        <Label text="Producto" textFill="#9e9e9e" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Label text="Cantidad" textFill="#9e9e9e" prefWidth="80"/>
+                        <Label text="Subtotal" textFill="#9e9e9e" prefWidth="80" alignment="CENTER_RIGHT"/>
+                        <Label text="" prefWidth="30"/> <!-- Espacio para el botón eliminar -->
+                    </HBox>
+
+                    <!-- Lista de productos -->
+                    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #121212;" VBox.vgrow="ALWAYS">
+                        <VBox fx:id="itemsContainer" spacing="10"/>
+                    </ScrollPane>
+
+                    <!-- Resumen de la compra -->
+                    <VBox spacing="10" style="-fx-padding: 20; -fx-background-color: #1a1a1a; -fx-background-radius: 5;">
+                        <Label text="Resumen del pedido" textFill="white" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                        <HBox spacing="10">
+                            <VBox spacing="15" HBox.hgrow="ALWAYS">
+                                <Label text="Información de envío" textFill="white" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+                                <Label text="Dirección" textFill="#9e9e9e"/>
+                                <TextField fx:id="direccionField" promptText="Calle, número, piso..."/>
+
+                                <Label text="Código Postal" textFill="#9e9e9e"/>
+                                <TextField fx:id="codigoPostalField" promptText="CP"/>
+
+                                <Label text="Ciudad" textFill="#9e9e9e"/>
+                                <TextField fx:id="ciudadField" promptText="Ciudad"/>
+
+                                <Label text="Teléfono" textFill="#9e9e9e"/>
+                                <TextField fx:id="telefonoField" promptText="Teléfono de contacto"/>
+                            </VBox>
+
+                            <VBox spacing="15" minWidth="250">
+                                <Label text="Total" textFill="white" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+                                <HBox>
+                                    <Label text="Subtotal:" textFill="#9e9e9e" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                                    <Label fx:id="subtotalLabel" text="€0.00" textFill="white"/>
+                                </HBox>
+
+                                <HBox>
+                                    <Label text="Gastos de envío:" textFill="#9e9e9e" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                                    <Label fx:id="envioLabel" text="€4.99" textFill="white"/>
+                                </HBox>
+
+                                <Separator style="-fx-background-color: #333333;"/>
+
+                                <HBox>
+                                    <Label text="Total:" textFill="white" style="-fx-font-weight: bold;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                                    <Label fx:id="totalLabel" text="€4.99" textFill="#7cb342" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                                </HBox>
+
+                                <Button fx:id="finalizarCompraBtn" text="Finalizar compra" onAction="#finalizarCompra"
+                                        style="-fx-background-color: #7cb342; -fx-text-fill: white; -fx-font-size: 14px;"
+                                        maxWidth="Infinity"/>
+
+                                <Button fx:id="seguirComprandoBtn" text="Seguir comprando" onAction="#irATienda"
+                                        style="-fx-background-color: #454545; -fx-text-fill: white;"
+                                        maxWidth="Infinity"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </center>
+    </BorderPane>
+</AnchorPane>

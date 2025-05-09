@@ -1,6 +1,7 @@
 package com.example.cannagrow;
 
 import com.example.model.Categoria;
+import com.example.model.CarritoModel;
 import com.example.model.Session;
 import com.example.model.UsuarioModel;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
@@ -38,6 +40,8 @@ public class MenuController {
     private BorderPane mainBorderPane;
     @FXML
     private FlowPane contenedorCategorias; // Este es el elemento que estaba causando el NullPointerException
+    @FXML
+    private BorderPane rootPane;
 
     @FXML
     public void initialize() {
@@ -63,6 +67,9 @@ public class MenuController {
         if (contenedorCategorias != null) {
             cargarCategorias();
         }
+
+        // Actualizar contador del carrito
+        actualizarContadorCarrito();
 
         if (usuario != null) {
             // Si tiene rol es Empleado, si no es Cliente
@@ -106,6 +113,24 @@ public class MenuController {
         }
 
         System.out.println("Inicialización de MenuController completada");
+    }
+
+    /**
+     * Actualiza el texto del botón del carrito para mostrar la cantidad de items
+     */
+    private void actualizarContadorCarrito() {
+        try {
+            if (carritoButton != null) {
+                int cantidadItems = CarritoModel.getCantidadTotal();
+                if (cantidadItems > 0) {
+                    carritoButton.setText("Carrito (" + cantidadItems + ")");
+                } else {
+                    carritoButton.setText("Carrito");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error al actualizar contador del carrito: " + e.getMessage());
+        }
     }
 
     private void cargarLogo() {
@@ -229,22 +254,77 @@ public class MenuController {
 
     @FXML
     private void onInicioClick(javafx.event.ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        SceneChanger.changeScene("/com/example/cannagrow/inicio.fxml", stage);
+        try {
+            if (rootPane != null) {
+                resetearBotonesMenu();
+                inicioButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+                if (contenedorCategorias != null) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/inicio.fxml"));
+                    Parent inicioVista = loader.load();
+                    rootPane.setCenter(inicioVista);
+                    return;
+                }
+            }
+            // Si el rootPane es null o no se pudo cargar en el centro, cambiar toda la escena
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneChanger.changeScene("/com/example/cannagrow/inicio.fxml", stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo cargar la vista de inicio.");
+        }
+    }
+
+    /**
+     * Resetea los estilos de todos los botones del menú
+     */
+    private void resetearBotonesMenu() {
+        String estiloNormal = "-fx-background-color: #555555; -fx-text-fill: white;";
+        inicioButton.setStyle(estiloNormal);
+        productosButton.setStyle(estiloNormal);
+        carritoButton.setStyle(estiloNormal);
+        pedidosButton.setStyle(estiloNormal);
     }
 
     @FXML
-    private void onProductosClick() {
-        mostrarMensaje("Productos", "Aquí irán los productos disponibles.");
+    public void onProductosClick() {
+        try {
+            resetearBotonesMenu();
+            productosButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+            AnchorPane productosPane = FXMLLoader.load(getClass().getResource("/com/example/cannagrow/Productos.fxml"));
+            rootPane.setCenter(productosPane);
+            actualizarContadorCarrito();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo cargar la vista de productos.");
+        }
     }
 
     @FXML
     private void onCarritoClick() {
-        mostrarMensaje("Carrito", "Aquí se mostrarán los productos en tu carrito.");
+        try {
+            // Verificar si hay un usuario en sesión
+            UsuarioModel usuario = Session.getUsuarioActual();
+            if (usuario == null) {
+                mostrarMensaje("Iniciar sesión",
+                        "Por favor, inicia sesión para acceder al carrito.",
+                        Alert.AlertType.INFORMATION);
+                return;
+            }
+
+            resetearBotonesMenu();
+            carritoButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+            AnchorPane carritoPane = FXMLLoader.load(getClass().getResource("/com/example/cannagrow/carrito.fxml"));
+            rootPane.setCenter(carritoPane);
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo cargar la vista del carrito.");
+        }
     }
 
     @FXML
     private void onPedidosClick() {
+        resetearBotonesMenu();
+        pedidosButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
         mostrarMensaje("Pedidos", "Aquí podrás revisar tus pedidos.");
     }
 
@@ -267,6 +347,14 @@ public class MenuController {
 
     private void mostrarMensaje(String titulo, String contenido) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(contenido);
+        alert.showAndWait();
+    }
+
+    private void mostrarMensaje(String titulo, String contenido, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(contenido);

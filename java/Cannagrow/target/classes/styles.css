@@ -1,0 +1,118 @@
+/* styles.css */
+
+.root {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-base: #121212;
+    -fx-background: #121212;
+    -fx-control-inner-background: #1f1f1f;
+}
+
+/* Estilos para botones */
+.button {
+    -fx-background-color: #388e3c;
+    -fx-text-fill: white;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #2e7d32;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,150,0,0.3), 5, 0, 0, 0);
+}
+
+.button:pressed {
+    -fx-background-color: #1b5e20;
+}
+
+/* Estilos para tarjetas de productos */
+.tarjeta-producto {
+    -fx-background-color: #1f1f1f;
+    -fx-background-radius: 12px;
+    -fx-padding: 12px;
+    -fx-cursor: hand;
+    -fx-border-radius: 12px;
+    -fx-transition: all 0.3s ease;
+}
+
+.tarjeta-producto:hover {
+    -fx-background-color: #2a2a2a;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,150,0,0.5), 10, 0, 0, 0);
+}
+
+/* Estilos para el botón de filtro */
+.filtro-btn {
+    -fx-background-color: #1f1f1f;
+    -fx-text-fill: #9e9e9e;
+    -fx-background-radius: 15px;
+    -fx-padding: 5px 10px;
+    -fx-cursor: hand;
+    -fx-border-radius: 15px;
+}
+
+.filtro-btn:hover {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: white;
+}
+
+.filtro-btn:selected {
+    -fx-background-color: #388e3c;
+    -fx-text-fill: white;
+}
+
+/* Estilos para ScrollPane */
+.scroll-pane {
+    -fx-background: #121212;
+    -fx-border-color: #121212;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: #121212;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: #1a1a1a;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #4caf50;
+    -fx-background-radius: 8px;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #388e3c;
+}
+
+/* Estilos para TextField */
+.text-field {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: white;
+    -fx-background-radius: 20px;
+    -fx-padding: 5px 15px;
+    -fx-prompt-text-fill: #9e9e9e;
+}
+
+.text-field:focused {
+    -fx-background-color: #333333;
+    -fx-border-color: #4caf50;
+    -fx-border-radius: 20px;
+}
+
+/* Estilo para separadores */
+.separator {
+    -fx-background-color: #333333;
+}
+
+.separator .line {
+    -fx-border-color: #333333;
+    -fx-border-width: 1px;
+}
+
+/* Estilo para etiquetas de categoría */
+.category-label {
+    -fx-background-color: #388e3c;
+    -fx-text-fill: white;
+    -fx-background-radius: 12px;
+    -fx-padding: 2px 8px;
+    -fx-font-size: 10px;
+}
