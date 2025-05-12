@@ -41,6 +41,26 @@ body {
   object-fit: cover;
   border-radius: 10px;
 }
+.card-img-top {
+  height: 250px;
+  object-fit: cover;
+  width: 100%;  
+}
+
+/* Style.css (solo estilos para igualar altura) */
+#products .row {
+  align-items: stretch; /* Estira columnas a la misma altura */
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* 100% de la columna */
+}
+
+.product-card .card-body {
+  flex: 1; /* Rellena espacio restante */
+}
 
 /* Testimonios */
 .carousel-item blockquote {
@@ -84,10 +104,4 @@ body {
 
 .footer-social a:hover {
   color: white;
-}
-
-.card-img-top {
-  height: 250px;       /* Ajusta según tu preferencia */
-  object-fit: cover;   /* Rellena el espacio sin deformar la imagen */
-  width: 100%;         /* Ocupa todo el ancho del contenedor */
 }
