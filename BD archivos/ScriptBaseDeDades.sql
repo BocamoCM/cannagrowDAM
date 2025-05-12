@@ -87,3 +87,13 @@ CREATE TABLE PedidoLog (
     fecha_accion datetime not null,
     accion varchar(255) not null
 );
+
+-- Tabla Sesion
+CREATE TABLE Sesion (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_id int,
+    tipo_usuario enum('Cliente', 'Empleado'),
+    inicio timestamp,
+    ip varchar(45),
+    dispositivo varchar(100)
+);
