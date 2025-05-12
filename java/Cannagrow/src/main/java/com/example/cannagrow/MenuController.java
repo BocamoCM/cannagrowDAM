@@ -265,35 +265,8 @@ public class MenuController {
 
     @FXML
     private void onInicioClick(javafx.event.ActionEvent event) {
-        try {
-            resetearBotonesMenu();
-            inicioButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
-
-            // Comprobar si tenemos el BorderPane para cargar la vista
-            BorderPane borderPane = (mainBorderPane != null) ? mainBorderPane : rootPane;
-
-            if (borderPane != null) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/inicio.fxml"));
-                Parent inicioVista = loader.load();
-                borderPane.setCenter(inicioVista);
-            } else {
-                // Si no hay BorderPane disponible, cambiamos toda la escena
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                SceneChanger.changeScene("/com/example/cannagrow/inicio.fxml", stage);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarMensaje("Error", "No se pudo cargar la vista de inicio.");
-
-            // Intentar cambiar la escena completa como último recurso
-            try {
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                SceneChanger.changeScene("/com/example/cannagrow/inicio.fxml", stage);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                mostrarMensaje("Error crítico", "No se pudo cargar la vista de inicio de ninguna forma.");
-            }
-        }
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneChanger.changeScene("/com/example/cannagrow/inicio.fxml", stage);
     }
 
     /**
@@ -345,7 +318,7 @@ public class MenuController {
             resetearBotonesMenu();
             carritoButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
 
-            AnchorPane carritoPane = FXMLLoader.load(getClass().getResource("/com/example/cannagrow/carrito.fxml"));
+            AnchorPane carritoPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cannagrow/carrito.fxml")));
 
             // Determinar qué BorderPane usar
             BorderPane borderPane = (mainBorderPane != null) ? mainBorderPane : rootPane;
@@ -436,4 +409,6 @@ public class MenuController {
         alert.setContentText(contenido);
         alert.showAndWait();
     }
+
+
 }
