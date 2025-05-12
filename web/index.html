@@ -185,48 +185,82 @@
       </div>
     </section>         
 
-    <!-- Testimonios -->
-    <section id="testimonials" class="bg-light py-5">
-      <div class="container">
-        <h2 class="text-center mb-5" data-aos="fade-up">Testimonios</h2>
-        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-aos="fade-up">
-          <div class="carousel-inner text-center">
-            <div class="carousel-item active">
+<!-- Testimonios -->
+<section id="testimonials" class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-5" data-aos="fade-up">Testimonios</h2>
+
+    <!-- Carousel con autoslide cada 3000 ms y sin pausa al hacer hover -->
+    <div
+      id="testimonialCarousel"
+      class="carousel slide"
+      data-bs-ride="carousel"
+      data-bs-interval="3000"
+      data-bs-pause="false"
+      data-aos="fade-up"
+    >
+      <div class="carousel-inner text-center">
+        
+        <!-- Slide 1: Testimonios 1 y 2 -->
+        <div class="carousel-item active">
+          <div class="row">
+            <div class="col-md-6">
               <blockquote class="blockquote">
                 <p>"El CBD me ayudó a dormir como nunca. Muy recomendado!"</p>
                 <footer class="blockquote-footer">María S., 20 años</footer>
               </blockquote>
+            </div>
+            <div class="col-md-6">
               <blockquote class="blockquote">
                 <p>"Con el té de CBD de CannaGrow duermo mejor y me siento mucho más tranquila."</p>
                 <footer class="blockquote-footer">Ana M., 42 años</footer>
               </blockquote>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Slide 2: Testimonios 3 y 4 -->
+        <div class="carousel-item">
+          <div class="row">
+            <div class="col-md-6">
               <blockquote class="blockquote">
                 <p>"Llevo meses sin dolor de espalda gracias a la crema muscular."</p>
                 <footer class="blockquote-footer">Luis D., 35 años</footer>
               </blockquote>
+            </div>
+            <div class="col-md-6">
               <blockquote class="blockquote">
                 <p>"Reduce mis calambres y el mal humor durante el periodo. ¡Funciona!"</p>
                 <footer class="blockquote-footer">Camila, 25 años</footer>
               </blockquote>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Slide 3: Testimonios 5 y 6 -->
+        <div class="carousel-item">
+          <div class="row">
+            <div class="col-md-6">
               <blockquote class="blockquote">
                 <p>"Desde que lo tomo, me duermo rápido y despierto descansado."</p>
                 <footer class="blockquote-footer">Mateo, 36 años</footer>
               </blockquote>
+            </div>
+            <div class="col-md-6">
               <blockquote class="blockquote">
                 <p>"Ideal para la ansiedad y el insomnio que me trajo la menopausia."</p>
                 <footer class="blockquote-footer">Laura, 50 años</footer>
               </blockquote>
             </div>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-          </button>
         </div>
+
       </div>
-    </section>
+    </div>
+  </div>
+</section>
+
+
 
     <!-- Instalador de App -->
     <section id="instalador" class="py-5 app-installer-section">

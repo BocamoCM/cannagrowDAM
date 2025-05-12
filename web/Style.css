@@ -47,6 +47,17 @@ body {
   margin-bottom: 2rem;
 }
 
+.carousel-item {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.carousel-item.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 /* Instalador App */
 .app-installer-section {
   background-color: #000000;
@@ -80,4 +91,3 @@ body {
   object-fit: cover;   /* Rellena el espacio sin deformar la imagen */
   width: 100%;         /* Ocupa todo el ancho del contenedor */
 }
-
