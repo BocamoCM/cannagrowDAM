@@ -49,22 +49,36 @@ body {
 
 /* Style.css (solo estilos para igualar altura) */
 #products .row {
-  align-items: stretch; /* Estira columnas a la misma altura */
+  align-items: stretch;
 }
 
 .product-card {
   display: flex;
   flex-direction: column;
-  height: 100%; /* 100% de la columna */
+  height: 100%;
 }
 
 .product-card .card-body {
-  flex: 1; /* Rellena espacio restante */
+  flex: 1;
 }
 
 /* Testimonios */
 .carousel-item blockquote {
   margin-bottom: 2rem;
+}
+
+#testimonials .carousel-inner .row {
+  align-items: stretch;
+}
+#testimonials .carousel-item .col-md-6 {
+  display: flex;
+}
+#testimonials .carousel-item blockquote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  margin-bottom: 0;
 }
 
 .carousel-item {
@@ -92,6 +106,14 @@ body {
 .contact-section input,
 .contact-section textarea {
   border-radius: 0.5rem;
+}
+
+/* Tutorial */
+.tutorial2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 /* Footer */
