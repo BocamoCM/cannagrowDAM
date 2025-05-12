@@ -79,3 +79,11 @@ CREATE TABLE Regulacion (
     id INT PRIMARY KEY AUTO_INCREMENT,
     descripcion TEXT NOT NULL
 );
+
+-- Tabla PedidoLog
+CREATE TABLE PedidoLog (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    pedido_id int null,
+    fecha_accion datetime not null,
+    accion varchar(255) not null
+);
