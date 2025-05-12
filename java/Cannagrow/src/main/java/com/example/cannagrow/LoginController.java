@@ -49,14 +49,13 @@ public class LoginController {
             return;
         }
 
-        // Usamos la nueva versión del método
         UsuarioModel usuarioAutenticado = usuarioModel.autenticarUsuario(user, pass);
 
         if (usuarioAutenticado != null) {
             loginMessage.setStyle("-fx-text-fill: green;");
             loginMessage.setText("Inicio de sesión exitoso.");
 
-            // Guardamos el usuario autenticado en la sesión
+            // Guarda el usuario en la sesión y registra el inicio en la base de datos
             Session.setUsuarioActual(usuarioAutenticado);
 
             try {
