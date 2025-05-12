@@ -290,7 +290,7 @@ public class MenuController {
         try {
             resetearBotonesMenu();
             productosButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
-            AnchorPane productosPane = FXMLLoader.load(getClass().getResource("/com/example/cannagrow/Productos.fxml"));
+            AnchorPane productosPane = FXMLLoader.load(getClass().getResource("/com/example/cannagrow/productos.fxml"));
             rootPane.setCenter(productosPane);
             actualizarContadorCarrito();
         } catch (IOException e) {
