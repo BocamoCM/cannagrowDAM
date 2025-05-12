@@ -39,7 +39,7 @@ public class MenuController {
     @FXML
     private BorderPane mainBorderPane;
     @FXML
-    private FlowPane contenedorCategorias; // Este es el elemento que estaba causando el NullPointerException
+    private FlowPane contenedorCategorias;
     @FXML
     private BorderPane rootPane;
 
@@ -72,11 +72,12 @@ public class MenuController {
         actualizarContadorCarrito();
 
         if (usuario != null) {
-            // Si tiene rol es Empleado, si no es Cliente
-            String tipoUsuario = (usuario.getRol() != null) ? capitalizar(usuario.getRol()) : "Cliente";
+            // Aseguramos que el rol nunca sea null para evitar NPE
+            String rol = (usuario.getRol() != null) ? usuario.getRol().toLowerCase() : "cliente";
+            String tipoUsuario = capitalizar(rol);
             System.out.println("Usuario actual: " + tipoUsuario);
 
-            if (usuario.getRol() == null || usuario.getRol().equalsIgnoreCase("cliente")) {
+            if (rol.equals("cliente")) {
                 // CLIENTE
                 carritoButton.setVisible(true);
                 pedidosButton.setVisible(true);
@@ -84,8 +85,6 @@ public class MenuController {
                 adminButton.setVisible(false);
             } else {
                 // EMPLEADO
-                String rol = usuario.getRol().toLowerCase();
-
                 switch (rol) {
                     case "gerente":
                         carritoButton.setVisible(true);
@@ -110,6 +109,10 @@ public class MenuController {
             }
         } else {
             System.out.println("No hay usuario logueado");
+            // Configuración para usuario no logueado
+            carritoButton.setVisible(false);
+            pedidosButton.setVisible(false);
+            adminButton.setVisible(false);
         }
 
         System.out.println("Inicialización de MenuController completada");
@@ -245,7 +248,15 @@ public class MenuController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/register-view.fxml"));
             Parent registroVista = loader.load();
-            mainBorderPane.setCenter(registroVista);
+
+            // Usar el BorderPane que está definido
+            if (mainBorderPane != null) {
+                mainBorderPane.setCenter(registroVista);
+            } else if (rootPane != null) {
+                rootPane.setCenter(registroVista);
+            } else {
+                mostrarMensaje("Error", "No se pudo cargar la vista de registro: BorderPane no encontrado.");
+            }
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error", "No se pudo cargar la vista de registro.");
@@ -255,21 +266,33 @@ public class MenuController {
     @FXML
     private void onInicioClick(javafx.event.ActionEvent event) {
         try {
-            if (rootPane != null) {
-                resetearBotonesMenu();
-                inicioButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
-                if (contenedorCategorias != null) {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/inicio.fxml"));
-                    Parent inicioVista = loader.load();
-                    return;
-                }
+            resetearBotonesMenu();
+            inicioButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+
+            // Comprobar si tenemos el BorderPane para cargar la vista
+            BorderPane borderPane = (mainBorderPane != null) ? mainBorderPane : rootPane;
+
+            if (borderPane != null) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/inicio.fxml"));
+                Parent inicioVista = loader.load();
+                borderPane.setCenter(inicioVista);
+            } else {
+                // Si no hay BorderPane disponible, cambiamos toda la escena
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                SceneChanger.changeScene("/com/example/cannagrow/inicio.fxml", stage);
             }
-            // Si el rootPane es null o no se pudo cargar en el centro, cambiar toda la escena
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            SceneChanger.changeScene("/com/example/cannagrow/inicio.fxml", stage);
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error", "No se pudo cargar la vista de inicio.");
+
+            // Intentar cambiar la escena completa como último recurso
+            try {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                SceneChanger.changeScene("/com/example/cannagrow/inicio.fxml", stage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                mostrarMensaje("Error crítico", "No se pudo cargar la vista de inicio de ninguna forma.");
+            }
         }
     }
 
@@ -278,10 +301,10 @@ public class MenuController {
      */
     private void resetearBotonesMenu() {
         String estiloNormal = "-fx-background-color: #555555; -fx-text-fill: white;";
-        inicioButton.setStyle(estiloNormal);
-        productosButton.setStyle(estiloNormal);
-        carritoButton.setStyle(estiloNormal);
-        pedidosButton.setStyle(estiloNormal);
+        if (inicioButton != null) inicioButton.setStyle(estiloNormal);
+        if (productosButton != null) productosButton.setStyle(estiloNormal);
+        if (carritoButton != null) carritoButton.setStyle(estiloNormal);
+        if (pedidosButton != null) pedidosButton.setStyle(estiloNormal);
     }
 
     @FXML
@@ -289,9 +312,18 @@ public class MenuController {
         try {
             resetearBotonesMenu();
             productosButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+
             AnchorPane productosPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cannagrow/Productos.fxml")));
-            mainBorderPane.setCenter(productosPane);  // Usar mainBorderPane en lugar de rootPane
-            actualizarContadorCarrito();
+
+            // Determinar qué BorderPane usar
+            BorderPane borderPane = (mainBorderPane != null) ? mainBorderPane : rootPane;
+
+            if (borderPane != null) {
+                borderPane.setCenter(productosPane);
+                actualizarContadorCarrito();
+            } else {
+                mostrarMensaje("Error", "No se pudo cargar la vista de productos: BorderPane no encontrado.");
+            }
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error", "No se pudo cargar la vista de productos.");
@@ -312,8 +344,17 @@ public class MenuController {
 
             resetearBotonesMenu();
             carritoButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+
             AnchorPane carritoPane = FXMLLoader.load(getClass().getResource("/com/example/cannagrow/carrito.fxml"));
-            rootPane.setCenter(carritoPane);
+
+            // Determinar qué BorderPane usar
+            BorderPane borderPane = (mainBorderPane != null) ? mainBorderPane : rootPane;
+
+            if (borderPane != null) {
+                borderPane.setCenter(carritoPane);
+            } else {
+                mostrarMensaje("Error", "No se pudo cargar la vista del carrito: BorderPane no encontrado.");
+            }
         } catch (IOException e) {
             e.printStackTrace();
             mostrarMensaje("Error", "No se pudo cargar la vista del carrito.");
@@ -322,9 +363,26 @@ public class MenuController {
 
     @FXML
     private void onPedidosClick() {
-        resetearBotonesMenu();
-        pedidosButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
-        mostrarMensaje("Pedidos", "Aquí podrás revisar tus pedidos.");
+        try {
+            // Verificar si hay un usuario en sesión
+            UsuarioModel usuario = Session.getUsuarioActual();
+            if (usuario == null) {
+                mostrarMensaje("Iniciar sesión",
+                        "Por favor, inicia sesión para acceder a los pedidos.",
+                        Alert.AlertType.INFORMATION);
+                return;
+            }
+
+            resetearBotonesMenu();
+            pedidosButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+
+            // Aquí se cargaría la vista de pedidos cuando esté implementada
+            // Por ahora solo mostramos un mensaje
+            mostrarMensaje("Pedidos", "Aquí podrás revisar tus pedidos.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo acceder a los pedidos.");
+        }
     }
 
     @FXML
@@ -333,15 +391,34 @@ public class MenuController {
         Session.setUsuarioActual(null);
         Session.cerrarSesion();
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        SceneChanger.changeScene("/com/example/cannagrow/hello-view.fxml", stage); // Te lleva de vuelta al login
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneChanger.changeScene("/com/example/cannagrow/hello-view.fxml", stage); // Te lleva de vuelta al login
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo volver a la pantalla de inicio de sesión.");
+        }
     }
 
     @FXML
     private void onAdminClick(javafx.event.ActionEvent event) {
-        mostrarMensaje("Admin", "Bienvenido Administrador de Cannagrow.");
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        SceneChanger.changeScene("/com/example/cannagrow/menu-admin.fxml", stage);
+        try {
+            // Verificar si el usuario tiene permiso de administrador
+            UsuarioModel usuario = Session.getUsuarioActual();
+            if (usuario == null || usuario.getRol() == null || !usuario.getRol().equalsIgnoreCase("gerente")) {
+                mostrarMensaje("Acceso denegado",
+                        "No tienes permisos para acceder al panel de administración.",
+                        Alert.AlertType.WARNING);
+                return;
+            }
+
+            mostrarMensaje("Admin", "Bienvenido Administrador de Cannagrow.");
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneChanger.changeScene("/com/example/cannagrow/menu-admin.fxml", stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo acceder al panel de administración.");
+        }
     }
 
     private void mostrarMensaje(String titulo, String contenido) {
