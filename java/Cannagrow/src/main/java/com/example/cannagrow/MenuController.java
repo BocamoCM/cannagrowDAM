@@ -43,6 +43,7 @@ public class MenuController {
     @FXML
     private BorderPane rootPane;
 
+
     @FXML
     public void initialize() {
         System.out.println("Iniciando inicialización de MenuController...");
@@ -361,17 +362,22 @@ public class MenuController {
     @FXML
     private void onLogoutClick(javafx.event.ActionEvent event) {
         mostrarMensaje("Cerrar sesión", "Sesión cerrada. Vuelve pronto.");
-        Session.setUsuarioActual(null);
-        Session.cerrarSesion();
+
+        Session.cerrarSesion(); // <-- Esto ahora también actualiza en la BD
 
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            SceneChanger.changeScene("/com/example/cannagrow/hello-view.fxml", stage); // Te lleva de vuelta al login
+            SceneChanger.changeScene("/com/example/cannagrow/hello-view.fxml", stage);
         } catch (Exception e) {
             e.printStackTrace();
             mostrarMensaje("Error", "No se pudo volver a la pantalla de inicio de sesión.");
         }
     }
+
+
+    /**
+     * Cierra la sesión del usuario y redirige a la pantalla de inicio de sesión.
+     */
 
     @FXML
     private void onAdminClick(javafx.event.ActionEvent event) {
