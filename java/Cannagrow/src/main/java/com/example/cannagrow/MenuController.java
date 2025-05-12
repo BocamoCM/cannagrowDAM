@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -20,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class MenuController {
     @FXML
@@ -261,7 +261,6 @@ public class MenuController {
                 if (contenedorCategorias != null) {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/inicio.fxml"));
                     Parent inicioVista = loader.load();
-                    rootPane.setCenter(inicioVista);
                     return;
                 }
             }
@@ -290,8 +289,8 @@ public class MenuController {
         try {
             resetearBotonesMenu();
             productosButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
-            AnchorPane productosPane = FXMLLoader.load(getClass().getResource("/com/example/cannagrow/productos.fxml"));
-            rootPane.setCenter(productosPane);
+            AnchorPane productosPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cannagrow/Productos.fxml")));
+            mainBorderPane.setCenter(productosPane);  // Usar mainBorderPane en lugar de rootPane
             actualizarContadorCarrito();
         } catch (IOException e) {
             e.printStackTrace();

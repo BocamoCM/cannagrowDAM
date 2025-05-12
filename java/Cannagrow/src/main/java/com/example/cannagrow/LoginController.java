@@ -60,7 +60,7 @@ public class LoginController {
             Session.setUsuarioActual(usuarioAutenticado);
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/menu.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/inicio.fxml"));
                 Parent menuRoot = loader.load();
                 Scene menuScene = new Scene(menuRoot);
                 Stage currentStage = (Stage) usernameField.getScene().getWindow();
