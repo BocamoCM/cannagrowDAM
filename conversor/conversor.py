@@ -1,6 +1,7 @@
 # conversor.py
 # Script para convertir imágenes JPG/PNG a WebP con interfaz gráfica.
 # Requisitos: Python 3.x, Pillow (instalar con `pip install pillow`).
+# Requisitos: Python 3.x, Pillow (instalar con `pip install pillow`).
 
 import os
 import sys
