@@ -1,0 +1,82 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.1.1 Chrome/132.0.6834.210 Electron/34.3.3 Safari/537.36" version="26.1.1">
+  <diagram name="Página-1" id="gi0N5ZV0rk2WKtdGokFU">
+    <mxGraphModel dx="526" dy="606" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="OSo333r_8WSZKT-N2uYB-1" value="Producto" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="220" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-2" value="id_producto (int)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-1">
+          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-3" value="nombre_producto (String)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-1">
+          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-4" value="precio (Double)&lt;div&gt;stock (int)&lt;/div&gt;&lt;div&gt;contenidoTHC (Double)&lt;/div&gt;&lt;div&gt;contenidoCBD(Double)&lt;/div&gt;&lt;div&gt;+ actualizarStock(cantidad: int): void&lt;/div&gt;&lt;div&gt;+ calcularPrecioConImpuesto(): float&amp;nbsp;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-1">
+          <mxGeometry y="90" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-5" value="Cliente" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="160" width="220" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-6" value="id_cliente (int)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-5">
+          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-7" value="nombre_cliente (String)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-5">
+          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-8" value="fechaNacimiento (Date)&lt;div&gt;email (String)&lt;/div&gt;&lt;div&gt;direccion (String)&lt;/div&gt;&lt;div&gt;+ verificarEdad(boolean)&lt;/div&gt;&lt;div&gt;+ realizatPedido(pedido: Pedido) void&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-5">
+          <mxGeometry y="90" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-9" value="Empleado" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="400" width="220" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-10" value="id_empleado (int)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-9">
+          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-11" value="nombre_empleado (String)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-9">
+          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-12" value="rol(enum) (Vendedor, Cultivador, Gerente)&lt;div&gt;email: String&lt;/div&gt;&lt;div&gt;salario: double&lt;/div&gt;&lt;div&gt;+ calcularSalarioMensual(float)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-9">
+          <mxGeometry y="90" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-13" value="Pedido" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="304" y="400" width="330" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-14" value="id_pedido (int)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-13">
+          <mxGeometry y="30" width="330" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-15" value="fecha(date)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-13">
+          <mxGeometry y="60" width="330" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-16" value="total(float)&lt;div&gt;estado(enum(Pendiente, Enviado, Entregado, Cancelado))&lt;/div&gt;&lt;div&gt;cliente(id_cliente)&lt;/div&gt;&lt;div&gt;+ calcularTotal(float)&lt;/div&gt;&lt;div&gt;+ cambiarEstado(nuevoEstado (String)) void&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-13">
+          <mxGeometry y="90" width="330" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-17" value="ItemPedido" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="600" width="220" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-18" value="id_pedido" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-17">
+          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-19" value="producto(id_producto)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-17">
+          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-20" value="cantidad: int&lt;div&gt;+ calcularSubtotal(float)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-17">
+          <mxGeometry y="90" width="220" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-21" value="Regulacion" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="304" y="600" width="230" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-22" value="id_regulacion" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-21">
+          <mxGeometry y="30" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-23" value="descripcion(String)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-21">
+          <mxGeometry y="60" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OSo333r_8WSZKT-N2uYB-24" value="+ cumple(producto: id_producto) boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="OSo333r_8WSZKT-N2uYB-21">
+          <mxGeometry y="90" width="230" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
