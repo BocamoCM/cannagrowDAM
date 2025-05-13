@@ -92,8 +92,19 @@ CREATE TABLE PedidoLog (
 CREATE TABLE Sesion (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     usuario_id int,
-    tipo_usuario enum('Cliente', 'Empleado'),
     inicio timestamp,
     ip varchar(45),
     dispositivo varchar(100)
+);
+
+-- Tabla SesionActiva
+
+CREATE TABLE SesionActiva (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_id int,
+    tipo_usuario enum('Cliente', 'Empleado'),
+    nombre_usuario varchar(100),
+    inicio_sesion timestamp,
+    fin_sesion timestamp,
+    activa tinyint(1)
 );

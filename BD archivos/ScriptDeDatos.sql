@@ -26,7 +26,7 @@
 
 -- DATOS EMPLEADOS
 -- Empleado
-INSERT INTO Empleado (nombre, rol, email, salario, contrasena_hash, imagen_empleado) VALUES 
+INSERT INTO Empleado (nombre, rol, email, salario, contrasena_hash, fotoPerfilUrl) VALUES 
 ('Alvaro',     'Repartidor', 'alvaro@cannagrow.com',    1200.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
 ('Beatriz',    'Repartidor', 'beatriz@cannagrow.com',   1220.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
 ('Carmen',     'Repartidor', 'carmen@cannagrow.com',    1240.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
@@ -82,7 +82,7 @@ INSERT INTO Empleado (nombre, rol, email, salario, contrasena_hash, imagen_emple
 ('Borja Carreres',  'Gerente',    'borja_carreres@email.com',  6400.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
 ('Andreu Rosell',   'Gerente',    'andreu_rosell@email.com',  10000.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
 ('Nacho Piles',     'Cultivador', 'nacho_piles@email.com',     1400.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
-('Mario mas',       'Vendedor',   'mario_mas@email.com',       1850.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
+('Mario mas',       'Vendedor',   'mario_mas@email.com',       1850.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', https://cannagrowdam.duckdns.org/imagenesBD/imagenesEmpleado/marioFoto.webp),
 ('admin',    'Gerente',    'admin@email.com',    15400.00, 'admin', NULL),
 ('Lucía Vega',      'Vendedor',   'lucia.vega@email.com',      2100.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
 ('Carlos Ruiz',     'Vendedor',   'carlos.ruiz@email.com',     1300.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
