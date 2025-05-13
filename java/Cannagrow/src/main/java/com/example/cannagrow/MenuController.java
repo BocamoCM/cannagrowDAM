@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -17,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -37,9 +39,9 @@ public class MenuController {
     @FXML
     private Button adminButton;
     @FXML
-    private FlowPane contenedorCategorias;
-    @FXML
     private BorderPane rootPane;
+    @FXML
+    private Label userText;
 
 
     @FXML
@@ -64,6 +66,7 @@ public class MenuController {
             String rol = (usuario.getRol() != null) ? usuario.getRol().toLowerCase() : "cliente";
             String tipoUsuario = capitalizar(rol);
             System.out.println("Usuario actual: " + tipoUsuario);
+            userText.setText("Bienvenido, " + usuario.getNombre() + " (" + tipoUsuario + ")");
 
             if (rol.equals("cliente")) {
                 // CLIENTE
@@ -143,85 +146,74 @@ public class MenuController {
         try {
             UsuarioModel usuario = Session.getUsuarioActual();
 
-            if (usuario != null && usuario.getFotoPerfilUrl() != null && !usuario.getFotoPerfilUrl().isEmpty()) {
-                // Intentar cargar la foto de perfil del usuario
-                String fotoPerfilUrl = usuario.getFotoPerfilUrl();
-                System.out.println("Intentando cargar foto de perfil desde: " + fotoPerfilUrl);
+            // Configurar el ImageView primero
+            if (logoImage != null) {
+                logoImage.setFitWidth(40);
+                logoImage.setFitHeight(40);
+                logoImage.setPreserveRatio(true);
 
-                InputStream fotoStream = getClass().getResourceAsStream(fotoPerfilUrl);
-
-                if (fotoStream != null) {
-                    logoImage.setImage(new Image(fotoStream));
-                    // Configurar el ImageView para mostrar la foto en círculo
-                    logoImage.setStyle("-fx-background-radius: 50%; -fx-background-color: white;");
-                    System.out.println("Foto de perfil cargada correctamente");
-                    return;
-                } else {
-                    System.err.println("No se pudo encontrar la foto de perfil en: " + fotoPerfilUrl);
-
-                    // Si la foto no se encuentra como recurso, intentar cargar como ruta absoluta o URL
-                    try {
-                        Image imagen = new Image(fotoPerfilUrl);
-                        if (!imagen.isError()) {
-                            logoImage.setImage(imagen);
-                            logoImage.setStyle("-fx-background-radius: 50%; -fx-background-color: white;");
-                            System.out.println("Foto de perfil cargada desde ruta absoluta o URL");
-                            return;
-                        }
-                    } catch (Exception ex) {
-                        System.err.println("Error al cargar desde ruta absoluta: " + ex.getMessage());
-                    }
-                }
+                // Aplicar clip circular
+                javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(20, 20, 20);
+                logoImage.setClip(clip);
+                logoImage.setStyle("-fx-background-radius: 50%; -fx-background-color: white;");
+            } else {
+                System.err.println("ERROR: logoImage es null al intentar configurarlo");
+                return;
             }
 
-            // Si no hay usuario logueado o no se pudo cargar la foto, cargar logo por defecto
-            cargarLogoPorDefecto();
+            // Verificar usuario y URL
+            if (usuario == null || usuario.getFotoPerfilUrl() == null || usuario.getFotoPerfilUrl().isEmpty()) {
+                cargarLogoPorDefecto();
+                return;
+            }
 
+            // Obtener la ruta de imagen y usarla como recurso interno
+            String fotoPath = usuario.getFotoPerfilUrl();
+            System.out.println("Intentando cargar foto desde: " + fotoPath);
+
+            // Intentar cargar como recurso interno (más fiable)
+            InputStream fotoStream = getClass().getResourceAsStream(fotoPath);
+
+            if (fotoStream != null) {
+                Image imagen = new Image(fotoStream);
+                logoImage.setImage(imagen);
+                System.out.println("Foto de perfil cargada correctamente");
+            } else {
+                System.out.println("No se encontró la imagen, cargando logo por defecto");
+                cargarLogoPorDefecto();
+            }
         } catch (Exception e) {
             System.err.println("Error al cargar la foto de perfil: " + e.getMessage());
-            e.printStackTrace();
-            // Si ocurre algún error, intentar cargar el logo por defecto
             cargarLogoPorDefecto();
         }
     }
 
-
-
     private void cargarLogoPorDefecto() {
         try {
-            // Registrar la ruta que estamos intentando cargar
-            String logoPath = "/com/example/cannagrow/cannagrow_logo.png";
+            String logoPath = "/com/example/cannagrow/img/perfil_cliente.png";
             System.out.println("Cargando logo por defecto desde: " + logoPath);
 
             InputStream logoStream = getClass().getResourceAsStream(logoPath);
             if (logoStream != null) {
                 logoImage.setImage(new Image(logoStream));
-                // Resetear el estilo para el logo
-                logoImage.setStyle("");
                 System.out.println("Logo por defecto cargado correctamente");
             } else {
-                System.err.println("No se pudo encontrar el recurso del logo en: " + logoPath);
+                // Intentar con la ruta del logo principal si la imagen de perfil falla
+                String fallbackPath = "/com/example/cannagrow/cannagrow_logo.png";
+                InputStream fallbackStream = getClass().getResourceAsStream(fallbackPath);
 
-                // Intentar con rutas alternativas
-                String[] rutasAlternativas = {
-                        "/cannagrow_logo.png",
-                        "/img/cannagrow_logo.png",
-                        "/images/cannagrow_logo.png"
-                };
-
-                for (String ruta : rutasAlternativas) {
-                    System.out.println("Intentando con ruta alternativa: " + ruta);
-                    InputStream altStream = getClass().getResourceAsStream(ruta);
-                    if (altStream != null) {
-                        logoImage.setImage(new Image(altStream));
-                        System.out.println("Logo cargado desde ruta alternativa: " + ruta);
-                        break;
-                    }
+                if (fallbackStream != null) {
+                    logoImage.setImage(new Image(fallbackStream));
+                    System.out.println("Logo principal cargado como alternativa");
+                } else {
+                    System.err.println("No se pudo cargar ningún logo por defecto");
                 }
             }
+
+            // Resetear el estilo para logos no circulares
+            logoImage.setStyle("");
         } catch (Exception e) {
             System.err.println("Error al cargar el logo por defecto: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -319,24 +311,22 @@ public class MenuController {
     @FXML
     private void onPedidosClick() {
         try {
-            // Verificar si hay un usuario en sesión
-            UsuarioModel usuario = Session.getUsuarioActual();
-            if (usuario == null) {
-                mostrarMensaje("Iniciar sesión",
-                        "Por favor, inicia sesión para acceder a los pedidos.",
-                        Alert.AlertType.INFORMATION);
-                return;
-            }
-
             resetearBotonesMenu();
-            pedidosButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+            inicioButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
 
-            // Aquí se cargaría la vista de pedidos cuando esté implementada
-            // Por ahora solo mostramos un mensaje
-            mostrarMensaje("Pedidos", "Aquí podrás revisar tus pedidos.");
-        } catch (Exception e) {
+            // Cargar la vista de inicio
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/pedidos.fxml"));
+            Parent inicioPane = loader.load();
+
+            // Usar el BorderPane principal para mostrar la vista
+            if (rootPane != null) {
+                rootPane.setCenter(inicioPane);
+            } else {
+                mostrarMensaje("Error", "No se pudo cargar la vista de inicio: BorderPane no encontrado.");
+            }
+        } catch (IOException e) {
             e.printStackTrace();
-            mostrarMensaje("Error", "No se pudo acceder a los pedidos.");
+            mostrarMensaje("Error", "No se pudo cargar la vista de inicio.");
         }
     }
 

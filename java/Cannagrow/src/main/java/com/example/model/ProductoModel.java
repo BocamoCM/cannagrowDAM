@@ -153,4 +153,42 @@ public class ProductoModel {
 
         return productos;
     }
+
+    // For ProductoModel class
+    /**
+     * Obtains a product by its ID
+     * @param id The product ID to search for
+     * @return The Producto object if found, null otherwise
+     */
+    public static Producto obtenerPorId(int id) {
+        Producto producto = null;
+        String sql = "SELECT * FROM Producto WHERE id = ?";
+
+        try (Connection conn = DBUtil.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    producto = new Producto();
+                    producto.setId(rs.getInt("id"));
+                    producto.setNombre(rs.getString("nombre"));
+                    producto.setTipo(rs.getString("tipo"));
+                    producto.setContenidoTHC(rs.getFloat("contenidoTHC"));
+                    producto.setContenidoCBD(rs.getFloat("contenidoCBD"));
+                    producto.setPrecio(rs.getFloat("precio"));
+                    producto.setStock(rs.getInt("stock"));
+
+
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener producto por ID: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return producto;
+    }
 }
