@@ -1,0 +1,114 @@
+# Lenguajes de programación
+*.py linguist-language=Python
+*.java linguist-language=Java
+*.cpp linguist-language=C++
+*.c linguist-language=C
+*.h linguist-language=C
+*.js linguist-language=JavaScript
+*.ts linguist-language=TypeScript
+*.html linguist-language=HTML
+*.css linguist-language=CSS
+*.scss linguist-language=SCSS
+*.sass linguist-language=Sass
+*.json linguist-language=JSON
+*.xml linguist-language=XML
+*.yaml linguist-language=YAML
+*.yml linguist-language=YAML
+*.md linguist-language=Markdown
+*.php linguist-language=PHP
+*.rb linguist-language=Ruby
+*.go linguist-language=Go
+*.swift linguist-language=Swift
+*.kt linguist-language=Kotlin
+*.dart linguist-language=Dart
+*.r linguist-language=R
+*.sh linguist-language=Shell
+*.bash linguist-language=Shell
+*.zsh linguist-language=Shell
+*.sql linguist-language=SQL
+*.pl linguist-language=Perl
+*.lua linguist-language=Lua
+*.clojure linguist-language=Clojure
+*.scala linguist-language=Scala
+*.groovy linguist-language=Groovy
+*.el linguist-language=EmacsLisp
+*.coffee linguist-language=CoffeeScript
+*.tsv linguist-language=TSV
+
+# Archivos de configuración
+*.ini linguist-documentation=true
+*.conf linguist-documentation=true
+*.toml linguist-documentation=true
+*.env linguist-documentation=true
+*.properties linguist-documentation=true
+
+# Archivos de documentación
+*.pdf linguist-documentation=true
+*.txt linguist-documentation=true
+*.rst linguist-documentation=true
+*.docx linguist-documentation=true
+*.odt linguist-documentation=true
+*.md linguist-documentation=true
+
+# Archivos de imagen (no contar como código)
+*.jpg linguist-vendored=true
+*.jpeg linguist-vendored=true
+*.png linguist-vendored=true
+*.gif linguist-vendored=true
+*.svg linguist-vendored=true
+*.ico linguist-vendored=true
+*.bmp linguist-vendored=true
+*.webp linguist-vendored=true
+*.tiff linguist-vendored=true
+
+# Archivos de audio/video (no contar como código)
+*.mp3 linguist-vendored=true
+*.wav linguist-vendored=true
+*.ogg linguist-vendored=true
+*.mp4 linguist-vendored=true
+*.avi linguist-vendored=true
+*.mkv linguist-vendored=true
+*.mov linguist-vendored=true
+*.flv linguist-vendored=true
+
+# Archivos binarios (no contar como código)
+*.exe linguist-generated=true
+*.dll linguist-generated=true
+*.so linguist-generated=true
+*.dylib linguist-generated=true
+*.jar linguist-generated=true
+*.war linguist-generated=true
+*.zip linguist-generated=true
+*.tar.gz linguist-generated=true
+*.rar linguist-generated=true
+*.7z linguist-generated=true
+
+# Otros lenguajes menos comunes
+*.haskell linguist-language=Haskell
+*.elixir linguist-language=Elixir
+*.ocaml linguist-language=OCaml
+*.sol linguist-language=Solidity
+*.vhdl linguist-language=VHDL
+*.verilog linguist-language=Verilog
+*.f# linguist-language=F#
+*.nim linguist-language=Nim
+*.rs linguist-language=Rust
+*.tcl linguist-language=Tcl
+*.groovy linguist-language=Groovy
+*.vbs linguist-language=VBScript
+*.actionscript linguist-language=ActionScript
+
+# Ignorar archivos generados o dependencias
+/node_modules/* linguist-vendored=true
+/vendor/* linguist-vendored=true
+/build/* linguist-generated=true
+/dist/* linguist-generated=true
+
+# Excluir archivos de logs
+*.log linguist-generated=true
+
+# Archivos de base de datos (no contar como código)
+*.sql linguist-documentation=true
+*.sqlite linguist-documentation=true
+*.db linguist-documentation=true
+*.db3 linguist-documentation=true
