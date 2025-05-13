@@ -181,6 +181,7 @@ public class PedidosController implements Initializable {
         accionesColumn.setCellFactory(cellFactory);
     }
 
+
     private void configurarFiltroEstados() {
         // Agregar la opción "Todos" y los estados disponibles
         ObservableList<String> opcionesFiltro = FXCollections.observableArrayList();
@@ -196,6 +197,7 @@ public class PedidosController implements Initializable {
         // Configurar el evento de cambio del filtro
         filtroEstadoComboBox.setOnAction(event -> filtrarPedidosPorEstado());
     }
+
 
     private void configurarTablaDetalles() {
         productoColumn.setCellValueFactory(cellData -> {
@@ -291,7 +293,7 @@ public class PedidosController implements Initializable {
             listaPedidos.clear();
             listaPedidos.addAll(pedidos);
         }
-    }
+    }*/
 
     private void mostrarDetallesPedido(Pedido pedido) {
         // Cargar los detalles del pedido
