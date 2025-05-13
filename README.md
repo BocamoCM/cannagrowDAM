@@ -1,5 +1,5 @@
 [![24/7 Support](https://img.shields.io/badge/24%2F7%20Support-✔️-34495E)](#)  
-
+.
 ## Tienda de Cannabis Legal de Confianza
 
 **Especialistas en productos para el cultivo y consumo de cannabis dentro del marco legl**
