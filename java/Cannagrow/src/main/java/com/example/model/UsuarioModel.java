@@ -1,17 +1,16 @@
 package com.example.model;
 
 import org.mindrot.jbcrypt.BCrypt;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 
 public class UsuarioModel {
     private String nombre;
     private String email;
     private String rol;
     private double salario;
-    private int id;// Solo se usará para empleados
+    private int id;
+    private String fotoPerfilUrl; // Nuevo campo para la foto de perfil
 
     public UsuarioModel autenticarUsuario(String nombre, String contrasena) {
         UsuarioModel usuario = autenticarDesdeTabla("Empleado", nombre, contrasena);
@@ -24,7 +23,7 @@ public class UsuarioModel {
     }
 
     private UsuarioModel autenticarDesdeTabla(String tabla, String nombre, String contrasena) {
-        String query = "SELECT id, contrasena_hash, email" +
+        String query = "SELECT id, contrasena_hash, email, fotoPerfilUrl" + // Añadido fotoPerfilUrl
                 (tabla.equals("Empleado") ? ", rol, salario" : "") +
                 " FROM " + tabla + " WHERE nombre = ?";
 
@@ -43,6 +42,7 @@ public class UsuarioModel {
                         usuario.setId(rs.getInt("id"));
                         usuario.setNombre(nombre);
                         usuario.setEmail(rs.getString("email"));
+                        usuario.setFotoPerfilUrl(rs.getString("fotoPerfilUrl")); // Obtener la URL de la foto
 
                         if (tabla.equals("Empleado")) {
                             usuario.setRol(rs.getString("rol"));
@@ -69,14 +69,17 @@ public class UsuarioModel {
 
     public boolean registrarUsuario(String nombre, String email, String contrasena, String rol, double salario) {
         String contrasenaHash = BCrypt.hashpw(contrasena, BCrypt.gensalt());
+        String fotoPerfilPredeterminada = rol.equalsIgnoreCase("Cliente") ?
+                "/com/example/cannagrow/img/perfil_cliente.png" :
+                "/com/example/cannagrow/img/perfil_" + rol.toLowerCase() + ".png";
 
         String tabla = rol.equalsIgnoreCase("Cliente") ? "Cliente" : "Empleado";
         String query;
 
         if (tabla.equals("Cliente")) {
-            query = "INSERT INTO Cliente (nombre, email, contrasena_hash) VALUES (?, ?, ?)";
+            query = "INSERT INTO Cliente (nombre, email, contrasena_hash, fotoPerfilUrl) VALUES (?, ?, ?, ?)";
         } else {
-            query = "INSERT INTO Empleado (nombre, email, contrasena_hash, rol, salario) VALUES (?, ?, ?, ?, ?)";
+            query = "INSERT INTO Empleado (nombre, email, contrasena_hash, rol, salario, fotoPerfilUrl) VALUES (?, ?, ?, ?, ?, ?)";
         }
 
         try (Connection conn = DBUtil.getConexion();
@@ -89,6 +92,9 @@ public class UsuarioModel {
             if (tabla.equals("Empleado")) {
                 stmt.setString(4, rol);
                 stmt.setDouble(5, salario);
+                stmt.setString(6, fotoPerfilPredeterminada);
+            } else {
+                stmt.setString(4, fotoPerfilPredeterminada);
             }
 
             return stmt.executeUpdate() > 0;
@@ -99,7 +105,48 @@ public class UsuarioModel {
         }
     }
 
-    public void actualizarContrasena(String nombre, String nuevaContrasena, String tabla) {
+    public boolean registrarCliente(String nombre, String email, String contrasena, Date fechaNacimiento) {
+        String contrasenaHash = BCrypt.hashpw(contrasena, BCrypt.gensalt());
+        String fotoPerfilPredeterminada = "/com/example/cannagrow/img/perfil_cliente.png";
+
+        String query = "INSERT INTO Cliente (nombre, email, contrasena_hash, fechaNacimiento, fotoPerfilUrl) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DBUtil.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, nombre);
+            stmt.setString(2, email);
+            stmt.setString(3, contrasenaHash);
+            stmt.setDate(4, fechaNacimiento);
+            stmt.setString(5, fotoPerfilPredeterminada);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean actualizarFotoPerfil(int id, String fotoPerfilUrl) {
+        String tabla = rol.equalsIgnoreCase("Cliente") ? "Cliente" : "Empleado";
+        String query = "UPDATE " + tabla + " SET fotoPerfilUrl = ? WHERE id = ?";
+
+        try (Connection conn = DBUtil.getConexion();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, fotoPerfilUrl);
+            stmt.setInt(2, id);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void actualizarContrasena(String nombre, String nuevaContrasena, String tabla) {
         String nuevaHash = BCrypt.hashpw(nuevaContrasena, BCrypt.gensalt());
         String query = "UPDATE " + tabla + " SET contrasena_hash = ? WHERE nombre = ?";
 
@@ -121,27 +168,6 @@ public class UsuarioModel {
         }
     }
 
-    public boolean registrarCliente(String nombre, String email, String contrasena, java.sql.Date fechaNacimiento) {
-        String contrasenaHash = BCrypt.hashpw(contrasena, BCrypt.gensalt());
-
-        String query = "INSERT INTO Cliente (nombre, email, contrasena_hash, fechaNacimiento) VALUES (?, ?, ?, ?)";
-
-        try (Connection conn = DBUtil.getConexion();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setString(1, nombre);
-            stmt.setString(2, email);
-            stmt.setString(3, contrasenaHash);
-            stmt.setDate(4, fechaNacimiento);
-
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     // Getters y setters
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
@@ -155,11 +181,9 @@ public class UsuarioModel {
     public double getSalario() { return salario; }
     public void setSalario(double salario) { this.salario = salario; }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getFotoPerfilUrl() { return fotoPerfilUrl; }
+    public void setFotoPerfilUrl(String fotoPerfilUrl) { this.fotoPerfilUrl = fotoPerfilUrl; }
 }

@@ -35,8 +35,13 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        Image image = new Image(getClass().getResourceAsStream("/com/example/cannagrow/cannagrow_logo.png"));
-        logoImage.setImage(image);
+        try {
+            Image image = new Image(getClass().getResourceAsStream("/com/example/cannagrow/cannagrow_logo.png"));
+            logoImage.setImage(image);
+        } catch (Exception e) {
+            System.err.println("Error al cargar el logo: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -59,15 +64,15 @@ public class LoginController {
             Session.setUsuarioActual(usuarioAutenticado);
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/inicio.fxml"));
-                Parent menuRoot = loader.load();
-                Scene menuScene = new Scene(menuRoot);
+                // Cambiamos para cargar menu.fxml en lugar de inicio.fxml
+                // De esta forma el MenuController se encargará de mostrar la vista de inicio
+                // en su contenido central
                 Stage currentStage = (Stage) usernameField.getScene().getWindow();
-                currentStage.setScene(menuScene);
-                currentStage.show();
-            } catch (IOException e) {
+                SceneChanger.changeScene("/com/example/cannagrow/menu.fxml", currentStage);
+            } catch (Exception e) {
                 e.printStackTrace();
-                loginMessage.setText("Error al cargar el menú.");
+                loginMessage.setStyle("-fx-text-fill: red;");
+                loginMessage.setText("Error al cargar el menú: " + e.getMessage());
             }
 
         } else {
@@ -78,7 +83,13 @@ public class LoginController {
 
     @FXML
     public void onRegistrarseClick(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        SceneChanger.changeScene("/com/example/cannagrow/registro.fxml", stage);
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneChanger.changeScene("/com/example/cannagrow/registro.fxml", stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            loginMessage.setStyle("-fx-text-fill: red;");
+            loginMessage.setText("Error al cargar la página de registro: " + e.getMessage());
+        }
     }
 }

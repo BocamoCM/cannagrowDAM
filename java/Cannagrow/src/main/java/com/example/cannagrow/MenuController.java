@@ -37,8 +37,6 @@ public class MenuController {
     @FXML
     private Button adminButton;
     @FXML
-    private BorderPane mainBorderPane;
-    @FXML
     private FlowPane contenedorCategorias;
     @FXML
     private BorderPane rootPane;
@@ -53,21 +51,10 @@ public class MenuController {
             System.err.println("ERROR: logoImage es null");
         }
 
-        if (contenedorCategorias == null) {
-            System.err.println("ERROR: contenedorCategorias es null");
-        } else {
-            System.out.println("contenedorCategorias inicializado correctamente");
-        }
-
         UsuarioModel usuario = Session.getUsuarioActual();
 
         // Cargar logo primero
-        cargarLogo();
-
-        // Luego cargar categorías si el contenedor existe
-        if (contenedorCategorias != null) {
-            cargarCategorias();
-        }
+        cargarFotoPerfil();
 
         // Actualizar contador del carrito
         actualizarContadorCarrito();
@@ -116,6 +103,21 @@ public class MenuController {
             adminButton.setVisible(false);
         }
 
+        // Cargar la vista de inicio por defecto
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/inicio.fxml"));
+            Parent inicioPane = loader.load();
+
+            if (rootPane != null) {
+                rootPane.setCenter(inicioPane);
+            } else {
+                System.err.println("ERROR: rootPane es null");
+            }
+        } catch (IOException e) {
+            System.err.println("Error cargando la vista de inicio: " + e.getMessage());
+            e.printStackTrace();
+        }
+
         System.out.println("Inicialización de MenuController completada");
     }
 
@@ -137,16 +139,66 @@ public class MenuController {
         }
     }
 
-    private void cargarLogo() {
+    private void cargarFotoPerfil() {
+        try {
+            UsuarioModel usuario = Session.getUsuarioActual();
+
+            if (usuario != null && usuario.getFotoPerfilUrl() != null && !usuario.getFotoPerfilUrl().isEmpty()) {
+                // Intentar cargar la foto de perfil del usuario
+                String fotoPerfilUrl = usuario.getFotoPerfilUrl();
+                System.out.println("Intentando cargar foto de perfil desde: " + fotoPerfilUrl);
+
+                InputStream fotoStream = getClass().getResourceAsStream(fotoPerfilUrl);
+
+                if (fotoStream != null) {
+                    logoImage.setImage(new Image(fotoStream));
+                    // Configurar el ImageView para mostrar la foto en círculo
+                    logoImage.setStyle("-fx-background-radius: 50%; -fx-background-color: white;");
+                    System.out.println("Foto de perfil cargada correctamente");
+                    return;
+                } else {
+                    System.err.println("No se pudo encontrar la foto de perfil en: " + fotoPerfilUrl);
+
+                    // Si la foto no se encuentra como recurso, intentar cargar como ruta absoluta o URL
+                    try {
+                        Image imagen = new Image(fotoPerfilUrl);
+                        if (!imagen.isError()) {
+                            logoImage.setImage(imagen);
+                            logoImage.setStyle("-fx-background-radius: 50%; -fx-background-color: white;");
+                            System.out.println("Foto de perfil cargada desde ruta absoluta o URL");
+                            return;
+                        }
+                    } catch (Exception ex) {
+                        System.err.println("Error al cargar desde ruta absoluta: " + ex.getMessage());
+                    }
+                }
+            }
+
+            // Si no hay usuario logueado o no se pudo cargar la foto, cargar logo por defecto
+            cargarLogoPorDefecto();
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar la foto de perfil: " + e.getMessage());
+            e.printStackTrace();
+            // Si ocurre algún error, intentar cargar el logo por defecto
+            cargarLogoPorDefecto();
+        }
+    }
+
+
+
+    private void cargarLogoPorDefecto() {
         try {
             // Registrar la ruta que estamos intentando cargar
             String logoPath = "/com/example/cannagrow/cannagrow_logo.png";
-            System.out.println("Intentando cargar logo desde: " + logoPath);
+            System.out.println("Cargando logo por defecto desde: " + logoPath);
 
             InputStream logoStream = getClass().getResourceAsStream(logoPath);
             if (logoStream != null) {
                 logoImage.setImage(new Image(logoStream));
-                System.out.println("Logo cargado correctamente");
+                // Resetear el estilo para el logo
+                logoImage.setStyle("");
+                System.out.println("Logo por defecto cargado correctamente");
             } else {
                 System.err.println("No se pudo encontrar el recurso del logo en: " + logoPath);
 
@@ -168,7 +220,7 @@ public class MenuController {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error al cargar el logo: " + e.getMessage());
+            System.err.println("Error al cargar el logo por defecto: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -179,95 +231,28 @@ public class MenuController {
         return texto.substring(0, 1).toUpperCase() + texto.substring(1).toLowerCase();
     }
 
-    private void cargarCategorias() {
-        System.out.println("Iniciando carga de categorías...");
 
-        // Limpiamos el contenedor primero para evitar duplicados
-        contenedorCategorias.getChildren().clear();
-
-        // Definimos categorías con sus imágenes
-        Categoria[] categorias = {
-                new Categoria("Fertilizantes", "/com/example/cannagrow/img/fertilizantes.png"),
-                new Categoria("CBD", "/com/example/cannagrow/img/cbd.png"),
-                new Categoria("Crecimiento", "/com/example/cannagrow/img/armarios.png")
-        };
-
-        // Contador para verificar cuántas categorías se cargaron correctamente
-        int categoriasExitosas = 0;
-
-        for (Categoria cat : categorias) {
-            try {
-                System.out.println("Cargando categoría: " + cat.getNombre() + " con imagen: " + cat.getImageUrl());
-
-                // Verificamos primero si la imagen existe
-                InputStream testStream = getClass().getResourceAsStream(cat.getImageUrl());
-                if (testStream == null) {
-                    System.err.println("ADVERTENCIA: Imagen no encontrada en: " + cat.getImageUrl());
-
-                    // Intentar con rutas alternativas
-                    String nombreArchivo = cat.getImageUrl().substring(cat.getImageUrl().lastIndexOf('/') + 1);
-                    String[] rutasAlternativas = {
-                            "/img/" + nombreArchivo,
-                            "/images/" + nombreArchivo,
-                            "/" + nombreArchivo
-                    };
-
-                    for (String ruta : rutasAlternativas) {
-                        System.out.println("Intentando con ruta alternativa: " + ruta);
-                        if (getClass().getResourceAsStream(ruta) != null) {
-                            cat.setImageUrl(ruta);
-                            System.out.println("Imagen encontrada en ruta alternativa: " + ruta);
-                            break;
-                        }
-                    }
-                } else {
-                    testStream.close(); // No olvidar cerrar el stream
-                }
-
-                // Cargar el componente FXML para la categoría
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/CategoriaItem.fxml"));
-                Parent item = loader.load();
-
-                CategoriaItemController controller = loader.getController();
-                controller.setCategoria(cat);
-
-                contenedorCategorias.getChildren().add(item);
-                categoriasExitosas++;
-                System.out.println("Categoría " + cat.getNombre() + " agregada al contenedor");
-
-            } catch (IOException e) {
-                System.err.println("Error cargando categoría " + cat.getNombre() + ": " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println("Total de categorías cargadas exitosamente: " + categoriasExitosas + " de " + categorias.length);
-    }
-
-    @FXML
-    private void onMostrarRegistroClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/register-view.fxml"));
-            Parent registroVista = loader.load();
-
-            // Usar el BorderPane que está definido
-            if (mainBorderPane != null) {
-                mainBorderPane.setCenter(registroVista);
-            } else if (rootPane != null) {
-                rootPane.setCenter(registroVista);
-            } else {
-                mostrarMensaje("Error", "No se pudo cargar la vista de registro: BorderPane no encontrado.");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarMensaje("Error", "No se pudo cargar la vista de registro.");
-        }
-    }
 
     @FXML
     private void onInicioClick(javafx.event.ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        SceneChanger.changeScene("/com/example/cannagrow/inicio.fxml", stage);
+        try {
+            resetearBotonesMenu();
+            inicioButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+
+            // Cargar la vista de inicio
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/inicio.fxml"));
+            Parent inicioPane = loader.load();
+
+            // Usar el BorderPane principal para mostrar la vista
+            if (rootPane != null) {
+                rootPane.setCenter(inicioPane);
+            } else {
+                mostrarMensaje("Error", "No se pudo cargar la vista de inicio: BorderPane no encontrado.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo cargar la vista de inicio.");
+        }
     }
 
     /**
@@ -289,11 +274,9 @@ public class MenuController {
 
             AnchorPane productosPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cannagrow/Productos.fxml")));
 
-            // Determinar qué BorderPane usar
-            BorderPane borderPane = (mainBorderPane != null) ? mainBorderPane : rootPane;
-
-            if (borderPane != null) {
-                borderPane.setCenter(productosPane);
+            // Usar rootPane para mostrar la vista
+            if (rootPane != null) {
+                rootPane.setCenter(productosPane);
                 actualizarContadorCarrito();
             } else {
                 mostrarMensaje("Error", "No se pudo cargar la vista de productos: BorderPane no encontrado.");
@@ -321,11 +304,9 @@ public class MenuController {
 
             AnchorPane carritoPane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/cannagrow/carrito.fxml")));
 
-            // Determinar qué BorderPane usar
-            BorderPane borderPane = (mainBorderPane != null) ? mainBorderPane : rootPane;
-
-            if (borderPane != null) {
-                borderPane.setCenter(carritoPane);
+            // Usar rootPane para mostrar la vista
+            if (rootPane != null) {
+                rootPane.setCenter(carritoPane);
             } else {
                 mostrarMensaje("Error", "No se pudo cargar la vista del carrito: BorderPane no encontrado.");
             }
