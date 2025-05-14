@@ -109,9 +109,9 @@ public class CarritoController {
         try {
             // Intentar múltiples rutas para encontrar la imagen
             String[] rutasCarrito = {
-                    "/com/example/cannagrow/img/cart.png",
+                    "/com/example/cannagrow/images/carrito_vacio.png",
                     "/img/cart.png",
-                    "/images/cart.png",
+                    "/images/carrito_vacio.png",
                     "/cart.png"
             };
 
