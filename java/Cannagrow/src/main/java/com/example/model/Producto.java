@@ -22,6 +22,10 @@ public class Producto {
         this.imagenProducto = imagenProducto;
     }
 
+    public Producto() {
+
+    }
+
     public int getId() {
         return id;
     }
