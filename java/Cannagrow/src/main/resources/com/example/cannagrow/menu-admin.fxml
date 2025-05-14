@@ -35,6 +35,10 @@
             <Button text="Cerrar sesión" onAction="#onLogoutClick" maxWidth="180"
                     style="-fx-background-color: #d32f2f; -fx-text-fill: white;"
                     fx:id="logoutButton"/>
+            <Button text="Volver" onAction="#onInicioClick" maxWidth="180"
+                    style="-fx-background-color: #d32f2f; -fx-text-fill: white;"
+                    fx:id="IniciotButton"/>
+
 
         </VBox>
     </left>

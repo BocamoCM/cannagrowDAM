@@ -15,21 +15,65 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 720);
+        try {
+            // Imprime la URL del recurso FXML para depuración
+            var resourceUrl = Main.class.getResource("hello-view.fxml");
+            System.out.println("URL del FXML: " + resourceUrl);
 
-        // Añadir la hoja de estilos CSS a la escena
-        String cssPath = "/styles.css";
-        scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
+            // Carga el archivo FXML
+            FXMLLoader fxmlLoader = new FXMLLoader(resourceUrl);
+            Scene scene = new Scene(fxmlLoader.load(), 1000, 720);
 
-        stage.setTitle("Cannagroww");
-        stage.getIcons().add(new Image(getClass().getResource("/com/example/cannagrow/images/cannagrow_logo.png").toExternalForm()));
-        stage.setScene(scene);
+            // Añadir la hoja de estilos CSS a la escena
+            try {
+                String cssPath = "/styles.css";
+                var cssUrl = getClass().getResource(cssPath);
+                if (cssUrl != null) {
+                    scene.getStylesheets().add(cssUrl.toExternalForm());
+                } else {
+                    System.err.println("No se encontró el archivo CSS: " + cssPath);
+                }
+            } catch (Exception e) {
+                System.err.println("Error al cargar el CSS: " + e.getMessage());
+            }
 
-        // Configurar el cierre de la aplicación
-        configureCloseRequest(stage);
+            stage.setTitle("Cannagroww");
 
-        stage.show();
+            // Cargar el icono
+            try {
+                Image icon = new Image(getClass().getResourceAsStream("/com/example/cannagrow/cannagrow_logo.png"));
+                if (icon != null && !icon.isError()) {
+                    stage.getIcons().add(icon);
+                } else {
+                    System.err.println("Error al cargar el icono: La imagen es nula o contiene errores");
+                }
+            } catch (Exception e) {
+                System.err.println("Error al cargar el icono: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            // Configurar escena y mostrar
+            stage.setScene(scene);
+
+            // Configurar el cierre de la aplicación
+            configureCloseRequest(stage);
+
+            stage.show();
+
+        } catch (Exception e) {
+            System.err.println("Error al iniciar la aplicación: " + e.getMessage());
+            e.printStackTrace();
+
+            // Mostrar diálogo de error
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error de Inicialización");
+            errorAlert.setHeaderText("Error al cargar la aplicación");
+            errorAlert.setContentText("Detalles: " + e.getMessage());
+            errorAlert.showAndWait();
+
+            // Salir de la aplicación en caso de error crítico
+            Platform.exit();
+        }
     }
 
     private void configureCloseRequest(Stage stage) {
@@ -51,7 +95,6 @@ public class Main extends Application {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 // Cerrar sesión
-                // Asegúrate de importar tu clase Session
                 Session.cerrarSesion();
 
                 // Salir de la aplicación
@@ -64,7 +107,11 @@ public class Main extends Application {
     public void stop() throws Exception {
         // Método de respaldo para asegurar cierre de sesión
         // En caso de que no se haya cerrado correctamente
-        Session.cerrarSesion();
+        try {
+            Session.cerrarSesion();
+        } catch (Exception e) {
+            System.err.println("Error al cerrar sesión: " + e.getMessage());
+        }
         super.stop();
     }
 
