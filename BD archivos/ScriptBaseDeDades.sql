@@ -94,11 +94,11 @@ CREATE TABLE Sesion (
     usuario_id int,
     inicio timestamp,
     ip varchar(45),
-    dispositivo varchar(100)
+    dispositivo varchar(100),
+    FOREIGN KEY (usuario_id) REFERENCES Cliente(id)
 );
 
 -- Tabla SesionActiva
-
 CREATE TABLE SesionActiva (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     usuario_id int,
@@ -107,4 +107,14 @@ CREATE TABLE SesionActiva (
     inicio_sesion timestamp,
     fin_sesion timestamp,
     activa tinyint(1)
+);
+
+-- Tabla Reportes
+CREATE TABLE reportes(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    cliente_id int,
+    empleado_id int null,
+    descripcion varchar(500) not null,
+    FOREIGN KEY (cliente_id) REFERENCES Cliente(id),
+    FOREIGN KEY (empleado_id) REFERENCES Empleado(id)
 );
