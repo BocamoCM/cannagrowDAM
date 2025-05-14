@@ -25,7 +25,6 @@
 -- VALUES ('Producto no debe exceder 20% de THC para venta libre.');
 
 -- DATOS EMPLEADOS
--- Empleado
 INSERT INTO Empleado (nombre, rol, email, salario, contrasena_hash, fotoPerfilUrl) VALUES 
 ('Alvaro',     'Repartidor', 'alvaro@cannagrow.com',    1200.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
 ('Beatriz',    'Repartidor', 'beatriz@cannagrow.com',   1220.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
@@ -117,7 +116,7 @@ INSERT INTO Empleado (nombre, rol, email, salario, contrasena_hash, fotoPerfilUr
 ('Emma Molina',     'Cultivador', 'emma.molina@email.com',     1180.00, '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL);
 
 
--- Cliente
+-- Datos Cliente
 INSERT INTO Cliente (nombre, fechaNacimiento, email, direccion, contrasena_hash, imagen_cliente) VALUES
 ('Juan Pérez',             '1990-03-25', 'juan.perez@email.com',            'Calle de la tortosa, Llauri',                                    '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
 ('Sara García',            '1954-11-13', 'sara.garcia@example.com',         'Calle de la tortosa 79, Benifaió',                               '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
@@ -204,7 +203,7 @@ INSERT INTO Cliente (nombre, fechaNacimiento, email, direccion, contrasena_hash,
 ('Laura Hernández',        '1971-04-11', 'laura.hernandez@example.com',     'Calle de la tortosa 121, Sueca',                                 '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL),
 ('Antonio Hernández',      '2000-09-15', 'antonio.hernandez8@example.com',  'Calle de la tortosa 163, Polinyà de Xúquer',                     '$2b$10$z5ypL0dS/Va7bQxXZrX8SOHeH0LaQsmkZbzD1kPUzobp5g65h7.B2', NULL);
 
--- PRODUCTOS
+-- Datos Producto
 INSERT INTO Producto (nombre, tipo, contenidoTHC, contenidoCBD, precio, stock, imagen_producto) VALUES 
 ('SemillaSinSeleccionar', 'semilla', 18.5, 0.2, 15.99, 100, NULL),
 ('SemillaSelecionadaNormal', 'semilla', 18.5, 0.2, 22.45, 180, NULL),
@@ -287,6 +286,7 @@ INSERT INTO Producto (nombre, tipo, contenidoTHC, contenidoCBD, precio, stock, i
 ('CBDildo', 'Artilujos', 0.0, 0.0, 0.50, 40, NULL),
 ('CBDildo liquido', 'cosmético', 0.0, 0.0, 10.50, 40, NULL);
 
+-- Datos Regulacion
 INSERT INTO Regulacion (descripcion) VALUES
   ('Los productos de cannabis destinados a uso tópico no deben contener más del 0,2% de THC.'),
   ('Está prohibida la venta de productos comestibles con cannabinoides, como gominolas o chocolates.'),
@@ -299,7 +299,7 @@ INSERT INTO Regulacion (descripcion) VALUES
   ('La comercialización de flores de cannabis para consumo humano está prohibida en España.'),
   ('Los productos de cannabis deben incluir advertencias sobre su uso y mantenerlos fuera del alcance de los niños.');
 
--- Vehiculos
+-- Datos Vehiculos
 INSERT INTO Vehiculo (matricula, color, conductor_id, marca, estado, kilometros_totales, consumo_100km, cv_motor) VALUES
 ('1234ABC', 'Rojo', 1, 'Toyota', 'Activo', 120000, 6.5, 90),
 ('2345BCD', 'Azul', 2, 'Renault', 'En mantenimiento', 95000, 5.8, 85),
@@ -362,7 +362,7 @@ INSERT INTO Vehiculo (matricula, color, conductor_id, marca, estado, kilometros_
 ('5959CCD', 'Blanco', 59, 'Volkswagen', 'Activo', 84000, 6.6, 96),
 ('6060DDE', 'Gris', 60, 'Seat', 'Fuera de servicio', 118000, 7.2, 105);
 
--- Pedido
+-- Datos Pedido
 INSERT INTO Pedido (fecha, total, estado, cliente_id, empleado_id, vehiculo_matricula) VALUES
 ('2025-05-31', 50.00, 'Pendiente', 1, 5, '1234ABC'),
 ('2025-06-01', 55.00, 'Enviado',   2, 6, '2345BCD'),
@@ -487,6 +487,7 @@ INSERT INTO Pedido (fecha, total, estado, cliente_id, empleado_id, vehiculo_matr
 ('2025-09-28', 50.00, 'Pendiente', 1,5, '1234ABC'),
 ('2025-09-29', 55.00, 'Enviado',   2,6, '2345BCD');
 
+-- Datos ItemPedido
 INSERT INTO ItemPedido (pedido_id, producto_id, cantidad) VALUES
 (1, 1, 2), 
 (1, 2, 1),
@@ -637,3 +638,22 @@ INSERT INTO ItemPedido (pedido_id, producto_id, cantidad) VALUES
 (60, 72, 1), 
 (60, 73, 2), 
 (60, 74, 1);
+
+-- Datos Reportes
+INSERT INTO reportes (cliente_id, empleado_id, descripcion) VALUES
+	(4, 3, "El apartado de productos no me funciona"),
+    (1, 2, 'Problema con el producto recibido, llegó dañado.'),
+    (5, 4, 'Queja por tiempos de respuesta demasiado largos.'),
+    (3, 1, 'Problema con la renovación automática de su plan.'),
+    (10, NULL, 'Cliente reporta error en el sitio web.'),
+    (9, 3, 'Sugerencia de mejora en el proceso de atención al cliente.'),
+    (2, 5, 'Cliente indica que no ha recibido su factura.'),
+    (8, NULL, 'Solicitud de soporte técnico para instalación de software.'),
+    (7, 2, 'Reporte de falla en el sistema de pago en línea.'),
+    (6, NULL, 'Cliente desea cancelar su suscripción.'),
+    (1, 4, 'Queja por maltrato por parte de un repartidor.'),
+    (5, 3, 'El producto entregado no coincide con lo solicitado.'),
+    (4, NULL, 'Cliente solicita actualización de sus datos personales.'),
+    (3, 1, 'Cliente reporta cobro doble en su factura.'),
+    (2, NULL, 'Solicitud de reembolso por servicio no utilizado.')
+;
