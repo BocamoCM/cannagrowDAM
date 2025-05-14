@@ -22,7 +22,7 @@ public class Main extends Application {
         String cssPath = "/styles.css";
         scene.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
 
-        stage.setTitle("Cannagrow");
+        stage.setTitle("Cannagroww");
         stage.getIcons().add(new Image(getClass().getResource("/com/example/cannagrow/images/cannagrow_logo.png").toExternalForm()));
         stage.setScene(scene);
 
