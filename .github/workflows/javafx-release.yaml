@@ -54,7 +54,7 @@ jobs:
                    --win-menu `
                    --icon src/main/resources/icono.ico `
                    --win-console `
-                   --java-options "-Xms256m -Xmx512m" `
+                   --java-options "-Xms512m -Xmx1024m" `
                    --app-version "2.0.0" `
                    --verbose
         shell: pwsh
