@@ -106,6 +106,7 @@ public class CarritoController {
      * Carga el icono de carrito vacío
      */
     private void cargarIconoCarritoVacio() {
+        System.out.println("Intentando cargar icono de carrito vacío...");
         try {
             // Intentar múltiples rutas para encontrar la imagen
             String[] rutasCarrito = {
@@ -115,23 +116,21 @@ public class CarritoController {
                     "/cart.png"
             };
 
-            boolean imagenCargada = false;
-
             for (String ruta : rutasCarrito) {
+                System.out.println("Intentando cargar desde: " + ruta);
                 InputStream iconStream = getClass().getResourceAsStream(ruta);
                 if (iconStream != null) {
+                    System.out.println("¡Imagen encontrada en: " + ruta);
                     carritoVacioIcon.setImage(new Image(iconStream));
-                    System.out.println("Imagen de carrito vacío cargada desde: " + ruta);
-                    imagenCargada = true;
-                    break;
+                    return;
+                } else {
+                    System.out.println("No se encontró imagen en: " + ruta);
                 }
             }
-
-            if (!imagenCargada) {
-                System.err.println("No se pudo cargar el icono del carrito vacío");
-            }
+            System.err.println("No se pudo cargar el icono del carrito vacío desde ninguna ruta");
         } catch (Exception e) {
             System.err.println("Error al cargar el icono del carrito: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -15,84 +15,90 @@
     <BorderPane fx:id="rootPane" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
                 AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
-        <!-- Vista carrito vacío -->
         <center>
-            <VBox fx:id="carritoVacioView" alignment="CENTER" spacing="20" visible="true">
-                <ImageView fx:id="carritoVacioIcon" fitWidth="100" fitHeight="100" preserveRatio="true"/>
+            <!-- Usamos StackPane para superponer las dos vistas y controlar su visibilidad -->
+            <StackPane>
+                <!-- Vista carrito vacío -->
+                <VBox fx:id="carritoVacioView" alignment="CENTER" spacing="20" visible="true">
+                    <ImageView fx:id="carritoVacioIcon" fitWidth="100" fitHeight="100" preserveRatio="true">
+                        <!-- Intentamos cargar la imagen directamente desde FXML como fallback -->
+                        <image>
+                            <Image url="@images/carrito_vacio.png" />
+                        </image>
+                    </ImageView>
 
-                <Label text="Tu carrito está vacío" styleClass="titulo"/>
-                <Label text="Agrega productos para comenzar a comprar" styleClass="subtexto"/>
-                <Button fx:id="irTiendaBtn" text="Ir a la tienda" onAction="#irATienda" styleClass="boton-verde"/>
-            </VBox>
-        </center>
+                    <Label text="Tu carrito está vacío" styleClass="titulo"/>
+                    <Label text="Agrega productos para comenzar a comprar" styleClass="subtexto"/>
+                    <Button fx:id="irTiendaBtn" text="Ir a la tienda" onAction="#irATienda" styleClass="boton-verde"/>
+                </VBox>
 
-        <!-- Vista carrito con contenido -->
-        <center>
-            <VBox fx:id="carritoContenidoView" spacing="20" visible="false">
-                <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
-                </padding>
+                <!-- Vista carrito con contenido -->
+                <VBox fx:id="carritoContenidoView" spacing="20" visible="false">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
 
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="Mi Carrito" styleClass="titulo"/>
-                    <Button fx:id="vaciarCarritoBtn" text="Vaciar carrito" onAction="#vaciarCarrito" styleClass="boton-rojo"/>
-                </HBox>
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Mi Carrito" styleClass="titulo"/>
+                        <Button fx:id="vaciarCarritoBtn" text="Vaciar carrito" onAction="#vaciarCarrito" styleClass="boton-rojo"/>
+                    </HBox>
 
-                <!-- Layout principal dividido en productos y resumen -->
-                <HBox spacing="20" VBox.vgrow="ALWAYS">
-                    <!-- Lado izquierdo: productos -->
-                    <VBox spacing="10" HBox.hgrow="ALWAYS">
-                        <!-- Cabecera tabla -->
-                        <HBox spacing="10" styleClass="cabecera-tabla">
-                            <Label text="Producto" styleClass="texto-tabla" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                            <Label text="Cantidad" styleClass="texto-tabla" prefWidth="80"/>
-                            <Label text="Subtotal" styleClass="texto-tabla" prefWidth="80" alignment="CENTER_RIGHT"/>
-                            <Label text="" prefWidth="30"/>
-                        </HBox>
+                    <!-- Layout principal dividido en productos y resumen -->
+                    <HBox spacing="20" VBox.vgrow="ALWAYS">
+                        <!-- Lado izquierdo: productos -->
+                        <VBox spacing="10" HBox.hgrow="ALWAYS">
+                            <!-- Cabecera tabla -->
+                            <HBox spacing="10" styleClass="cabecera-tabla">
+                                <Label text="Producto" styleClass="texto-tabla" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                                <Label text="Cantidad" styleClass="texto-tabla" prefWidth="80"/>
+                                <Label text="Subtotal" styleClass="texto-tabla" prefWidth="80" alignment="CENTER_RIGHT"/>
+                                <Label text="" prefWidth="30"/>
+                            </HBox>
 
-                        <!-- Lista de productos con scroll -->
-                        <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" styleClass="transparent-scroll">
-                            <VBox fx:id="itemsContainer" spacing="10">
-                                <padding>
-                                    <Insets top="10" right="10" bottom="10" left="10"/>
-                                </padding>
-                            </VBox>
-                        </ScrollPane>
-                    </VBox>
+                            <!-- Lista de productos con scroll -->
+                            <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" styleClass="transparent-scroll">
+                                <VBox fx:id="itemsContainer" spacing="10">
+                                    <padding>
+                                        <Insets top="10" right="10" bottom="10" left="10"/>
+                                    </padding>
+                                </VBox>
+                            </ScrollPane>
+                        </VBox>
 
-                    <!-- Lado derecho: resumen -->
-                    <VBox spacing="15" minWidth="320" styleClass="resumen-box">
-                        <Label text="Resumen del pedido" styleClass="subtitulo"/>
+                        <!-- Lado derecho: resumen -->
+                        <VBox spacing="15" minWidth="320" styleClass="resumen-box">
+                            <Label text="Resumen del pedido" styleClass="subtitulo"/>
 
-                        <Label text="Información de envío" styleClass="subseccion"/>
-                        <TextField fx:id="direccionField" promptText="Dirección completa"/>
-                        <TextField fx:id="codigoPostalField" promptText="Código Postal"/>
-                        <TextField fx:id="ciudadField" promptText="Ciudad"/>
-                        <TextField fx:id="telefonoField" promptText="Teléfono de contacto"/>
+                            <Label text="Información de envío" styleClass="subseccion"/>
+                            <TextField fx:id="direccionField" promptText="Dirección completa"/>
+                            <TextField fx:id="codigoPostalField" promptText="Código Postal"/>
+                            <TextField fx:id="ciudadField" promptText="Ciudad"/>
+                            <TextField fx:id="telefonoField" promptText="Teléfono de contacto"/>
 
-                        <Separator styleClass="custom-separator"/>
+                            <Separator styleClass="custom-separator"/>
 
-                        <HBox>
-                            <Label text="Subtotal:" styleClass="campo-label" HBox.hgrow="ALWAYS"/>
-                            <Label fx:id="subtotalLabel" text="€0.00" styleClass="campo-valor"/>
-                        </HBox>
-                        <HBox>
-                            <Label text="Envío:" styleClass="campo-label" HBox.hgrow="ALWAYS"/>
-                            <Label fx:id="envioLabel" text="€4.99" styleClass="campo-valor"/>
-                        </HBox>
-                        <Separator styleClass="custom-separator"/>
-                        <HBox>
-                            <Label text="Total:" styleClass="campo-total" HBox.hgrow="ALWAYS"/>
-                            <Label fx:id="totalLabel" text="€4.99" styleClass="valor-total"/>
-                        </HBox>
+                            <HBox>
+                                <Label text="Subtotal:" styleClass="campo-label" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="subtotalLabel" text="€0.00" styleClass="campo-valor"/>
+                            </HBox>
+                            <HBox>
+                                <Label text="Envío:" styleClass="campo-label" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="envioLabel" text="€4.99" styleClass="campo-valor"/>
+                            </HBox>
+                            <Separator styleClass="custom-separator"/>
+                            <HBox>
+                                <Label text="Total:" styleClass="campo-total" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="totalLabel" text="€4.99" styleClass="valor-total"/>
+                            </HBox>
 
-                        <Button fx:id="finalizarCompraBtn" text="Finalizar compra" onAction="#finalizarCompra"
-                                styleClass="boton-verde-grande" maxWidth="Infinity"/>
-                        <Button fx:id="seguirComprandoBtn" text="Seguir comprando" onAction="#irATienda"
-                                styleClass="boton-secundario" maxWidth="Infinity"/>
-                    </VBox>
-                </HBox>
-            </VBox>
+                            <Button fx:id="finalizarCompraBtn" text="Finalizar compra" onAction="#finalizarCompra"
+                                    styleClass="boton-verde-grande" maxWidth="Infinity"/>
+                            <Button fx:id="seguirComprandoBtn" text="Seguir comprando" onAction="#irATienda"
+                                    styleClass="boton-secundario" maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </StackPane>
         </center>
     </BorderPane>
 </AnchorPane>
