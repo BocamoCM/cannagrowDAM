@@ -637,3 +637,22 @@ INSERT INTO ItemPedido (pedido_id, producto_id, cantidad) VALUES
 (60, 72, 1), 
 (60, 73, 2), 
 (60, 74, 1);
+
+-- Reportes Datos
+INSERT INTO reportes (cliente_id, empleado_id, descripcion) VALUES
+	(4, 3, "El apartado de productos no me funciona"),
+    (1, 2, 'Problema con el producto recibido, llegó dañado.'),
+    (5, 4, 'Queja por tiempos de respuesta demasiado largos.'),
+    (3, 1, 'Problema con la renovación automática de su plan.'),
+    (10, NULL, 'Cliente reporta error en el sitio web.'),
+    (9, 3, 'Sugerencia de mejora en el proceso de atención al cliente.'),
+    (2, 5, 'Cliente indica que no ha recibido su factura.'),
+    (8, NULL, 'Solicitud de soporte técnico para instalación de software.'),
+    (7, 2, 'Reporte de falla en el sistema de pago en línea.'),
+    (6, NULL, 'Cliente desea cancelar su suscripción.'),
+    (1, 4, 'Queja por maltrato por parte de un repartidor.'),
+    (5, 3, 'El producto entregado no coincide con lo solicitado.'),
+    (4, NULL, 'Cliente solicita actualización de sus datos personales.'),
+    (3, 1, 'Cliente reporta cobro doble en su factura.'),
+    (2, NULL, 'Solicitud de reembolso por servicio no utilizado.')
+;
