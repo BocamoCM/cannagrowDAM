@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.cannagrow.AdminUsuariosController"
+            prefWidth="600" prefHeight="500"
+            style="-fx-background-color: #212121;">
+
+    <VBox spacing="10" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- Título -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Administración de Usuarios" textFill="white" style="-fx-font-size: 24px;">
+                <font>
+                    <Font name="System Bold" size="24"/>
+                </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnAgregarUsuario" text="Agregar Usuario"
+                    style="-fx-background-color: #43a047; -fx-text-fill: white;"/>
+        </HBox>
+
+        <!-- Filtros -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <ComboBox fx:id="comboFiltroRol" promptText="Filtrar por Rol" prefWidth="150"/>
+            <TextField fx:id="txtBuscar" promptText="Buscar por nombre o email" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnBuscar" text="Buscar"
+                    style="-fx-background-color: #1976d2; -fx-text-fill: white;"/>
+            <Button fx:id="btnLimpiarFiltros" text="Limpiar"
+                    style="-fx-background-color: #757575; -fx-text-fill: white;"/>
+        </HBox>
+
+        <!-- Tabla de Usuarios -->
+        <TableView fx:id="tablaUsuarios" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="colFoto" text="Foto" prefWidth="60"/>
+                <TableColumn fx:id="colNombre" text="Nombre" prefWidth="120"/>
+                <TableColumn fx:id="colEmail" text="Email" prefWidth="150"/>
+                <TableColumn fx:id="colRol" text="Rol" prefWidth="100"/>
+                <TableColumn fx:id="colSalario" text="Salario" prefWidth="100"/>
+                <TableColumn fx:id="colAcciones" text="Acciones" prefWidth="120"/>
+            </columns>
+        </TableView>
+
+        <!-- Estadísticas -->
+        <HBox spacing="20" style="-fx-background-color: #1f1f1f; -fx-padding: 10px; -fx-background-radius: 5px;">
+            <Label fx:id="lblTotalUsuarios" text="Total Usuarios: 0" textFill="white"/>
+            <Label fx:id="lblTotalEmpleados" text="Empleados: 0" textFill="white"/>
+            <Label fx:id="lblTotalClientes" text="Clientes: 0" textFill="white"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

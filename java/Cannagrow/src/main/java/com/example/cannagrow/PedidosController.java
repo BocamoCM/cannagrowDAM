@@ -1,12 +1,9 @@
 package com.example.cannagrow;
 
-import com.example.model.PedidoModel;
+import com.example.model.*;
 import com.example.model.PedidoModel.Pedido;
 import com.example.model.PedidoModel.DetallePedido;
 import com.example.model.PedidoModel.EstadoPedido;
-import com.example.model.Producto;
-import com.example.model.ProductoModel;
-import com.example.model.UsuarioModel;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -243,7 +240,7 @@ public class PedidosController implements Initializable {
 
     private void cargarPedidosUsuario() {
         // Obtener el ID del usuario actual
-        int usuarioId = UsuarioModel.getUsuarioActivo().getId();
+        int usuarioId = Session.getUsuarioActual().getId();
 
         // Obtener el ID del cliente asociado al usuario
         int clienteId = PedidoModel.obtenerClienteIdPorUsuario(usuarioId);
@@ -267,7 +264,7 @@ public class PedidosController implements Initializable {
         String filtro = filtroEstadoComboBox.getValue();
 
         // Obtener el ID del usuario actual
-        int usuarioId = UsuarioModel.getUsuarioActivo().getId();
+        int usuarioId = Session.getUsuarioActual().getId();
 
         // Obtener el ID del cliente asociado al usuario
         int clienteId = PedidoModel.obtenerClienteIdPorUsuario(usuarioId);
@@ -293,7 +290,7 @@ public class PedidosController implements Initializable {
             listaPedidos.clear();
             listaPedidos.addAll(pedidos);
         }
-    }*/
+    }
 
     private void mostrarDetallesPedido(Pedido pedido) {
         // Cargar los detalles del pedido

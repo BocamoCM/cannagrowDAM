@@ -42,8 +42,6 @@ public class MenuController {
     private Button adminButton;
     @FXML
     private BorderPane rootPane;
-    @FXML
-    private Label userText;
 
 
     @FXML
@@ -166,44 +164,44 @@ public class MenuController {
         try {
             UsuarioModel usuario = Session.getUsuarioActual();
 
-            // Configurar el ImageView primero
-            if (logoImage != null) {
-                logoImage.setFitWidth(40);
-                logoImage.setFitHeight(40);
-                logoImage.setPreserveRatio(true);
+            if (usuario != null && usuario.getFotoPerfilUrl() != null && !usuario.getFotoPerfilUrl().isEmpty()) {
+                // Intentar cargar la foto de perfil del usuario
+                String fotoPerfilUrl = usuario.getFotoPerfilUrl();
+                System.out.println("Intentando cargar foto de perfil desde: " + fotoPerfilUrl);
 
-                // Aplicar clip circular
-                javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(20, 20, 20);
-                logoImage.setClip(clip);
-                logoImage.setStyle("-fx-background-radius: 50%; -fx-background-color: white;");
-            } else {
-                System.err.println("ERROR: logoImage es null al intentar configurarlo");
-                return;
+                InputStream fotoStream = getClass().getResourceAsStream(fotoPerfilUrl);
+
+                if (fotoStream != null) {
+                    logoImage.setImage(new Image(fotoStream));
+                    // Configurar el ImageView para mostrar la foto en círculo
+                    logoImage.setStyle("-fx-background-radius: 50%; -fx-background-color: white;");
+                    System.out.println("Foto de perfil cargada correctamente");
+                    return;
+                } else {
+                    System.err.println("No se pudo encontrar la foto de perfil en: " + fotoPerfilUrl);
+
+                    // Si la foto no se encuentra como recurso, intentar cargar como ruta absoluta o URL
+                    try {
+                        Image imagen = new Image(fotoPerfilUrl);
+                        if (!imagen.isError()) {
+                            logoImage.setImage(imagen);
+                            logoImage.setStyle("-fx-background-radius: 50%; -fx-background-color: white;");
+                            System.out.println("Foto de perfil cargada desde ruta absoluta o URL");
+                            return;
+                        }
+                    } catch (Exception ex) {
+                        System.err.println("Error al cargar desde ruta absoluta: " + ex.getMessage());
+                    }
+                }
             }
 
-            // Verificar usuario y URL
-            if (usuario == null || usuario.getFotoPerfilUrl() == null || usuario.getFotoPerfilUrl().isEmpty()) {
-                cargarLogoPorDefecto();
-                return;
-            }
+            // Si no hay usuario logueado o no se pudo cargar la foto, cargar logo por defecto
+            cargarLogoPorDefecto();
 
-            // Obtener la ruta de imagen y usarla como recurso interno
-            String fotoPath = usuario.getFotoPerfilUrl();
-            System.out.println("Intentando cargar foto desde: " + fotoPath);
-
-            // Intentar cargar como recurso interno (más fiable)
-            InputStream fotoStream = getClass().getResourceAsStream(fotoPath);
-
-            if (fotoStream != null) {
-                Image imagen = new Image(fotoStream);
-                logoImage.setImage(imagen);
-                System.out.println("Foto de perfil cargada correctamente");
-            } else {
-                System.out.println("No se encontró la imagen, cargando logo por defecto");
-                cargarLogoPorDefecto();
-            }
         } catch (Exception e) {
             System.err.println("Error al cargar la foto de perfil: " + e.getMessage());
+            e.printStackTrace();
+            // Si ocurre algún error, intentar cargar el logo por defecto
             cargarLogoPorDefecto();
         }
     }

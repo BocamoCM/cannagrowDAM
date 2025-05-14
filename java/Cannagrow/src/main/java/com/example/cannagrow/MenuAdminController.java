@@ -23,17 +23,6 @@ public class MenuAdminController {
     private Label bienvenidaLabel;
 
 
-    @FXML
-    private Button pedidosButton;
-
-    @FXML
-    private Button productosButton;
-
-    @FXML
-    private Button inicioButton;
-
-    @FXML
-    private Button logoutButton;
 
     @FXML
     private ImageView logoImage;
@@ -42,9 +31,10 @@ public class MenuAdminController {
     private Button adminButton;
 
     @FXML
+    private Button usuariosButton; // Nuevo botón para administrar usuarios
+
+    @FXML
     private BorderPane adminBorderPane;
-
-
 
     @FXML
     public void initialize() {
@@ -62,42 +52,19 @@ public class MenuAdminController {
             // Control de permisos por rol
             switch (rol) {
                 case "gerente":
-                    // Admin puede ver todo
-                    pedidosButton.setVisible(true);
-                    productosButton.setVisible(true);
+                    // Gerente puede ver todo
+                    usuariosButton.setVisible(true); // Solo gerentes pueden administrar usuarios
+                    break;
 
-                    break;
-                case "usuario":
-                    // Usuario solo puede acceder a ciertas partes
-                    pedidosButton.setVisible(true);
-                    productosButton.setVisible(true);
-                    adminButton.setVisible(false);
-                    break;
                 default:
                     // Rol desconocido, ocultar todo por seguridad
-                    pedidosButton.setVisible(false);
-                    productosButton.setVisible(false);
-                    adminButton.setVisible(false);
+                    usuariosButton.setVisible(false);
+                    if (adminButton != null) {
+                        adminButton.setVisible(false);
+                    }
                     break;
             }
         }
-    }
-
-
-    @FXML
-    private void onInicioClick() {
-        mostrarMensaje("Inicio", "Estás en el menú principal.");
-    }
-
-    @FXML
-    private void onProductosClick() {
-        mostrarMensaje("Productos", "Aquí irán los productos disponibles.");
-    }
-
-
-    @FXML
-    private void onPedidosClick() {
-        mostrarMensaje("Pedidos", "Aquí podrás revisar tus pedidos.");
     }
 
 
@@ -112,6 +79,23 @@ public class MenuAdminController {
         }
     }
 
+    @FXML
+    private void onUsuariosClick() {
+        try {
+            // Cargar la vista de administración de usuarios
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/admin-usuarios.fxml"));
+            Parent usuariosVista = loader.load();
+
+            // Ocultar la etiqueta de bienvenida
+            bienvenidaLabel.setVisible(false);
+
+            // Mostrar la vista de administración de usuarios en el centro
+            adminBorderPane.setCenter(usuariosVista);
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo cargar la pantalla de administración de usuarios.");
+        }
+    }
 
     @FXML
     private void onLogoutClick(javafx.event.ActionEvent event) {
@@ -123,7 +107,6 @@ public class MenuAdminController {
         SceneChanger.changeScene("/com/example/cannagrow/hello-view.fxml", stage); // Te lleva de vuelta al login
     }
 
-
     private void mostrarMensaje(String titulo, String contenido) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
@@ -132,3 +115,4 @@ public class MenuAdminController {
         alert.showAndWait();
     }
 }
+
