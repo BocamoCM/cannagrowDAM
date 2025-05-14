@@ -8,9 +8,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.geometry.Bounds;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductosController {
 
@@ -26,7 +30,35 @@ public class ProductosController {
     @FXML
     private TextField buscarTextField;
 
+    @FXML
+    private ScrollPane scrollPane;  // Asegúrate de tener un ScrollPane en tu FXML
+
     private String filtroActual = "Todos";
+    private List<Producto> productosActuales = new ArrayList<>();
+    private int elementosPorCarga = 90;  // Número de productos a cargar en cada carga
+    private int totalProductosCargados = 0;
+    private boolean cargandoProductos = false;
+    private String terminoBusquedaActual = "";
+
+    // Caché de imágenes
+    private static final Map<String, Image> imagenCache = new HashMap<>();
+    private static final Image DEFAULT_IMAGE; // Imagen por defecto
+
+    static {
+        // Inicializar la imagen por defecto una sola vez
+        Image defaultImg = null;
+        try {
+            InputStream is = ProductosController.class.getResourceAsStream("/com/example/cannagrow/img/sin_imagen.png");
+            if (is != null) {
+                defaultImg = new Image(is);
+                is.close();
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cargar la imagen por defecto: " + e.getMessage());
+        } finally {
+            DEFAULT_IMAGE = defaultImg;
+        }
+    }
 
     @FXML
     public void initialize() {
@@ -53,14 +85,32 @@ public class ProductosController {
             configurarBusqueda();
         }
 
-        // Cargar todos los productos inicialmente
+        // Configurar scroll listener para lazy loading
+        if (scrollPane != null) {
+            configurarScrollListener();
+        }
+
+        // Cargar la primera página de productos
         cargarProductos();
+    }
+
+    private void configurarScrollListener() {
+        scrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+            // Si el usuario ha llegado cerca del final del scroll y no estamos ya cargando productos
+            if (newValue.doubleValue() > 0.8 && !cargandoProductos &&
+                    totalProductosCargados < productosActuales.size()) {
+                cargarMasProductos();
+            }
+        });
     }
 
     private void configurarBusqueda() {
         buscarTextField.setOnAction(event -> {
             String termino = buscarTextField.getText().trim();
+            terminoBusquedaActual = termino;
+
             if (termino.isEmpty()) {
+                filtroActual = "Todos";
                 cargarProductos(); // Si está vacío, mostrar todos
             } else {
                 buscarProductos(termino);
@@ -73,11 +123,12 @@ public class ProductosController {
 
         // Limpiar el contenedor
         contenedorProductos.getChildren().clear();
+        totalProductosCargados = 0;
 
         // Buscar productos por nombre
-        List<Producto> productos = ProductoModel.buscarPorNombre(termino);
+        productosActuales = ProductoModel.buscarPorNombre(termino);
 
-        if (productos.isEmpty()) {
+        if (productosActuales.isEmpty()) {
             mostrarMensaje("No se encontraron productos con \"" + termino + "\"");
             return;
         }
@@ -85,11 +136,8 @@ public class ProductosController {
         // Actualizar título
         tituloProductos.setText("Resultados para: \"" + termino + "\"");
 
-        // Mostrar productos encontrados
-        for (Producto p : productos) {
-            VBox tarjeta = crearTarjetaProducto(p);
-            contenedorProductos.getChildren().add(tarjeta);
-        }
+        // Mostrar los primeros productos
+        cargarMasProductos();
     }
 
     private void configurarFiltros() {
@@ -138,8 +186,10 @@ public class ProductosController {
             filtroBtn.getStyleClass().add("filtro-seleccionado");
             filtroBtn.setStyle("-fx-background-color: #388e3c; -fx-text-fill: white;");
 
-            // Actualizar filtro actual
+            // Actualizar filtro actual y limpiar búsqueda
             filtroActual = tipo;
+            terminoBusquedaActual = "";
+            buscarTextField.setText("");
 
             // Cargar productos según el filtro
             if (tipo.equals("Todos")) {
@@ -153,7 +203,7 @@ public class ProductosController {
     }
 
     private void cargarProductos() {
-        System.out.println("Cargando todos los productos...");
+        System.out.println("Cargando productos iniciales...");
 
         // Actualizar título si se cambió en una búsqueda
         if (tituloProductos != null) {
@@ -162,19 +212,19 @@ public class ProductosController {
 
         // Limpiar el contenedor primero
         contenedorProductos.getChildren().clear();
+        totalProductosCargados = 0;
 
-        List<Producto> productos = ProductoModel.obtenerTodos();
-        System.out.println("Productos obtenidos: " + productos.size());
+        // Obtener todos los productos disponibles (solo IDs y datos básicos)
+        productosActuales = ProductoModel.obtenerTodos();
+        System.out.println("Total de productos disponibles: " + productosActuales.size());
 
-        if (productos.isEmpty()) {
+        if (productosActuales.isEmpty()) {
             mostrarMensaje("No hay productos disponibles");
             return;
         }
 
-        for (Producto p : productos) {
-            VBox tarjeta = crearTarjetaProducto(p);
-            contenedorProductos.getChildren().add(tarjeta);
-        }
+        // Cargar la primera página de productos
+        cargarMasProductos();
     }
 
     private void cargarProductosPorTipo(String tipo) {
@@ -187,19 +237,41 @@ public class ProductosController {
 
         // Limpiar el contenedor primero
         contenedorProductos.getChildren().clear();
+        totalProductosCargados = 0;
 
         // Obtener productos filtrados por tipo
-        List<Producto> productos = ProductoModel.obtenerPorTipo(tipo);
+        productosActuales = ProductoModel.obtenerPorTipo(tipo);
 
-        if (productos.isEmpty()) {
+        if (productosActuales.isEmpty()) {
             mostrarMensaje("No hay productos de tipo " + tipo);
             return;
         }
 
-        for (Producto p : productos) {
+        // Cargar la primera página de productos
+        cargarMasProductos();
+    }
+
+    private void cargarMasProductos() {
+        if (cargandoProductos || totalProductosCargados >= productosActuales.size()) {
+            return; // Ya estamos cargando o ya cargamos todo
+        }
+
+        cargandoProductos = true;
+
+        // Determinar cuántos productos más cargar
+        int fin = Math.min(totalProductosCargados + elementosPorCarga, productosActuales.size());
+        System.out.println("Cargando productos del " + totalProductosCargados + " al " + (fin-1));
+
+        // Cargar los siguientes productos
+        for (int i = totalProductosCargados; i < fin; i++) {
+            Producto p = productosActuales.get(i);
             VBox tarjeta = crearTarjetaProducto(p);
             contenedorProductos.getChildren().add(tarjeta);
         }
+
+        // Actualizar contador
+        totalProductosCargados = fin;
+        cargandoProductos = false;
     }
 
     private void mostrarMensaje(String texto) {
@@ -210,9 +282,9 @@ public class ProductosController {
 
         // Icono (imagen triste o de información)
         try {
-            InputStream iconStream = getClass().getResourceAsStream("/com/example/cannagrow/img/info-icon.png");
-            if (iconStream != null) {
-                ImageView icon = new ImageView(new Image(iconStream));
+            Image infoIcon = getImagenCache("/com/example/cannagrow/img/info-icon.png");
+            if (infoIcon != null) {
+                ImageView icon = new ImageView(infoIcon);
                 icon.setFitHeight(64);
                 icon.setFitWidth(64);
                 mensajeBox.getChildren().add(icon);
@@ -267,7 +339,7 @@ public class ProductosController {
         imagen.setFitHeight(120);
         imagen.setPreserveRatio(true);
 
-        // Cargar imagen con manejo de errores mejorado
+        // Cargar imagen con manejo de errores mejorado usando caché
         cargarImagen(producto.getImagenProducto(), imagen);
 
         imagenContainer.getChildren().add(imagen);
@@ -320,16 +392,14 @@ public class ProductosController {
         comprarBtn.setStyle("-fx-background-color: #4caf50; -fx-text-fill: white; -fx-background-radius: 50%;");
         comprarBtn.setPrefSize(30, 30);
 
-        // Cargar icono para el botón de compra
-        try {
-            InputStream iconStream = getClass().getResourceAsStream("/com/example/cannagrow/img/cart.png");
-            if (iconStream != null) {
-                ImageView icon = new ImageView(new Image(iconStream, 16, 16, true, true));
-                comprarBtn.setGraphic(icon);
-            } else {
-                comprarBtn.setText("+");
-            }
-        } catch (Exception e) {
+        // Cargar icono para el botón de compra con caché
+        Image cartIcon = getImagenCache("/com/example/cannagrow/img/cart.png");
+        if (cartIcon != null) {
+            ImageView icon = new ImageView(cartIcon);
+            icon.setFitWidth(16);
+            icon.setFitHeight(16);
+            comprarBtn.setGraphic(icon);
+        } else {
             comprarBtn.setText("+");
         }
 
@@ -410,79 +480,70 @@ public class ProductosController {
         return stockLabel;
     }
 
-    private void cargarImagen(String url, ImageView imageView) {
+    /**
+     * Obtiene una imagen de la caché o la carga y almacena si no existe.
+     * @param ruta La ruta de la imagen
+     * @return La imagen cargada o null si no se pudo cargar
+     */
+    private Image getImagenCache(String ruta) {
+        // Si la ruta es nula o vacía, devolver la imagen por defecto
+        if (ruta == null || ruta.isEmpty()) {
+            return DEFAULT_IMAGE;
+        }
+
+        // Comprobar si la imagen ya está en caché
+        if (imagenCache.containsKey(ruta)) {
+            return imagenCache.get(ruta);
+        }
+
+        // Cargar la imagen e incorporar a caché
         try {
-            if (url != null && !url.isEmpty()) {
-                // Primero intentamos cargar desde la URL proporcionada
-                System.out.println("Intentando cargar imagen desde: " + url);
+            Image imagen = null;
 
-                // Si es una ruta de recurso
-                if (url.startsWith("/")) {
-                    InputStream is = getClass().getResourceAsStream(url);
-                    if (is != null) {
-                        imageView.setImage(new Image(is));
-                        return;
-                    }
-
+            // Si es una ruta de recurso
+            if (ruta.startsWith("/")) {
+                InputStream is = getClass().getResourceAsStream(ruta);
+                if (is != null) {
+                    imagen = new Image(is);
+                    is.close();
+                } else {
                     // Intentar con rutas alternativas
                     String[] alternativas = {
-                            "/com/example/cannagrow" + url,
-                            "/img" + url.substring(url.lastIndexOf('/')),
-                            "/images" + url.substring(url.lastIndexOf('/'))
+                            "/com/example/cannagrow" + ruta,
+                            "/img" + ruta.substring(ruta.lastIndexOf('/')),
+                            "/images" + ruta.substring(ruta.lastIndexOf('/'))
                     };
 
                     for (String alt : alternativas) {
-                        System.out.println("Intentando ruta alternativa: " + alt);
                         InputStream altIs = getClass().getResourceAsStream(alt);
                         if (altIs != null) {
-                            imageView.setImage(new Image(altIs));
-                            return;
+                            imagen = new Image(altIs);
+                            altIs.close();
+                            break;
                         }
                     }
-                } else {
-                    // Si es una URL externa o una ruta del sistema de archivos
-                    imageView.setImage(new Image(url, true));
-                    return;
                 }
+            } else {
+                // Si es una URL externa o una ruta del sistema de archivos
+                imagen = new Image(ruta, true); // El segundo parámetro indica carga en background
             }
 
-            // Si llegamos aquí, cargar la imagen por defecto
-            cargarImagenPorDefecto(imageView);
-
+            if (imagen != null && !imagen.isError()) {
+                imagenCache.put(ruta, imagen);
+                return imagen;
+            }
         } catch (Exception e) {
-            System.err.println("Error al cargar la imagen: " + e.getMessage());
-            cargarImagenPorDefecto(imageView);
+            System.err.println("Error al cargar la imagen para caché: " + e.getMessage());
         }
+
+        // Si no se pudo cargar, usar la imagen por defecto y cachearla para esta ruta
+        imagenCache.put(ruta, DEFAULT_IMAGE);
+        return DEFAULT_IMAGE;
     }
 
-    private void cargarImagenPorDefecto(ImageView imageView) {
-        try {
-            InputStream is = getClass().getResourceAsStream("/com/example/cannagrow/img/sin_imagen.png");
-            if (is != null) {
-                imageView.setImage(new Image(is));
-            } else {
-                // Intentar con rutas alternativas
-                String[] alternativas = {
-                        "/img/sin_imagen.png",
-                        "/images/sin_imagen.png",
-                        "/sin_imagen.png"
-                };
-
-                for (String alt : alternativas) {
-                    InputStream altIs = getClass().getResourceAsStream(alt);
-                    if (altIs != null) {
-                        imageView.setImage(new Image(altIs));
-                        return;
-                    }
-                }
-
-                // Si no se encuentra ninguna imagen, creamos una imagen vacía
-                imageView.setStyle("-fx-background-color: #333333;");
-            }
-        } catch (Exception e) {
-            System.err.println("Error al cargar la imagen por defecto: " + e.getMessage());
-            imageView.setStyle("-fx-background-color: #333333;");
-        }
+    private void cargarImagen(String url, ImageView imageView) {
+        Image imagen = getImagenCache(url);
+        imageView.setImage(imagen);
     }
 
     private void agregarAlCarrito(Producto producto) {
@@ -520,5 +581,26 @@ public class ProductosController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    // Método para recargar productos cuando sea necesario (por ejemplo, después de cambiar un filtro)
+    public void recargarProductos() {
+        terminoBusquedaActual = "";
+        buscarTextField.setText("");
+
+        if (filtroActual.equals("Todos")) {
+            cargarProductos();
+        } else {
+            cargarProductosPorTipo(filtroActual);
+        }
+    }
+
+    /**
+     * Limpia la caché de imágenes para liberar memoria.
+     * Útil cuando se cambia de pantalla o se cierra la aplicación.
+     */
+    public static void limpiarCache() {
+        imagenCache.clear();
+        System.out.println("Caché de imágenes limpiada");
     }
 }

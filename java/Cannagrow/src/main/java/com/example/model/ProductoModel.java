@@ -10,7 +10,7 @@ public class ProductoModel {
      * Obtiene todos los productos de la base de datos
      * @return Lista de productos
      */
-    public static List<Producto> obtenerTodos() {
+    public static List<Producto> obtenerTodos() {  // Fixed method name from "obtenearTodos" to "obtenerTodos"
         List<Producto> productos = new ArrayList<>();
         String sql = "SELECT * FROM Producto";
 
