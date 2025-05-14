@@ -52,6 +52,7 @@ jobs:
                    --win-dir-chooser `
                    --win-shortcut `
                    --win-menu `
+                   --icon src/main/resources/icono.ico `
                    --win-console `
                    --java-options "-Xms256m -Xmx512m" `
                    --app-version "2.0.0" `
