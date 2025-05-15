@@ -5,12 +5,27 @@ body {
 
 /* Navbar */
 .navbar {
-  transition: all 0.3s ease-in-out;
+  background-color: #fff !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
 }
 
 .navbar.scrolled {
   background-color: #fff !important;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .nav-link {
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.navbar.scrolled .nav-link {
+  color: #1ab808;
+}
+
+.navbar .nav-link:hover {
+  color: #47a076;
 }
 
 /* Hero Section */
