@@ -71,14 +71,18 @@ public class PedidoAdminModel {
 
 
 
-    public static List<Pedido> obtenerPedidosPorEstado(EstadoPedido estado) {
+    public static List<Pedido> obtenerPedidosPorEstado(EstadoPedido estado, int pagina, int limite) {
         List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM Pedido WHERE estado = ? ORDER BY fecha DESC";
+        String sql = "SELECT * FROM Pedido WHERE estado = ? ORDER BY fecha DESC LIMIT ? OFFSET ?";
+
+        int offset = (pagina - 1) * limite;
 
         try (Connection conn = DBUtil.getConexion();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, estado.getEstado());
+            ps.setInt(2, limite);
+            ps.setInt(3, offset);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {

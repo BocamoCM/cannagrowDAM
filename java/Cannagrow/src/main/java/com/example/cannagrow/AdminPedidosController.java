@@ -5,25 +5,35 @@ import com.example.model.PedidoModel.Pedido;
 import com.example.model.PedidoModel.DetallePedido;
 import com.example.model.PedidoModel.EstadoPedido;
 
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AdminPedidosController implements Initializable {
 
@@ -87,11 +97,26 @@ public class AdminPedidosController implements Initializable {
     @FXML
     private Button btnAsignarEmpleado;
 
+    @FXML
+    private ProgressBar progressBar;
+
+    @FXML
+    private Label statusLabel;
+
     private ObservableList<Pedido> listaPedidos = FXCollections.observableArrayList();
     private ObservableList<DetallePedido> listaDetalles = FXCollections.observableArrayList();
     private NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance();
     private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     private Pedido pedidoSeleccionado;
+
+    // Configuración para paginación y carga asíncrona
+    private static final int LIMITE_CARGA_INICIAL = 15; // Cantidad inicial de pedidos a cargar
+    private static final int TAMANO_PAGINA = 10; // Cantidad de pedidos por página adicional
+    private int paginaActual = 1;
+    private AtomicBoolean estaCargando = new AtomicBoolean(false); // Corregido el error tipográfico
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private String filtroActual = "Todos";
+    private EstadoPedido estadoFiltrado = null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -110,11 +135,18 @@ public class AdminPedidosController implements Initializable {
         // Configurar la tabla de detalles
         configurarTablaDetalles();
 
+        // Configurar paginación basada en scroll
+        configurarPaginacion();
+
         // Ocultar el panel de detalles al inicio
         detallesPedidoPane.setVisible(false);
 
-        // Cargar todos los pedidos al inicio
-        cargarTodosPedidos();
+        // Inicialmente ocultar la barra de progreso y mensaje de estado
+        if (progressBar != null) progressBar.setVisible(false);
+        if (statusLabel != null) statusLabel.setVisible(false);
+
+        // Cargar pedidos iniciales de forma asíncrona
+        cargarPedidosIniciales();
     }
 
     private void verificarPermisos() {
@@ -125,8 +157,6 @@ public class AdminPedidosController implements Initializable {
             alert.setHeaderText("No tiene permisos para acceder a esta sección");
             alert.setContentText("Esta sección está reservada para administradores y gerentes.");
             alert.showAndWait();
-
-            // Aquí podríamos redirigir a otra pantalla, pero dejaremos que siga para no bloquear la vista
         }
     }
 
@@ -135,81 +165,69 @@ public class AdminPedidosController implements Initializable {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha"));
-        fechaColumn.setCellFactory(column -> {
-            return new TableCell<Pedido, Date>() {
-                @Override
-                protected void updateItem(Date fecha, boolean empty) {
-                    super.updateItem(fecha, empty);
-                    if (empty || fecha == null) {
-                        setText(null);
-                    } else {
-                        setText(formatoFecha.format(fecha));
-                    }
+        fechaColumn.setCellFactory(column -> new TableCell<Pedido, Date>() {
+            @Override
+            protected void updateItem(Date fecha, boolean empty) {
+                super.updateItem(fecha, empty);
+                if (empty || fecha == null) {
+                    setText(null);
+                } else {
+                    setText(formatoFecha.format(fecha));
                 }
-            };
+            }
         });
 
         clienteColumn.setCellValueFactory(cellData -> {
             Pedido pedido = cellData.getValue();
             if (pedido == null) return new SimpleStringProperty("Desconocido");
-            String nombreCliente = PedidoAdminModel.obtenerNombreClientePorId(pedido.getClienteId());
-            return new SimpleStringProperty(nombreCliente);
-        });
-
-
-        clienteColumn.setCellValueFactory(cellData -> {
-            Pedido pedido = cellData.getValue();
-            String nombreCliente = PedidoAdminModel.obtenerNombreClientePorId(pedido.getClienteId());
+            // Usar caché para nombres de clientes para mejorar rendimiento
+            String nombreCliente = UsuarioCache.getNombreCliente(pedido.getClienteId());
             return new SimpleStringProperty(nombreCliente);
         });
 
         totalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
-        totalColumn.setCellFactory(column -> {
-            return new TableCell<Pedido, Float>() {
-                @Override
-                protected void updateItem(Float total, boolean empty) {
-                    super.updateItem(total, empty);
-                    if (empty || total == null) {
-                        setText(null);
-                    } else {
-                        setText(formatoMoneda.format(total));
-                    }
+        totalColumn.setCellFactory(column -> new TableCell<Pedido, Float>() {
+            @Override
+            protected void updateItem(Float total, boolean empty) {
+                super.updateItem(total, empty);
+                if (empty || total == null) {
+                    setText(null);
+                } else {
+                    setText(formatoMoneda.format(total));
                 }
-            };
+            }
         });
 
         estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        estadoColumn.setCellFactory(column -> {
-            return new TableCell<Pedido, EstadoPedido>() {
-                @Override
-                protected void updateItem(EstadoPedido estado, boolean empty) {
-                    super.updateItem(estado, empty);
-                    if (empty || estado == null) {
-                        setText(null);
-                        setStyle("");
-                    } else {
-                        setText(estado.getEstado());
-                        // Asignar colores según el estado
-                        switch (estado) {
-                            case PENDIENTE:
-                                setStyle("-fx-text-fill: orange;");
-                                break;
-                            case ENVIADO:
-                                setStyle("-fx-text-fill: blue;");
-                                break;
-                            case ENTREGADO:
-                                setStyle("-fx-text-fill: green;");
-                                break;
-                            case CANCELADO:
-                                setStyle("-fx-text-fill: red;");
-                                break;
-                            default:
-                                setStyle("");
-                                break;
-                        }
+        estadoColumn.setCellFactory(column -> new TableCell<Pedido, EstadoPedido>() {
+            @Override
+            protected void updateItem(EstadoPedido estado, boolean empty) {
+                super.updateItem(estado, empty);
+                if (empty || estado == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(estado.getEstado());
+                    // Asignar colores según el estado
+                    switch (estado) {
+                        case PENDIENTE:
+                            setStyle("-fx-text-fill: orange;");
+                            break;
+                        case ENVIADO:
+                            setStyle("-fx-text-fill: blue;");
+                            break;
+                        case ENTREGADO:
+                            setStyle("-fx-text-fill: green;");
+                            break;
+                        case CANCELADO:
+                            setStyle("-fx-text-fill: red;");
+                            break;
+                        default:
+                            setStyle("");
+                            break;
                     }
                 }
-            };
+            }
         });
 
         vehiculoColumn.setCellValueFactory(new PropertyValueFactory<>("vehiculoMatricula"));
@@ -219,6 +237,10 @@ public class AdminPedidosController implements Initializable {
 
         // Asignar los datos a la tabla
         pedidosTableView.setItems(listaPedidos);
+
+        // Optimización: configurar prefetch de 20 filas para mejorar rendimiento de scroll
+        pedidosTableView.setFixedCellSize(40); // Altura fija para cada celda
+        pedidosTableView.setCache(true); // Activar cache para mejorar rendimiento
     }
 
     private void configurarColumnaBotones() {
@@ -269,7 +291,11 @@ public class AdminPedidosController implements Initializable {
         filtroEstadoComboBox.getSelectionModel().selectFirst();
 
         // Configurar el evento de cambio del filtro
-        filtroEstadoComboBox.setOnAction(event -> filtrarPedidosPorEstado());
+        filtroEstadoComboBox.setOnAction(event -> {
+            filtroActual = filtroEstadoComboBox.getValue();
+            resetearPaginacion();
+            filtrarPedidosPorEstado();
+        });
     }
 
     private void configurarCambioEstado() {
@@ -306,120 +332,428 @@ public class AdminPedidosController implements Initializable {
         cantidadColumn.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
 
         precioColumn.setCellValueFactory(new PropertyValueFactory<>("precioUnitario"));
-        precioColumn.setCellFactory(column -> {
-            return new TableCell<DetallePedido, Float>() {
-                @Override
-                protected void updateItem(Float precio, boolean empty) {
-                    super.updateItem(precio, empty);
-                    if (empty || precio == null) {
-                        setText(null);
-                    } else {
-                        setText(formatoMoneda.format(precio));
-                    }
+        precioColumn.setCellFactory(column -> new TableCell<DetallePedido, Float>() {
+            @Override
+            protected void updateItem(Float precio, boolean empty) {
+                super.updateItem(precio, empty);
+                if (empty || precio == null) {
+                    setText(null);
+                } else {
+                    setText(formatoMoneda.format(precio));
                 }
-            };
+            }
         });
 
         subtotalColumn.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
-        subtotalColumn.setCellFactory(column -> {
-            return new TableCell<DetallePedido, Float>() {
-                @Override
-                protected void updateItem(Float subtotal, boolean empty) {
-                    super.updateItem(subtotal, empty);
-                    if (empty || subtotal == null) {
-                        setText(null);
-                    } else {
-                        setText(formatoMoneda.format(subtotal));
-                    }
+        subtotalColumn.setCellFactory(column -> new TableCell<DetallePedido, Float>() {
+            @Override
+            protected void updateItem(Float subtotal, boolean empty) {
+                super.updateItem(subtotal, empty);
+                if (empty || subtotal == null) {
+                    setText(null);
+                } else {
+                    setText(formatoMoneda.format(subtotal));
                 }
-            };
+            }
         });
 
         detallesTableView.setItems(listaDetalles);
     }
 
-    private void cargarTodosPedidos() {
-        // Cargar todos los pedidos
-        List<Pedido> pedidos = PedidoAdminModel.obtenerTodosPedidos(1, 30);
+    private void configurarPaginacion() {
+        // Instead of finding the ScrollBar directly at initialization,
+        // add a listener to the scene property of the TableView
+        pedidosTableView.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                // Scene is now set, wait for TableView to be shown and fully rendered
+                Platform.runLater(() -> {
+                    // Add a scroll event listener directly to the TableView
+                    pedidosTableView.addEventFilter(ScrollEvent.ANY, event -> {
+                        // If we're scrolling down and not already loading
+                        if (event.getDeltaY() < 0 && !estaCargando.get()) { // Corregido el error tipográfico
+                            int lastIndex = pedidosTableView.getItems().size() - 1;
+                            if (lastIndex >= 0) {
+                                // Check if the last item is visible
+                                TableRow<?> lastRow = findTableRow(pedidosTableView, lastIndex);
+                                if (lastRow != null && lastRow.isVisible()) {
+                                    cargarMasPedidos();
+                                }
+
+                                // Alternative approach - check if we're close to the end
+                                int visibleIndex = getLastVisibleIndex(pedidosTableView);
+                                if (visibleIndex >= lastIndex - 3) {
+                                    cargarMasPedidos();
+                                }
+                            }
+                        }
+                    });
+
+                    // Add a listener for row visibility changes
+                    pedidosTableView.skinProperty().addListener((skinObs, oldSkin, newSkin) -> {
+                        if (newSkin != null) {
+                            // Add a scroll detection mechanism that runs periodically
+                            Timeline scrollCheck = new Timeline(
+                                    new KeyFrame(Duration.millis(500), e -> {
+                                        if (!estaCargando.get() && pedidosTableView.getSkin() != null) { // Corregido el error tipográfico
+                                            ScrollBar verticalBar = findScrollBar(pedidosTableView);
+                                            if (verticalBar != null) {
+                                                double position = verticalBar.getValue() / (verticalBar.getMax() - verticalBar.getMin());
+                                                if (position > 0.8) { // User has scrolled more than 80% down
+                                                    cargarMasPedidos();
+                                                }
+                                            }
+                                        }
+                                    })
+                            );
+                            scrollCheck.setCycleCount(Timeline.INDEFINITE);
+                            scrollCheck.play();
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    private ScrollBar findScrollBar(TableView<?> tableView) {
+        // Try different lookup approaches
+
+        // Approach 1: Direct lookup using CSS selectors
+        for (Node node : tableView.lookupAll(".scroll-bar")) {
+            if (node instanceof ScrollBar) {
+                ScrollBar bar = (ScrollBar) node;
+                if (bar.getOrientation() == Orientation.VERTICAL) {
+                    return bar;
+                }
+            }
+        }
+
+        // Approach 2: Look for ScrollBar in the parent container
+        Parent parent = tableView.getParent();
+        while (parent != null) {
+            for (Node node : parent.lookupAll(".scroll-bar")) {
+                if (node instanceof ScrollBar) {
+                    ScrollBar bar = (ScrollBar) node;
+                    if (bar.getOrientation() == Orientation.VERTICAL) {
+                        return bar;
+                    }
+                }
+            }
+            parent = parent.getParent();
+        }
+
+        return null;
+    }
+
+    private TableRow<?> findTableRow(TableView<?> tableView, int index) {
+        for (Node node : tableView.lookupAll(".table-row-cell")) {
+            if (node instanceof TableRow) {
+                TableRow<?> row = (TableRow<?>) node;
+                if (row.getIndex() == index) {
+                    return row;
+                }
+            }
+        }
+        return null;
+    }
+
+    private int getLastVisibleIndex(TableView<?> tableView) {
+        int lastIndex = -1;
+        for (Node node : tableView.lookupAll(".table-row-cell")) {
+            if (node instanceof TableRow && node.isVisible()) {
+                TableRow<?> row = (TableRow<?>) node;
+                if (row.getIndex() > lastIndex) {
+                    lastIndex = row.getIndex();
+                }
+            }
+        }
+        return lastIndex;
+    }
+
+    private void resetearPaginacion() {
+        // Reiniciar la paginación cuando cambia el filtro
+        paginaActual = 1;
         listaPedidos.clear();
-        listaPedidos.addAll(pedidos);
+    }
+
+    private void cargarPedidosIniciales() {
+        estaCargando.set(true); // Corregido el error tipográfico
+        mostrarEstadoCarga(true, "Cargando pedidos iniciales...");
+
+        Task<List<Pedido>> task = new Task<List<Pedido>>() {
+            @Override
+            protected List<Pedido> call() throws Exception {
+                // Determinar si hay un filtro de estado activo
+                EstadoPedido estadoFiltro = obtenerEstadoFiltro(filtroActual);
+
+                // Cargar pedidos con paginación
+                List<Pedido> pedidos;
+                if (estadoFiltro == null) {
+                    pedidos = PedidoAdminModel.obtenerTodosPedidos(1, LIMITE_CARGA_INICIAL);
+                } else {
+                    pedidos = PedidoAdminModel.obtenerPedidosPorEstado(estadoFiltro, 1, LIMITE_CARGA_INICIAL);
+                }
+
+                // Pre-cargar datos de clientes para mejorar rendimiento
+                for (Pedido pedido : pedidos) {
+                    preCargarDatosCliente(pedido.getClienteId());
+                }
+
+                return pedidos;
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            List<Pedido> pedidos = task.getValue();
+            Platform.runLater(() -> {
+                listaPedidos.addAll(pedidos);
+                pedidosTableView.refresh();
+                estaCargando.set(false); // Corregido el error tipográfico
+                mostrarEstadoCarga(false, "");
+            });
+        });
+
+        task.setOnFailed(event -> {
+            Platform.runLater(() -> {
+                mostrarAlerta("Error", "Error al cargar pedidos",
+                        "No se pudieron cargar los pedidos. Intente nuevamente.", Alert.AlertType.ERROR);
+                estaCargando.set(false); // Corregido el error tipográfico
+                mostrarEstadoCarga(false, "");
+            });
+        });
+
+        executorService.submit(task);
+    }
+
+    private void cargarMasPedidos() {
+        if (estaCargando.get()) return; // Corregido el error tipográfico
+
+        estaCargando.set(true); // Corregido el error tipográfico
+        mostrarEstadoCarga(true, "Cargando más pedidos...");
+
+        paginaActual++;
+
+        Task<List<Pedido>> task = new Task<List<Pedido>>() {
+            @Override
+            protected List<Pedido> call() throws Exception {
+                // Determinar si hay un filtro de estado activo
+                EstadoPedido estadoFiltro = obtenerEstadoFiltro(filtroActual);
+
+                // Cargar siguiente página de pedidos
+                List<Pedido> pedidos;
+                if (estadoFiltro == null) {
+                    pedidos = PedidoAdminModel.obtenerTodosPedidos(paginaActual, TAMANO_PAGINA);
+                } else {
+                    pedidos = PedidoAdminModel.obtenerPedidosPorEstado(estadoFiltro, paginaActual, TAMANO_PAGINA);
+                }
+
+                // Pre-cargar datos de clientes para mejorar rendimiento
+                for (Pedido pedido : pedidos) {
+                    preCargarDatosCliente(pedido.getClienteId());
+                }
+
+                return pedidos;
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            List<Pedido> pedidos = task.getValue();
+            Platform.runLater(() -> {
+                if (pedidos.isEmpty()) {
+                    // No hay más pedidos para cargar
+                    statusLabel.setText("No hay más pedidos para mostrar");
+                } else {
+                    listaPedidos.addAll(pedidos);
+                    pedidosTableView.refresh();
+                }
+                estaCargando.set(false); // Corregido el error tipográfico
+                mostrarEstadoCarga(false, "");
+            });
+        });
+
+        task.setOnFailed(event -> {
+            Platform.runLater(() -> {
+                mostrarAlerta("Error", "Error al cargar más pedidos",
+                        "No se pudieron cargar más pedidos. Intente nuevamente.", Alert.AlertType.ERROR);
+                estaCargando.set(false); // Corregido el error tipográfico
+                mostrarEstadoCarga(false, "");
+            });
+        });
+
+        executorService.submit(task);
     }
 
     private void filtrarPedidosPorEstado() {
+        if (estaCargando.get()) return; // Corregido el error tipográfico
+
+        estaCargando.set(true); // Corregido el error tipográfico
+        mostrarEstadoCarga(true, "Aplicando filtro...");
+
         String filtro = filtroEstadoComboBox.getValue();
+        Task<List<Pedido>> task = new Task<List<Pedido>>() {
+            @Override
+            protected List<Pedido> call() throws Exception {
+                List<Pedido> pedidos;
+                if ("Todos".equals(filtro)) {
+                    pedidos = PedidoAdminModel.obtenerTodosPedidos(1, LIMITE_CARGA_INICIAL);
+                } else {
+                    // Convertir el string del filtro a enum EstadoPedido
+                    EstadoPedido estadoFiltro = null;
+                    for (EstadoPedido estado : EstadoPedido.values()) {
+                        if (estado.getEstado().equals(filtro)) {
+                            estadoFiltro = estado;
+                            break;
+                        }
+                    }
 
-        List<Pedido> pedidos;
-
-        if ("Todos".equals(filtro)) {
-            pedidos = PedidoAdminModel.obtenerTodosPedidos(1, 30);
-        } else {
-            // Convertir el string del filtro a enum EstadoPedido
-            EstadoPedido estadoFiltro = null;
-            for (EstadoPedido estado : EstadoPedido.values()) {
-                if (estado.getEstado().equals(filtro)) {
-                    estadoFiltro = estado;
-                    break;
+                    pedidos = PedidoAdminModel.obtenerPedidosPorEstado(estadoFiltro, 1, LIMITE_CARGA_INICIAL);
                 }
+
+                // Pre-cargar datos de clientes
+                for (Pedido pedido : pedidos) {
+                    preCargarDatosCliente(pedido.getClienteId());
+                }
+
+                return pedidos;
             }
+        };
 
-            pedidos = PedidoAdminModel.obtenerPedidosPorEstado(estadoFiltro);
-        }
+        task.setOnSucceeded(event -> {
+            List<Pedido> pedidos = task.getValue();
+            Platform.runLater(() -> {
+                listaPedidos.clear();
+                listaPedidos.addAll(pedidos);
+                pedidosTableView.refresh();
+                estaCargando.set(false); // Corregido el error tipográfico
+                mostrarEstadoCarga(false, "");
+            });
+        });
 
-        listaPedidos.clear();
-        listaPedidos.addAll(pedidos);
+        task.setOnFailed(event -> {
+            Platform.runLater(() -> {
+                mostrarAlerta("Error", "Error al aplicar filtro",
+                        "No se pudo aplicar el filtro seleccionado. Intente nuevamente.", Alert.AlertType.ERROR);
+                estaCargando.set(false); // Corregido el error tipográfico
+                mostrarEstadoCarga(false, "");
+            });
+        });
+
+        executorService.submit(task);
     }
 
-    // 2. Corregir el método mostrarDetallesPedido para cargar correctamente los productos
-    private void mostrarDetallesPedido(Pedido pedido) {
-        // Cargar los detalles del pedido
-        List<DetallePedido> detalles;
-        try {
-            detalles = PedidoModel.obtenerDetallesPedido(pedido.getId());
-        } catch (Exception e) {
-            mostrarAlerta("Error", "No se pudieron cargar los detalles", e.getMessage(), Alert.AlertType.ERROR);
-            return;
+    private EstadoPedido obtenerEstadoFiltro(String filtro) {
+        if ("Todos".equals(filtro)) {
+            return null;
         }
 
-
-        // Cargar la información de productos para cada detalle
-        for (DetallePedido detalle : detalles) {
-            int productoId = detalle.getProductoId();
-            Producto producto = ProductoModel.obtenerPorId(productoId);
-            if (producto == null) {
-                producto = new Producto(); // vacío o con valores por defecto
-                producto.setNombre("Producto desconocido");
+        // Convertir el string del filtro a enum EstadoPedido
+        for (EstadoPedido estado : EstadoPedido.values()) {
+            if (estado.getEstado().equals(filtro)) {
+                return estado;
             }
-            detalle.setProducto(producto);
-
         }
 
-        // Obtener el nombre del cliente
-        String nombreCliente = PedidoAdminModel.obtenerNombreClientePorId(pedido.getClienteId());
+        return null;
+    }
 
+    private void preCargarDatosCliente(int clienteId) {
+        // Este método asegura que los datos del cliente estén en caché
+        if (!UsuarioCache.existeCliente(clienteId)) {
+            String nombreCliente = PedidoAdminModel.obtenerNombreClientePorId(clienteId);
+            UsuarioCache.agregarCliente(clienteId, nombreCliente);
+        }
+    }
 
-        // Actualizar la información del pedido en la etiqueta
-        pedidoInfoLabel.setText(String.format(
-                "Pedido #%d - Cliente: %s - Fecha: %s - Total: %s",
-                pedido.getId(),
-                nombreCliente,
-                formatoFecha.format(pedido.getFecha()),
-                formatoMoneda.format(pedido.getTotal())
-        ));
+    private void mostrarEstadoCarga(boolean mostrar, String mensaje) {
+        Platform.runLater(() -> {
+            if (progressBar != null) {
+                progressBar.setVisible(mostrar);
+                progressBar.setProgress(mostrar ? ProgressBar.INDETERMINATE_PROGRESS : 0);
+            }
 
-        // Seleccionar el estado actual en el combobox
-        cambioEstadoComboBox.setValue(pedido.getEstado());
+            if (statusLabel != null) {
+                statusLabel.setVisible(mostrar);
+                statusLabel.setText(mensaje);
+            }
 
-        // Actualizar la tabla de detalles
-        listaDetalles.clear();
-        listaDetalles.addAll(detalles);
+            // Desactivar los controles durante la carga
+            filtroEstadoComboBox.setDisable(mostrar);
+            btnRefrescar.setDisable(mostrar);
+        });
+    }
 
-        // Mostrar el panel de detalles
-        detallesPedidoPane.setVisible(true);
+    private void mostrarDetallesPedido(Pedido pedido) {
+        // Mostrar una indicación de carga
+        mostrarEstadoCarga(true, "Cargando detalles del pedido...");
+
+        Task<List<DetallePedido>> task = new Task<List<DetallePedido>>() {
+            @Override
+            protected List<DetallePedido> call() throws Exception {
+                List<DetallePedido> detalles = PedidoModel.obtenerDetallesPedido(pedido.getId());
+
+                // Cargar la información de productos para cada detalle
+                for (DetallePedido detalle : detalles) {
+                    int productoId = detalle.getProductoId();
+                    Producto producto = ProductoCache.obtenerProducto(productoId);
+                    if (producto == null) {
+                        producto = ProductoModel.obtenerPorId(productoId);
+                        if (producto == null) {
+                            producto = new Producto();
+                            producto.setNombre("Producto desconocido");
+                        }
+                        ProductoCache.agregarProducto(productoId, producto);
+                    }
+                    detalle.setProducto(producto);
+                }
+
+                return detalles;
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            List<DetallePedido> detalles = task.getValue();
+            Platform.runLater(() -> {
+                // Obtener el nombre del cliente (ya debería estar en caché)
+                String nombreCliente = UsuarioCache.getNombreCliente(pedido.getClienteId());
+
+                // Actualizar la información del pedido en la etiqueta
+                pedidoInfoLabel.setText(String.format(
+                        "Pedido #%d - Cliente: %s - Fecha: %s - Total: %s",
+                        pedido.getId(),
+                        nombreCliente,
+                        formatoFecha.format(pedido.getFecha()),
+                        formatoMoneda.format(pedido.getTotal())
+                ));
+
+                // Seleccionar el estado actual en el combobox
+                cambioEstadoComboBox.setValue(pedido.getEstado());
+
+                // Actualizar la tabla de detalles
+                listaDetalles.clear();
+                listaDetalles.addAll(detalles);
+
+                // Mostrar el panel de detalles
+                detallesPedidoPane.setVisible(true);
+
+                // Ocultar la indicación de carga
+                mostrarEstadoCarga(false, "");
+            });
+        });
+
+        task.setOnFailed(event -> {
+            Platform.runLater(() -> {
+                mostrarAlerta("Error", "No se pudieron cargar los detalles",
+                        task.getException().getMessage(), Alert.AlertType.ERROR);
+                mostrarEstadoCarga(false, "");
+            });
+        });
+
+        executorService.submit(task);
     }
 
     @FXML
     private void onRefrescarClick() {
-        cargarTodosPedidos();
+        resetearPaginacion();
+        cargarPedidosIniciales();
     }
 
     @FXML
@@ -429,6 +763,8 @@ public class AdminPedidosController implements Initializable {
         pedidoSeleccionado = null;
     }
 
+
+
     @FXML
     private void onCambiarEstadoClick() {
         if (pedidoSeleccionado == null) {
@@ -436,45 +772,18 @@ public class AdminPedidosController implements Initializable {
                     "Seleccione un pedido para cambiar su estado.", Alert.AlertType.ERROR);
             return;
         }
-
-        EstadoPedido nuevoEstado = cambioEstadoComboBox.getValue();
-        if (nuevoEstado == null) {
-            mostrarAlerta("Error", "No se ha seleccionado un estado",
-                    "Seleccione un estado para continuar.", Alert.AlertType.ERROR);
-            return;
-        }
-
-        // Confirmar cambio de estado
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Confirmar cambio");
-        confirmacion.setHeaderText("Cambiar estado del pedido #" + pedidoSeleccionado.getId());
-        confirmacion.setContentText("¿Está seguro que desea cambiar el estado de '" +
-                pedidoSeleccionado.getEstado().getEstado() + "' a '" +
-                nuevoEstado.getEstado() + "'?");
-
-        Optional<ButtonType> resultado = confirmacion.showAndWait();
-        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-            boolean actualizado = PedidoAdminModel.actualizarEstadoPedido(pedidoSeleccionado.getId(), nuevoEstado);
-
-            if (actualizado) {
-                mostrarAlerta("Éxito", "Estado actualizado",
-                        "El estado del pedido ha sido actualizado correctamente.", Alert.AlertType.INFORMATION);
-
-                // Actualizar la vista
-                pedidoSeleccionado.setEstado(nuevoEstado);
-                pedidosTableView.refresh();
-
-                // Si se cancela el pedido, actualizar el stock
-                if (nuevoEstado == EstadoPedido.CANCELADO) {
-                    PedidoAdminModel.devolverStockPedidoCancelado(pedidoSeleccionado.getId());
-                }
-            } else {
-                mostrarAlerta("Error", "Error al actualizar",
-                        "No se pudo actualizar el estado del pedido.", Alert.AlertType.ERROR);
-            }
-        }
     }
 
+
+
+
+    private void mostrarAlerta(String titulo, String encabezado, String contenido, Alert.AlertType tipo) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(encabezado);
+        alerta.setContentText(contenido);
+        alerta.showAndWait();
+    }
     @FXML
     private void onAsignarEmpleadoClick() {
         if (pedidoSeleccionado == null) {
@@ -548,11 +857,11 @@ public class AdminPedidosController implements Initializable {
         });
     }
 
-    private void mostrarAlerta(String titulo, String cabecera, String contenido, Alert.AlertType tipo) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(cabecera);
-        alert.setContentText(contenido);
-        alert.showAndWait();
+    // Método para liberar recursos al cerrar la ventana
+    public void shutdown() {
+        if (executorService != null && !executorService.isShutdown()) {
+            executorService.shutdown();
+        }
     }
 }
+
