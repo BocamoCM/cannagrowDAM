@@ -153,6 +153,29 @@ public class ProductoModel {
 
         return productos;
     }
+    public static boolean actualizarProducto(Producto producto) {
+        String sql = "UPDATE Producto SET nombre=?, tipo=?, contenidoTHC=?, contenidoCBD=?, precio=?, stock=? WHERE id=?";
+        try (Connection conn = DBUtil.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, producto.getNombre());
+            pstmt.setString(2, producto.getTipo());
+            pstmt.setFloat(3, producto.getContenidoTHC());
+            pstmt.setFloat(4, producto.getContenidoCBD());
+            pstmt.setFloat(5, producto.getPrecio());
+            pstmt.setInt(6, producto.getStock());
+            pstmt.setInt(7, producto.getId());
+
+            int filasAfectadas = pstmt.executeUpdate();
+            return filasAfectadas > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar producto: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     // For ProductoModel class
     /**
