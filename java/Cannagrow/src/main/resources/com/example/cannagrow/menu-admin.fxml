@@ -30,6 +30,7 @@
             </Label>
 
             <Button text="Registrar User" onAction="#onRegisterClick" fx:id="registerButton" maxWidth="180"/>
+            <Button text="Administrar Pedidos" onAction="#onPedidoClick" fx:id="pedidoButton" maxWidth="180"/>
             <Button text="Administrar Usuarios" onAction="#onUsuariosClick" fx:id="usuariosButton" maxWidth="180"
                     style="-fx-background-color: #2e7d32; -fx-text-fill: white;"/>
             <Button text="Cerrar sesión" onAction="#onLogoutClick" maxWidth="180"
