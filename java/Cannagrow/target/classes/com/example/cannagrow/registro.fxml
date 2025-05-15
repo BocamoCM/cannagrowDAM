@@ -41,12 +41,14 @@
             <PasswordField fx:id="passwordField" maxWidth="250" promptText="Contraseña" style="-fx-background-radius: 10; -fx-padding: 10;" />
 
             <PasswordField fx:id="confirmPasswordField" maxWidth="250" promptText="Confirmar contraseña" style="-fx-background-radius: 10; -fx-padding: 10;" />
+            <TextField fx:id="discordIdField" maxWidth="250" promptText="Discord ID" style="-fx-background-radius: 10; -fx-padding: 10;" />
 
             <DatePicker fx:id="fechaNacimientoPicker" maxWidth="250" promptText="Fecha de nacimiento" style="-fx-background-radius: 10; -fx-padding: 10;" />
 
+            <!-- Corrección del campo Discord -->
+
             <!-- Campos opcionales para Empleado -->
             <TextField fx:id="salarioField" managed="false" maxWidth="250" promptText="Salario" style="-fx-background-radius: 10; -fx-padding: 10;" visible="false" />
-
             <HBox alignment="CENTER" spacing="20">
                 <Button fx:id="registerButton" onAction="#onRegisterClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 10;" text="Registrarse" />
                 <Button onAction="#onRegisterDosClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 10;" text="Atrás" />

@@ -30,6 +30,7 @@ public class RegisterController implements Initializable {
     @FXML private DatePicker fechaNacimientoPicker;
     @FXML private Label registerMessage;
     @FXML private TextField salarioField;
+    @FXML private TextField discordIdField; // Nuevo campo para ID de Discord
 
     // Elementos solo en el segundo FXML
     @FXML private ComboBox<String> tipoUsuarioComboBox;
@@ -152,6 +153,14 @@ public class RegisterController implements Initializable {
                 String password = passwordField.getText();
                 LocalDate fechaNacimiento = fechaNacimientoPicker.getValue();
 
+                // Obtener el ID de Discord (opcional)
+                String discordId = discordIdField != null ? discordIdField.getText().trim() : "";
+
+                // Si está vacío, pasar null para que sea tratado como NULL en la base de datos
+                if (discordId.isEmpty()) {
+                    discordId = null;
+                }
+
                 // Datos específicos según formulario
                 String tipo = isSecondForm && tipoUsuarioComboBox != null ?
                         tipoUsuarioComboBox.getValue() : "Cliente";
@@ -179,10 +188,10 @@ public class RegisterController implements Initializable {
                     if ("Cliente".equals(tipo)) {
                         // Convertir LocalDate a java.sql.Date para registrar cliente
                         Date sqlFechaNacimiento = Date.valueOf(fechaNacimiento);
-                        registroExitoso = usuarioModel.registrarCliente(nombre, email, password, sqlFechaNacimiento);
+                        registroExitoso = usuarioModel.registrarCliente(nombre, email, password, sqlFechaNacimiento, discordId);
                     } else {
                         // Registrar empleado
-                        registroExitoso = usuarioModel.registrarUsuario(nombre, email, password, rol, salario);
+                        registroExitoso = usuarioModel.registrarUsuario(nombre, email, password, rol, salario, discordId);
                     }
                 } catch (Exception e) {
                     System.err.println("Error al registrar usuario: " + e.getMessage());
@@ -251,6 +260,16 @@ public class RegisterController implements Initializable {
         if (fechaNacimientoPicker.getValue().plusYears(18).isAfter(LocalDate.now())) {
             showMessage("Debes ser mayor de 18 años para registrarte", true);
             return false;
+        }
+
+        // Validación opcional para el ID de Discord
+        if (discordIdField != null && !discordIdField.getText().trim().isEmpty()) {
+            String discordId = discordIdField.getText().trim();
+            // Formato básico para Discord ID: nombre#0000 o simplemente el número de ID
+            if (!discordId.matches("^[\\w\\s]+#\\d{4}$") && !discordId.matches("^\\d{17,20}$")) {
+                showMessage("Formato de Discord ID inválido. Use nombre#0000 o ID numérico", true);
+                return false;
+            }
         }
 
         // Validar campos específicos según el formulario

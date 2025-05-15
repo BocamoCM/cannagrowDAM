@@ -223,7 +223,7 @@ public class AdminUsuariosController {
     }
 
     private void cargarDesdeTabla(String tabla) {
-        String query = "SELECT id, nombre, email, fotoPerfilUrl" +
+        String query = "SELECT id, nombre, email, fotoPerfilUrl, discordid" +
                 (tabla.equals("Empleado") ? ", rol, salario" : "") +
                 " FROM " + tabla;
 
@@ -237,6 +237,7 @@ public class AdminUsuariosController {
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setEmail(rs.getString("email"));
                 usuario.setFotoPerfilUrl(rs.getString("fotoPerfilUrl"));
+                usuario.setDiscordId(rs.getString("discordid"));
 
                 if (tabla.equals("Empleado")) {
                     usuario.setRol(rs.getString("rol"));
@@ -291,7 +292,8 @@ public class AdminUsuariosController {
                             usuario.getEmail(),
                             controller.getContrasena(),
                             usuario.getRol(),
-                            usuario.getSalario()
+                            usuario.getSalario(),
+                            usuario.getDiscordId()
                     );
                     if (resultado) {
                         cargarUsuarios();
@@ -303,7 +305,8 @@ public class AdminUsuariosController {
                             usuario.getNombre(),
                             usuario.getEmail(),
                             controller.getContrasena(),
-                            controller.getFechaNacimiento()
+                            controller.getFechaNacimiento(),
+                            usuario.getDiscordId()
                     );
                     if (resultado) {
                         cargarUsuarios();
@@ -360,7 +363,7 @@ public class AdminUsuariosController {
 
     private boolean actualizarUsuario(UsuarioTablaModel usuario, boolean esEmpleado) {
         String tabla = esEmpleado ? "Empleado" : "Cliente";
-        String query = "UPDATE " + tabla + " SET nombre = ?, email = ?, fotoPerfilUrl = ?";
+        String query = "UPDATE " + tabla + " SET nombre = ?, email = ?, fotoPerfilUrl = ?, discordid = ?";
 
         if (esEmpleado) {
             query += ", rol = ?, salario = ?";
@@ -375,12 +378,19 @@ public class AdminUsuariosController {
             stmt.setString(2, usuario.getEmail());
             stmt.setString(3, usuario.getFotoPerfilUrl());
 
-            if (esEmpleado) {
-                stmt.setString(4, usuario.getRol());
-                stmt.setDouble(5, usuario.getSalario());
-                stmt.setInt(6, usuario.getId());
+            // El ID de Discord es opcional
+            if (usuario.getDiscordId() != null && !usuario.getDiscordId().isEmpty()) {
+                stmt.setString(4, usuario.getDiscordId());
             } else {
-                stmt.setInt(4, usuario.getId());
+                stmt.setNull(4, Types.VARCHAR);
+            }
+
+            if (esEmpleado) {
+                stmt.setString(5, usuario.getRol());
+                stmt.setDouble(6, usuario.getSalario());
+                stmt.setInt(7, usuario.getId());
+            } else {
+                stmt.setInt(5, usuario.getId());
             }
 
             int filas = stmt.executeUpdate();
@@ -452,6 +462,7 @@ public class AdminUsuariosController {
         private double salario;
         private String fotoPerfilUrl;
         private boolean esEmpleado;
+        private String discordId;
 
         public int getId() { return id; }
         public void setId(int id) { this.id = id; }
@@ -473,5 +484,8 @@ public class AdminUsuariosController {
 
         public boolean isEsEmpleado() { return esEmpleado; }
         public void setEsEmpleado(boolean esEmpleado) { this.esEmpleado = esEmpleado; }
+
+        public String getDiscordId() { return discordId; }
+        public void setDiscordId(String discordId) { this.discordId = discordId; }
     }
 }
