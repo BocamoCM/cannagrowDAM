@@ -182,6 +182,61 @@ body {
   background-color: #000000;
 }
 
+.instalador {  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+}
+
+.instalador-titulo {
+  text-align: center;
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 1px;
+}
+
+.btn-descarga {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background-color: transparent;
+  color: #00ff90;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid #00ff90;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px rgba(0, 255, 144, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 144, 0.2);
+  animation: descarga-pulse 3s infinite;
+}
+
+.btn-descarga:hover {
+  background-color: #00ff90;
+  color: #000;
+  box-shadow: 0 0 20px #00ff90, 0 0 30px rgba(0, 255, 144, 0.6);
+  text-shadow: none;
+}
+
+@keyframes descarga-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(0, 255, 144, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 144, 0.5);
+  }
+}
+
+
 /* Contacto */
 .contact-section {
   background-color: #47a076;
@@ -200,6 +255,49 @@ body {
   align-items: center;
   height: 100%;
   text-align: center;
+}
+
+.tutorial-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #47a076;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1rem;
+  box-shadow: 0 0 15px #47a076, 0 0 25px rgb(112, 255, 188);
+  animation: pulse 2s infinite;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.tutorial-btn:hover {
+  background-color: #3a8a65;
+  transform: scale(1.05);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    text-shadow: 0 0 5px #47a076, 0 0 10px rgba(114, 137, 218, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 10px #47a076, 0 0 20px rgba(114, 137, 218, 0.8);
+  }
+}
+
+.tutorial-title {
+  color: #47a076;
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  text-shadow:
+    0 0 5px #47a076,
+    0 0 10px rgba(71, 160, 118, 0.6);
+  animation: pulse 3s infinite;
+  margin-top: 2rem;
 }
 
 /* Footer */
