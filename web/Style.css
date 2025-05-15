@@ -29,6 +29,37 @@ body {
   border-radius: 1rem;
 }
 
+.btn-ver-productos {
+  display: inline-block;
+  background-color: #47a076;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #47a076;
+  border-radius: 12px;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 0 12px rgba(71, 160, 118, 0.5);
+  transition: all 0.3s ease;
+  animation: ver-productos-pulse 2.5s infinite;
+}
+
+.btn-ver-productos:hover {
+  background-color: #3a8a65;
+  box-shadow: 0 0 20px #3a8a65, 0 0 30px rgba(71, 160, 118, 0.6);
+}
+
+@keyframes ver-productos-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(71, 160, 118, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(71, 160, 118, 0.5);
+  }
+}
+
 /* Beneficios */
 .icon-circle {
   font-size: 2rem;
