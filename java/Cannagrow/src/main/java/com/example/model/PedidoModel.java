@@ -20,6 +20,15 @@ public class PedidoModel {
         public String getEstado() {
             return estado;
         }
+
+        public static EstadoPedido fromString(String estadoStr) {
+            for (EstadoPedido estado : EstadoPedido.values()) {
+                if (estado.getEstado().equalsIgnoreCase(estadoStr)) {
+                    return estado;
+                }
+            }
+            return null;
+        }
     }
 
     public static class Pedido {
@@ -56,6 +65,13 @@ public class PedidoModel {
         public String getVehiculoMatricula() { return vehiculoMatricula; }
         public boolean isNotificado() { return notificado; }
         public List<DetallePedido> getDetalles() { return detalles; }
+        public void setNotificado(boolean notificado) { this.notificado = notificado; }
+        public void setEmpleadoId(int empleadoId) { this.empleadoId = empleadoId; }
+        public int getEmpleadoId() { return empleadoId; }
+
+        public void setEstado(EstadoPedido estado) {
+            this.estado = estado;
+        }
     }
 
     public static class DetallePedido {

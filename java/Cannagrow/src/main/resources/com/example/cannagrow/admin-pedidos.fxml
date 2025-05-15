@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.cannagrow.AdminPedidosController"
+      spacing="10" style="-fx-background-color: #121212;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Título y filtros -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Administración de Pedidos" style="-fx-font-size: 24px; -fx-text-fill: white;">
+            <font>
+                <Font name="System Bold" size="24"/>
+            </font>
+        </Label>
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <Label text="Filtrar por estado:" style="-fx-text-fill: white;"/>
+        <ComboBox fx:id="filtroEstadoComboBox" prefWidth="150"/>
+
+        <Button fx:id="btnRefrescar" text="Refrescar"
+                style="-fx-background-color: #7cb342; -fx-text-fill: white;"
+                onAction="#onRefrescarClick"/>
+    </HBox>
+
+    <!-- Tabla principal de pedidos -->
+    <TableView fx:id="pedidosTableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="fechaColumn" text="Fecha" prefWidth="150"/>
+            <TableColumn fx:id="clienteColumn" text="Cliente" prefWidth="150"/>
+            <TableColumn fx:id="totalColumn" text="Total" prefWidth="100"/>
+            <TableColumn fx:id="estadoColumn" text="Estado" prefWidth="120"/>
+            <TableColumn fx:id="vehiculoColumn" text="Vehículo" prefWidth="100"/>
+            <TableColumn fx:id="accionesColumn" text="Acciones" prefWidth="180"/>
+        </columns>
+    </TableView>
+
+    <!-- Panel de detalles del pedido (inicialmente oculto) -->
+    <VBox fx:id="detallesPedidoPane" visible="false" spacing="10"
+          style="-fx-background-color: #1f1f1f; -fx-padding: 10;">
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label fx:id="pedidoInfoLabel" style="-fx-font-size: 16px; -fx-text-fill: white;"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="Cerrar detalles" onAction="#onCerrarDetallesClick"
+                    style="-fx-background-color: #d32f2f; -fx-text-fill: white;"/>
+        </HBox>
+
+        <TableView fx:id="detallesTableView" prefHeight="200">
+            <columns>
+                <TableColumn fx:id="productoColumn" text="Producto" prefWidth="200"/>
+                <TableColumn fx:id="cantidadColumn" text="Cantidad" prefWidth="100"/>
+                <TableColumn fx:id="precioColumn" text="Precio Unit." prefWidth="100"/>
+                <TableColumn fx:id="subtotalColumn" text="Subtotal" prefWidth="100"/>
+            </columns>
+        </TableView>
+
+        <!-- Panel para cambiar estado del pedido -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Cambiar estado:" style="-fx-text-fill: white;"/>
+            <ComboBox fx:id="cambioEstadoComboBox" prefWidth="150"/>
+            <Button text="Actualizar estado" fx:id="btnCambiarEstado"
+                    style="-fx-background-color: #7cb342; -fx-text-fill: white;"
+                    onAction="#onCambiarEstadoClick"/>
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Button text="Asignar empleado" fx:id="btnAsignarEmpleado"
+                    style="-fx-background-color: #0288d1; -fx-text-fill: white;"
+                    onAction="#onAsignarEmpleadoClick"/>
+        </HBox>
+    </VBox>
+</VBox>

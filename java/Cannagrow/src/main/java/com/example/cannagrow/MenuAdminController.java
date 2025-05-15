@@ -39,6 +39,8 @@ public class MenuAdminController {
     private Button registerButton;
     @FXML
     private Button logoutButton;
+    @FXML
+    private Button pedidoButton;
 
     @FXML
     public void initialize() {
@@ -217,6 +219,24 @@ public class MenuAdminController {
             mostrarMensaje("Error", "No se pudo acceder al panel de administración.", Alert.AlertType.WARNING);
         }
 
+    }
+
+    @FXML
+    public void onPedidoClick(ActionEvent actionEvent) {
+        try {
+            // Cargar la vista de administración de usuarios
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/admin-pedidos.fxml"));
+            Parent usuariosVista = loader.load();
+
+            // Ocultar la etiqueta de bienvenida
+            bienvenidaLabel.setVisible(false);
+
+            // Mostrar la vista de administración de usuarios en el centro
+            adminBorderPane.setCenter(usuariosVista);
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo cargar la pantalla de administración de usuarios.", Alert.AlertType.WARNING);
+        }
     }
 }
 
