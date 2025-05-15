@@ -47,7 +47,7 @@ body {
   width: 100%;  
 }
 
-/* Style.css (solo estilos para igualar altura) */
+/* Style.css */
 #products .row {
   align-items: stretch;
 }
@@ -113,10 +113,10 @@ body {
     0 0 10px #7289da,
     0 0 15px rgba(114, 137, 218, 0.7),
     0 0 20px rgba(114, 137, 218, 0.5);
-  animation: pulse 3s infinite;
+  animation: comunidad-pulse 3s infinite;
 }
 
-@keyframes pulse {
+@keyframes comunidad-pulse {
   0%, 100% {
     text-shadow:
       0 0 5px #7289da,
@@ -155,7 +155,7 @@ body {
     0 0 10px rgba(114, 137, 218, 0.2),
     inset 0 0 5px rgba(114, 137, 218, 0.2);
   transition: all 0.3s ease;
-  animation: pulse 3s infinite;
+  animation: discord-pulse 3s infinite;
 }
 
 .discord-btn:hover {
@@ -168,7 +168,7 @@ body {
   text-shadow: none;
 }
 
-@keyframes pulse {
+@keyframes discord-pulse {
   0%, 100% {
     text-shadow: 0 0 5px #7289da, 0 0 10px rgba(114, 137, 218, 0.5);
   }
@@ -277,7 +277,7 @@ body {
   transform: scale(1.05);
 }
 
-@keyframes pulse {
+@keyframes tutorial-pulse {
   0%, 100% {
     text-shadow: 0 0 5px #47a076, 0 0 10px rgba(114, 137, 218, 0.5);
   }
@@ -296,7 +296,7 @@ body {
   text-shadow:
     0 0 5px #47a076,
     0 0 10px rgba(71, 160, 118, 0.6);
-  animation: pulse 3s infinite;
+  animation: tutorial-pulse 3s infinite;
   margin-top: 2rem;
 }
 
