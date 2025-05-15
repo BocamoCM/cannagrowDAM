@@ -99,6 +99,40 @@ body {
   align-items: center;
 }
 
+.comunidad-text {
+  text-align: center;
+  color: #7289da;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 2rem 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  text-shadow:
+    0 0 5px #7289da,
+    0 0 10px #7289da,
+    0 0 15px rgba(114, 137, 218, 0.7),
+    0 0 20px rgba(114, 137, 218, 0.5);
+  animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 5px #7289da,
+      0 0 10px #7289da,
+      0 0 15px rgba(114, 137, 218, 0.7),
+      0 0 20px rgba(114, 137, 218, 0.5);
+  }
+  50% {
+    text-shadow:
+      0 0 10px #7289da,
+      0 0 20px #7289da,
+      0 0 30px rgba(114, 137, 218, 0.8),
+      0 0 40px rgba(114, 137, 218, 0.6);
+  }
+}
+
 /* Instalador App */
 .app-installer-section {
   background-color: #000000;
