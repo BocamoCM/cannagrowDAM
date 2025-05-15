@@ -92,6 +92,13 @@ body {
   transform: translateX(0);
 }
 
+/* Comunidad */
+.comunidad {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Instalador App */
 .app-installer-section {
   background-color: #000000;

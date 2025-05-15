@@ -22,7 +22,9 @@ CREATE TABLE Cliente (
     email VARCHAR(100) UNIQUE NOT NULL,
     direccion VARCHAR(255) NOT NULL,
     contrasena_hash CHAR(60) NOT NULL,
-    imagen_cliente VARCHAR(255)
+    usuario_id int,
+    discordid varchar(255),
+    fotoPerfilUrl VARCHAR(255)
 );
 
 -- Tabla Empleado
@@ -33,7 +35,7 @@ CREATE TABLE Empleado (
     email VARCHAR(100) UNIQUE NOT NULL,
     salario FLOAT NOT NULL,
     contrasena_hash CHAR(60) NOT NULL,
-    imagen_empleado VARCHAR(255)
+    FotoPerfilUrl VARCHAR(255)
 );
 
 -- Tabla Vehiculo (debe ir antes que Pedido)
