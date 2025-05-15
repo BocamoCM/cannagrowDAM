@@ -1,44 +1,29 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.1.1 Chrome/132.0.6834.210 Electron/34.3.3 Safari/537.36" version="26.1.1">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.2 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.2">
   <diagram name="Página-1" id="gi0N5ZV0rk2WKtdGokFU">
-    <mxGraphModel dx="1290" dy="621" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1546" dy="2915" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="OSo333r_8WSZKT-N2uYB-1" value="Producto" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="60" y="160" width="220" height="210" as="geometry" />
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OSo333r_8WSZKT-N2uYB-1" target="SSu75UD_Ex_s4T2fILEc-3">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-2" value="id_producto (int)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-1" vertex="1">
-          <mxGeometry y="30" width="220" height="30" as="geometry" />
+        <mxCell id="OSo333r_8WSZKT-N2uYB-1" value="Carrito Model" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="320" y="-420" width="550" height="260" as="geometry" />
         </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-3" value="nombre_producto (String)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-1" vertex="1">
-          <mxGeometry y="60" width="220" height="30" as="geometry" />
+        <mxCell id="OSo333r_8WSZKT-N2uYB-2" value="&lt;code data-end=&quot;224&quot; data-start=&quot;179&quot;&gt;private static Map&amp;lt;Producto, Integer&amp;gt; items&lt;/code&gt; – Mapa que guarda productos y cantidades" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-1" vertex="1">
+          <mxGeometry y="30" width="550" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-4" value="precio (Double)&lt;div&gt;stock (int)&lt;/div&gt;&lt;div&gt;contenidoTHC (Double)&lt;/div&gt;&lt;div&gt;contenidoCBD(Double)&lt;/div&gt;&lt;div&gt;+ actualizarStock(cantidad: int): void&lt;/div&gt;&lt;div&gt;+ calcularPrecioConImpuesto(): float&amp;nbsp;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-1" vertex="1">
-          <mxGeometry y="90" width="220" height="120" as="geometry" />
+        <mxCell id="OSo333r_8WSZKT-N2uYB-3" value="&lt;code data-end=&quot;297&quot; data-start=&quot;269&quot;&gt;private static float total&lt;/code&gt; – Total del carrito." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-1" vertex="1">
+          <mxGeometry y="60" width="550" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-5" value="Cliente" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="300" y="160" width="220" height="220" as="geometry" />
+        <mxCell id="OSo333r_8WSZKT-N2uYB-4" value="public static boolean agregarProducto(Producto producto, int cantidad)&lt;div&gt;public static void eliminarProducto(Producto producto)&lt;/div&gt;&lt;div&gt;public static boolean actualizarCantidad(Producto producto, int cantidad)&lt;/div&gt;&lt;div&gt;public static List&amp;lt;ItemCarrito&amp;gt; getItems()&lt;/div&gt;&lt;div&gt;public static boolean crearPedidoDesdeCarrito(int clienteId, String vehiculoMatricula)&lt;/div&gt;&lt;div&gt;private static void calcularTotal()&lt;/div&gt;&lt;div&gt;public static float getTotal()&lt;/div&gt;&lt;div&gt;public static void vaciarCarrito()&lt;/div&gt;&lt;div&gt;public static boolean estaVacio()&amp;nbsp;&lt;/div&gt;&lt;div&gt;public static int getNumeroItems()&lt;/div&gt;&lt;div&gt;public static int getCantidadTotal()&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-1" vertex="1">
+          <mxGeometry y="90" width="550" height="170" as="geometry" />
         </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-6" value="id_cliente (int)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-5" vertex="1">
-          <mxGeometry y="30" width="220" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-7" value="nombre_cliente (String)&lt;div&gt;contrasena(String)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-5" vertex="1">
-          <mxGeometry y="70" width="220" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-8" value="fechaNacimiento (Date)&lt;div&gt;email (String)&lt;/div&gt;&lt;div&gt;direccion (String)&lt;/div&gt;&lt;div&gt;+ verificarEdad(boolean)&lt;/div&gt;&lt;div&gt;+ realizatPedido(pedido: Pedido) void&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-5" vertex="1">
-          <mxGeometry y="100" width="220" height="120" as="geometry" />
-        </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-9" value="Empleado" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="60" y="400" width="220" height="180" as="geometry" />
-        </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-10" value="id_empleado (int)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-9" vertex="1">
-          <mxGeometry y="30" width="220" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-11" value="nombre_empleado (String)&lt;div&gt;Contrasena(String)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-9" vertex="1">
-          <mxGeometry y="60" width="220" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="OSo333r_8WSZKT-N2uYB-12" value="rol(enum) (Vendedor, Cultivador, Gerente)&lt;div&gt;email: String&lt;/div&gt;&lt;div&gt;salario: double&lt;/div&gt;&lt;div&gt;+ calcularSalarioMensual(float)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-9" vertex="1">
-          <mxGeometry y="90" width="220" height="90" as="geometry" />
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-1" value="" style="endArrow=none;html=1;rounded=0;exitX=0;exitY=1.023;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.001;entryY=0.004;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="OSo333r_8WSZKT-N2uYB-1" source="OSo333r_8WSZKT-N2uYB-3" target="OSo333r_8WSZKT-N2uYB-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-160" y="370" as="sourcePoint" />
+            <mxPoint x="-70" y="60" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="OSo333r_8WSZKT-N2uYB-13" value="Pedido" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="304" y="400" width="330" height="180" as="geometry" />
@@ -75,6 +60,54 @@
         </mxCell>
         <mxCell id="OSo333r_8WSZKT-N2uYB-24" value="+ cumple(producto: id_producto) boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="OSo333r_8WSZKT-N2uYB-21" vertex="1">
           <mxGeometry y="90" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-2" value="ItemCarrito" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="-370" width="550" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-3" value="private Producto producto&lt;div&gt;private int cantidad&lt;/div&gt;&lt;div&gt;private float subtotal&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="SSu75UD_Ex_s4T2fILEc-2">
+          <mxGeometry y="30" width="550" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-5" value="&lt;div&gt;public ItemCarrito(Producto producto, int cantidad, float subtotal)&lt;/div&gt;&lt;div&gt;public Producto getProducto()&lt;/div&gt;&lt;div&gt;public int getCantidad()&lt;/div&gt;&lt;div&gt;public float getSubtotal()&lt;/div&gt;&lt;div&gt;public void setCantidad(int cantidad)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="SSu75UD_Ex_s4T2fILEc-2">
+          <mxGeometry y="90" width="550" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-6" value="" style="endArrow=none;html=1;rounded=0;exitX=0;exitY=1.023;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.001;entryY=0.004;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="SSu75UD_Ex_s4T2fILEc-2" target="SSu75UD_Ex_s4T2fILEc-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint y="90.68999999999983" as="sourcePoint" />
+            <mxPoint x="-70" y="60" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="SSu75UD_Ex_s4T2fILEc-7" target="OSo333r_8WSZKT-N2uYB-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-7" value="Producto Model" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="-580" width="550" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-8" value="public static List&amp;lt;Producto&amp;gt; obtenerTodos()&lt;div&gt;public static List&amp;lt;Producto&amp;gt; obtenerPorTipo(String tipo)&lt;/div&gt;&lt;div&gt;public static List&amp;lt;String&amp;gt; obtenerTiposDisponibles()&lt;/div&gt;&lt;div&gt;public static List&amp;lt;Producto&amp;gt; buscarPorNombre(String termino)&lt;/div&gt;&lt;div&gt;public static Producto obtenerPorId(int id)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="SSu75UD_Ex_s4T2fILEc-7">
+          <mxGeometry y="30" width="550" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-11" value="" style="endArrow=none;html=1;rounded=0;exitX=-0.006;exitY=0.994;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.001;entryY=0.004;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="SSu75UD_Ex_s4T2fILEc-7" source="SSu75UD_Ex_s4T2fILEc-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint y="90.69000000000005" as="sourcePoint" />
+            <mxPoint x="550.55" y="111.40000000000009" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="SSu75UD_Ex_s4T2fILEc-12" target="SSu75UD_Ex_s4T2fILEc-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-12" value="Usuario Model" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="-930" width="550" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-14" value="private String nombre&lt;div&gt;private String email&lt;/div&gt;&lt;div&gt;private String rol&lt;/div&gt;&lt;div&gt;private double salario&lt;/div&gt;&lt;div&gt;private int id&lt;/div&gt;&lt;div&gt;private String fotoPerfilUrl&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="SSu75UD_Ex_s4T2fILEc-12">
+          <mxGeometry y="30" width="550" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-15" value="&lt;div&gt;public UsuarioModel autenticarUsuario(String nombre, String contrasena)&lt;/div&gt;&lt;div&gt;private UsuarioModel autenticarDesdeTabla(String tabla, String nombre, String contrasena)&lt;/div&gt;&lt;div&gt;public boolean registrarUsuario(String nombre, String email, String contrasena, String rol, double salario)&lt;/div&gt;&lt;div&gt;public boolean registrarCliente(String nombre, String email, String contrasena, Date fechaNacimiento)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="SSu75UD_Ex_s4T2fILEc-12">
+          <mxGeometry y="120" width="550" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="SSu75UD_Ex_s4T2fILEc-16" value="" style="endArrow=none;html=1;rounded=0;exitX=0;exitY=1.023;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1.001;entryY=0.004;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="SSu75UD_Ex_s4T2fILEc-12" source="SSu75UD_Ex_s4T2fILEc-14" target="SSu75UD_Ex_s4T2fILEc-15">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-160" y="370" as="sourcePoint" />
+            <mxPoint x="-70" y="60" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
