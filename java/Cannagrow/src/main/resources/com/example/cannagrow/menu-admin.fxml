@@ -1,54 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Circle?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:id="adminBorderPane"
-            fx:controller="com.example.cannagrow.MenuAdminController"
-            prefWidth="800" prefHeight="600"
-            style="-fx-background-color: #121212;">
-
+            fx:controller="com.example.cannagrow.MenuController"
+            stylesheets="@estilo.css"
+            prefWidth="1000" prefHeight="700"
+            styleClass="root">
 
     <!-- MENÚ LATERAL -->
     <left>
-        <VBox spacing="15" style="-fx-background-color: #1f1f1f;" prefWidth="200" alignment="TOP_CENTER">
+        <VBox spacing="20" alignment="TOP_CENTER" prefWidth="220" styleClass="panel">
             <padding>
-                <Insets top="20" left="10" right="10" bottom="10"/>
+                <Insets top="30" left="15" right="15" bottom="20"/>
             </padding>
 
-            <ImageView fx:id="logoImage" fitWidth="150" preserveRatio="true"/>
+            <!-- Imagen de perfil -->
+            <ImageView fx:id="perfilImage" fitWidth="120" preserveRatio="true">
+                <clip>
+                    <Circle centerX="60" centerY="60" radius="60"/>
+                </clip>
+            </ImageView>
 
-            <Label text="CannaGrow" textFill="white">
-                <font>
-                    <Font name="Arial Black" size="20"/>
-                </font>
-            </Label>
+            <!-- Texto de bienvenida -->
+            <Label text="Bienvenido, admin (Gerente)" textFill="white" wrapText="true"
+                   style="-fx-font-size: 14px; -fx-text-alignment: center;"/>
 
-            <Button text="Registrar User" onAction="#onRegisterClick" fx:id="registerButton" maxWidth="180"/>
-            <Button text="Administrar Pedidos" onAction="#onPedidoClick" fx:id="pedidoButton" maxWidth="180"/>
-            <Button text="Administrar Usuarios" onAction="#onUsuariosClick" fx:id="usuariosButton" maxWidth="180"
-                    style="-fx-background-color: #2e7d32; -fx-text-fill: white;"/>
-            <Button text="Cerrar sesión" onAction="#onLogoutClick" maxWidth="180"
-                    style="-fx-background-color: #d32f2f; -fx-text-fill: white;"
-                    fx:id="logoutButton"/>
-            <Button text="Volver" onAction="#onInicioClick" maxWidth="180"
-                    style="-fx-background-color: #d32f2f; -fx-text-fill: white;"
-                    fx:id="IniciotButton"/>
+            <!-- Nombre de la app -->
+            <Label text="CannaGrow" styleClass="label-titulo" />
 
+            <!-- Menú de navegación -->
+            <VBox spacing="10" alignment="CENTER">
+                <Button text="Inicio" fx:id="inicioButton" onAction="#onInicioClick"
+                        style="-fx-background-color: #7bb045; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" />
 
+                <Button text="Productos" fx:id="productosButton" onAction="#onProductosClick"
+                        style="-fx-background-color: #555555; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" />
+
+                <Button text="Carrito" fx:id="carritoButton" onAction="#onCarritoClick"
+                        style="-fx-background-color: #555555; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" />
+
+                <Button text="Pedidos" fx:id="pedidosButton" onAction="#onPedidosClick"
+                        style="-fx-background-color: #555555; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" />
+
+                <Button text="Cerrar sesión" fx:id="logoutButton" onAction="#onLogoutClick"
+                        style="-fx-background-color: #d32f2f; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" />
+
+                <Button text="Administrador" fx:id="adminButton" onAction="#onAdminClick"
+                        style="-fx-background-color: #d32f2f; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" />
+            </VBox>
         </VBox>
     </left>
 
     <!-- CONTENIDO CENTRAL -->
     <center>
-        <Label text="Bienvenido al panel de administración de CannaGrow"
-               textFill="white"
-               style="-fx-font-size: 24px;"
-               fx:id="bienvenidaLabel"/>
+        <VBox spacing="25" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="40" left="20" right="20" bottom="20"/>
+            </padding>
+
+            <!-- Bienvenida -->
+            <VBox styleClass="panel" maxWidth="700" spacing="15">
+                <Label text="Bienvenido a CannaGrow" styleClass="label-titulo"/>
+                <Label text="Explora nuestro amplio catálogo de productos para el cultivo y consumo responsable de cannabis. Desde semillas y fertilizantes hasta productos con CBD, ofrecemos soluciones para cultivadores novatos y expertos. ¡Calidad, discreción y servicio profesional garantizados!"
+                       styleClass="label-descripcion" wrapText="true" maxWidth="680"/>
+            </VBox>
+
+            <!-- Sección de categorías -->
+            <VBox alignment="TOP_CENTER" maxWidth="1000" spacing="10">
+                <Label text="Categorías Destacadas" styleClass="label-seccion"/>
+                <FlowPane fx:id="contenedorCategorias" alignment="CENTER" hgap="25" vgap="25" prefWrapLength="900">
+                    <padding>
+                        <Insets top="10" bottom="10" left="10" right="10"/>
+                    </padding>
+                </FlowPane>
+            </VBox>
+        </VBox>
     </center>
 </BorderPane>

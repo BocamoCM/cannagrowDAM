@@ -77,6 +77,7 @@
 
             <Button text="Asignar empleado" fx:id="btnAsignarEmpleado"
                     style="-fx-background-color: #0288d1; -fx-text-fill: white;"
+                    userData="123"
                     onAction="#onAsignarEmpleadoClick"/>
         </HBox>
     </VBox>

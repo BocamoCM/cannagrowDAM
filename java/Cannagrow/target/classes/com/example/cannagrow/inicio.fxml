@@ -9,7 +9,7 @@
 
 <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #121212;"
             xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
+            xmlns:fx="http://javaafx.com/fxml/1"
             fx:controller="com.example.cannagrow.InicioController">
     <content>
         <VBox alignment="TOP_CENTER" maxWidth="9999" spacing="30" style="-fx-background-color: #121212;">
