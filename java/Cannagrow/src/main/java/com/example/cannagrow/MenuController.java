@@ -52,70 +52,140 @@ public class MenuController {
 
     @FXML
     public void initialize() {
-        cargarnombre();
         System.out.println("Iniciando inicialización de MenuController...");
+
+        // Verificar componentes clave antes de continuar
+        boolean componentesValidos = verificarComponentesIU();
+        if (!componentesValidos) {
+            System.err.println("Algunos componentes de la UI no están disponibles. La inicialización será parcial.");
+            // No salir del método para permitir inicialización parcial
+        }
+
+        // Cargar datos del usuario actual
+        UsuarioModel usuario = Session.getUsuarioActual();
+        if (usuario != null) {
+            // Cargar nombre de usuario si el componente está disponible
+            cargarnombre();
+
+            // Cargar foto de perfil si el componente está disponible
+            cargarFotoPerfil();
+
+            // Actualizar contador del carrito si está disponible
+            if (carritoButton != null) {
+                actualizarContadorCarrito();
+            }
+
+            // Configurar visibilidad de botones según el rol
+            configurarBotonesPorRol(usuario);
+        } else {
+            System.out.println("No hay usuario logueado");
+            ocultarBotonesUsuarioNoLogueado();
+        }
+
+        // Cargar la vista de inicio
+        cargarVistaInicio();
+
+        System.out.println("Inicialización de MenuController completada");
+    }
+
+    /**
+     * Verifica que los componentes críticos de la UI existan
+     */
+    private boolean verificarComponentesIU() {
+        boolean todosDisponibles = true;
+
+        if (rootPane == null) {
+            System.err.println("ERROR: rootPane es null");
+            todosDisponibles = false;
+        }
+
+        if (userText == null) {
+            System.err.println("ERROR: userText es null");
+            todosDisponibles = false;
+        }
 
         if (logoImage == null) {
             System.err.println("ERROR: logoImage es null");
+            todosDisponibles = false;
         }
 
-        UsuarioModel usuario = Session.getUsuarioActual();
+        return todosDisponibles;
+    }
 
-        cargarFotoPerfil();
-        actualizarContadorCarrito();
+    /**
+     * Configura la visibilidad de los botones según el rol del usuario
+     */
+    private void configurarBotonesPorRol(UsuarioModel usuario) {
+        if (usuario == null) return;
 
-        if (usuario != null) {
-            String rol = (usuario.getRol() != null) ? usuario.getRol().toLowerCase() : "cliente";
-            String tipoUsuario = capitalizar(rol);
-            System.out.println("Usuario actual: " + tipoUsuario);
+        String rol = (usuario.getRol() != null) ? usuario.getRol().toLowerCase() : "cliente";
+        String tipoUsuario = capitalizar(rol);
+        System.out.println("Usuario actual: " + tipoUsuario);
+
+        // Solo actualizar el texto si el componente existe
+        if (userText != null) {
             userText.setText("Bienvenido, " + usuario.getNombre() + " (" + tipoUsuario + ")");
+        }
 
-            if (rol.equals("cliente")) {
+        // Asegurarse de que todos los botones existen antes de manipularlos
+        if (carritoButton == null || pedidosButton == null ||
+                productosButton == null || adminButton == null) {
+            System.err.println("Algunos botones no están disponibles en esta vista");
+            return;
+        }
+
+        // Configurar botones según el rol
+        switch (rol) {
+            case "cliente":
                 carritoButton.setVisible(true);
                 pedidosButton.setVisible(true);
                 productosButton.setVisible(true);
                 adminButton.setVisible(false);
-            } else {
-                switch (rol) {
-                    case "gerente":
-                        carritoButton.setVisible(true);
-                        pedidosButton.setVisible(true);
-                        productosButton.setVisible(true);
-                        adminButton.setVisible(true);
-                        break;
-                    case "vendedor":
-                        carritoButton.setVisible(false);
-                        pedidosButton.setVisible(true);
-                        productosButton.setVisible(true);
-                        adminButton.setVisible(false);
-                        break;
-                    default:
-                        carritoButton.setVisible(true);
-                        pedidosButton.setVisible(false);
-                        productosButton.setVisible(true);
-                        adminButton.setVisible(false);
-                        break;
-                }
-            }
-        } else {
-            System.out.println("No hay usuario logueado");
-            carritoButton.setVisible(false);
-            pedidosButton.setVisible(false);
-            adminButton.setVisible(false);
+                break;
+            case "gerente":
+                carritoButton.setVisible(true);
+                pedidosButton.setVisible(true);
+                productosButton.setVisible(true);
+                adminButton.setVisible(true);
+                break;
+            case "vendedor":
+                carritoButton.setVisible(false);
+                pedidosButton.setVisible(true);
+                productosButton.setVisible(true);
+                adminButton.setVisible(false);
+                break;
+            default:
+                carritoButton.setVisible(true);
+                pedidosButton.setVisible(false);
+                productosButton.setVisible(true);
+                adminButton.setVisible(false);
+                break;
         }
+    }
 
+    /**
+     * Oculta botones cuando el usuario no está logueado
+     */
+    private void ocultarBotonesUsuarioNoLogueado() {
+        if (carritoButton != null) carritoButton.setVisible(false);
+        if (pedidosButton != null) pedidosButton.setVisible(false);
+        if (adminButton != null) adminButton.setVisible(false);
+    }
+
+    /**
+     * Método para cargar la vista de inicio usando cache para evitar recargas
+     */
+    private void cargarVistaInicio() {
         try {
             if (rootPane != null) {
                 rootPane.setCenter(cargarInicioConCache());
             } else {
-                System.err.println("ERROR: rootPane es null");
+                System.err.println("ERROR: rootPane es null, no se puede cargar la vista de inicio");
             }
         } catch (IOException e) {
             System.err.println("Error cargando la vista de inicio: " + e.getMessage());
             e.printStackTrace();
         }
-
-        System.out.println("Inicialización de MenuController completada");
     }
 
     /**
@@ -161,14 +231,27 @@ public class MenuController {
 
             String nombre_actual = usuario.getNombre();
             System.out.println("Nombre obtenido: " + nombre_actual);
-            userText.setText(nombre_actual);
+
+            // Verificar que el componente existe antes de manipularlo
+            if (userText != null) {
+                userText.setText(nombre_actual);
+            } else {
+                System.err.println("ERROR: No se puede establecer el nombre de usuario porque userText es null");
+            }
         } catch (Exception e) {
+            System.err.println("Error al cargar el nombre de usuario: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void cargarFotoPerfil() {
         try {
+            // Verificar que el componente existe antes de manipularlo
+            if (logoImage == null) {
+                System.err.println("ERROR: No se puede cargar la foto de perfil porque logoImage es null");
+                return;
+            }
+
             UsuarioModel usuario = Session.getUsuarioActual();
 
             if (usuario != null && usuario.getFotoPerfilUrl() != null && !usuario.getFotoPerfilUrl().isEmpty()) {
@@ -210,6 +293,12 @@ public class MenuController {
 
     private void cargarLogoPorDefecto() {
         try {
+            // Verificar que el componente existe antes de manipularlo
+            if (logoImage == null) {
+                System.err.println("ERROR: No se puede cargar el logo por defecto porque logoImage es null");
+                return;
+            }
+
             String logoPath = "/com/example/cannagrow/img/perfil_cliente.png";
             System.out.println("Cargando logo por defecto desde: " + logoPath);
 
@@ -244,7 +333,11 @@ public class MenuController {
     private void onInicioClick(javafx.event.ActionEvent event) {
         try {
             resetearBotonesMenu();
-            inicioButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+
+            // Verificar que el botón existe antes de manipularlo
+            if (inicioButton != null) {
+                inicioButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+            }
 
             if (rootPane != null) {
                 rootPane.setCenter(cargarInicioConCache());
@@ -269,7 +362,11 @@ public class MenuController {
     public void onProductosClick() {
         try {
             resetearBotonesMenu();
-            productosButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+
+            // Verificar que el botón existe antes de manipularlo
+            if (productosButton != null) {
+                productosButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+            }
 
             // Si quieres cachear productos, descomenta y usa este bloque
             // if (productosPaneCache == null) {
@@ -305,7 +402,11 @@ public class MenuController {
             }
 
             resetearBotonesMenu();
-            carritoButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+
+            // Verificar que el botón existe antes de manipularlo
+            if (carritoButton != null) {
+                carritoButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+            }
 
             // Cache carrito similar:
             // if (carritoPaneCache == null) {
@@ -330,7 +431,11 @@ public class MenuController {
     private void onPedidosClick() {
         try {
             resetearBotonesMenu();
-            inicioButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+
+            // Verificar que el botón existe antes de manipularlo
+            if (inicioButton != null) {
+                inicioButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+            }
 
             // Cache pedidos similar:
             // if (pedidosPaneCache == null) {
@@ -356,8 +461,12 @@ public class MenuController {
         try {
             Session.cerrarSesion();
             // Dependiendo de tu implementación, redirige a login o cierra la app
-            Stage stage = (Stage) logoutButton.getScene().getWindow();
-            stage.close();
+            if (logoutButton != null) {
+                Stage stage = (Stage) logoutButton.getScene().getWindow();
+                stage.close();
+            } else {
+                System.err.println("ERROR: No se puede hacer logout porque logoutButton es null");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             mostrarMensaje("Error", "Error al cerrar sesión.");
@@ -377,22 +486,65 @@ public class MenuController {
         alert.showAndWait();
     }
 
+
     @FXML
     private void onAdminClick(ActionEvent event) {
         try {
-            // Cargar el nuevo archivo FXML
-            Parent root = FXMLLoader.load(getClass().getResource("menu-admin.fxml"));
+            // Verificar que el evento no es null
+            if (event == null || event.getSource() == null) {
+                System.err.println("ERROR: Evento o fuente del evento es null en onAdminClick");
+                mostrarMensaje("Error", "No se pudo cargar la vista de administración.");
+                return;
+            }
+
+            // Cargar el nuevo archivo FXML de administración
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/menu-admin.fxml"));
+            Parent root = loader.load();
 
             // Obtener la ventana actual (Stage)
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Establecer la nueva escena
-            stage.setScene(new Scene(root));
+            // Crear una nueva escena con el panel de administración
+            Scene scene = new Scene(root);
+
+            // Reemplazar completamente la escena actual
+            stage.setScene(scene);
             stage.show();
+
+            System.out.println("Panel de administración cargado correctamente como nueva escena");
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarMensaje("Error", "No se pudo cargar la vista de administración: " + e.getMessage());
+        }
+    }
+    /**
+     * Carga el panel de administración como centro del BorderPane actual
+     * en lugar de reemplazar toda la escena
+     */
+    private void loadAdminPanelInCurrentScene() {
+        try {
+            if (rootPane == null) {
+                mostrarMensaje("Error", "No se puede cargar el panel de administración: BorderPane no encontrado.");
+                return;
+            }
+
+            // Cargar el contenido del panel de administración
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/menu-admin.fxml"));
+            Parent adminPanel = loader.load();
+
+            // Configurar el panel en el centro del BorderPane actual
+            rootPane.setCenter(adminPanel);
+
+            // Destacar el botón de admin
+            resetearBotonesMenu();
+            if (adminButton != null) {
+                adminButton.setStyle("-fx-background-color: #7cb342; -fx-text-fill: white;");
+            }
+
+            System.out.println("Panel de administración cargado correctamente en la escena actual");
         } catch (IOException e) {
             e.printStackTrace();
-            // Opcional: Mostrar un mensaje de error
+            mostrarMensaje("Error", "No se pudo cargar el contenido del panel de administración: " + e.getMessage());
         }
     }
 }
-
