@@ -23,7 +23,7 @@
                     <ImageView fx:id="carritoVacioIcon" fitWidth="100" fitHeight="100" preserveRatio="true">
                         <!-- Intentamos cargar la imagen directamente desde FXML como fallback -->
                         <image>
-                            <Image url="@images/carrito_vacio.png" />
+                            <Image url="@images/carrito_vacio2.png" />
                         </image>
                     </ImageView>
 
