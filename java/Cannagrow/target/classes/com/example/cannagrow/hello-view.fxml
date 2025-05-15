@@ -43,6 +43,6 @@
       <Font name="Arial" size="12" />
     </font>
   </Label>
-   <TextField alignment="CENTER" text="¿No tienes una cuenta?" />
+   <Label alignment="CENTER" text="¿No tienes una cuenta?" />
    <Button layoutX="135.0" layoutY="316.0" maxWidth="150" onAction="#onRegistrarseClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 10;" text="Registrarse" />
 </VBox>
