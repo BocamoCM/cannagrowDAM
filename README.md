@@ -47,20 +47,24 @@ Ofrecer a nuestros clientes productos de la más alta calidad para el cultivo y 
    Soporte especializado para ayudarte a resolver cualquier duda técnica o legal.
 3. **Envío Discreto y Seguro**  
    Empaques opacos y envío con seguimiento para tu total privacidad.
+   El envío te es 100% seguro ja que el envío lo hacen nuestros repartidores de nuestra misma empresa lo que nos garantiza un 100% de privacidad en tus datos ja que tus datos no pasan a terceros para el envío y de seguridad de llegada por que garantizamos el envío hasta la puerta de tu casa.
 
 ---
 
-**Visítanos** en nuestra tienda física o explora nuestro catálogo online y descubre todos los productos que necesitas para tu proyecto de cultivo o consumo de cannabis de forma 100% legal.
+**Visítanos** en nuestra tienda física o explora nuestro catálogo online y descubre todos los productos que necesitas para tu proyecto de cultivo o consumo de cannabis de forma 100% legal y segura.
 
 ---
 
 ### ¿Cómo se compra?
 
 1. **Web**  
-    En nuestra web podrás ver los beneficios del **CBD**, información sobre nuestros productos, tutoriales y videotutoriales de cómo funciona nuestra aplicación. También podrás descargarte el ejecutable de nuestra aplicación o contactarnos, y te ayudaremos en lo imposible si es posible.
+    En nuestra web podrás ver los beneficios del **CBD**, información sobre nuestros productos, tutoriales y videotutoriales de cómo funciona nuestra aplicación, podras tambien entrar a nuestra comunidad de Discord. También podrás descargarte el ejecutable de nuestra aplicación o contactarnos, y te ayudaremos en todo lo que podamos y un poco más de lo que podamos, si es que eso es posible. Y harémos todo lo posible e incluso lo imposible, si es que lo imposible es posible.
 
 2. **APP**  
-    Una vez en nuestra aplicación, solo tendrás que iniciar sesión y comprar.
+    Una vez en nuestra aplicación, solo tendrás que iniciar sesión y comprar. Gracias de nuestra funcion de carrito y poder ver todos nuestro productos en el apartado de productos.
+   
+3. **Comunidad Discord**
+   En nuestra Comunidad podras preguntar todo lo que quieras y te responderan la gente de nuestra comunidad podra responderte y tambien nuestros moduladores que estan para poder contestarte a todas las dudas. Tambien 
 
 ---
 ### 🚀 Tecnología utilizada
