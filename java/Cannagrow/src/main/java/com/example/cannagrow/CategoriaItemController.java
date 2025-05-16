@@ -8,12 +8,22 @@ import javafx.scene.image.ImageView;
 
 import java.io.InputStream;
 
+/**
+ * Controlador para los elementos de categoría en la interfaz gráfica.
+ * Maneja la visualización de categorías con su nombre e imagen correspondiente.
+ */
 public class CategoriaItemController {
     @FXML
     private ImageView imageView;
     @FXML
     private Label nombreLabel;
 
+    /**
+     * Establece los datos de la categoría en los componentes de la interfaz.
+     * Actualiza el nombre y carga la imagen asociada a la categoría.
+     *
+     * @param categoria La categoría cuyos datos serán mostrados en la interfaz
+     */
     public void setCategoria(Categoria categoria) {
         System.out.println("setCategoria llamado con: " + categoria.getNombre());
 
@@ -23,6 +33,13 @@ public class CategoriaItemController {
         cargarImagen(categoria.getImageUrl());
     }
 
+    /**
+     * Intenta cargar una imagen desde la ruta especificada.
+     * Si no se encuentra en la ruta principal, prueba con rutas alternativas.
+     * Si ninguna ruta funciona, carga una imagen genérica.
+     *
+     * @param imagePath La ruta de la imagen a cargar
+     */
     private void cargarImagen(String imagePath) {
         System.out.println("Intentando cargar imagen desde: " + imagePath);
 
@@ -68,6 +85,11 @@ public class CategoriaItemController {
         }
     }
 
+    /**
+     * Carga una imagen genérica o placeholder cuando no se puede cargar
+     * la imagen original de la categoría.
+     * Intenta múltiples rutas de imágenes de placeholder predefinidas.
+     */
     private void cargarImagenGenerica() {
         try {
             // Intentar cargar una imagen de placeholder

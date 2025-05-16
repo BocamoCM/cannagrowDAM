@@ -1,0 +1,62 @@
+/* Fondo general de la aplicación */
+.root {
+    -fx-background-color: #121212;
+    -fx-font-family: "Arial";
+}
+
+/* Paneles o secciones internas */
+.panel {
+    -fx-background-color: #1f1f1f;
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+}
+
+/* Etiquetas principales (títulos grandes) */
+.label-titulo {
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+/* Etiquetas secundarias (descripciones) */
+.label-descripcion {
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 15px;
+}
+
+/* Etiquetas de secciones */
+.label-seccion {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+/* Botones estilo verde */
+.boton-verde {
+    -fx-background-color: #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-max-width: 180;
+}
+
+/* Botones estilo rojo */
+.boton-rojo {
+    -fx-background-color: #d32f2f;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-max-width: 180;
+}
+
+/* Estilo general para todos los botones */
+.button {
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+}
+
+/* ScrollPane sin bordes visibles */
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}

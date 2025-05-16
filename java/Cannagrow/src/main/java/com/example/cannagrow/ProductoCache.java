@@ -5,6 +5,9 @@ import com.example.model.Producto;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Controlador para  optimizar el rendimiento en la visualización del catálogo de productos.
+ */
 public class ProductoCache {
 
     // Mapa concurrente para evitar problemas en acceso concurrente

@@ -17,6 +17,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Controlador para la pantalla de inicio de sesión.
+ * Gestiona la autenticación de usuarios y la navegación a otras pantallas.
+ */
 public class LoginController {
 
     @FXML
@@ -33,6 +37,10 @@ public class LoginController {
 
     private final UsuarioModel usuarioModel = new UsuarioModel();
 
+    /**
+     * Inicializa los componentes de la pantalla de login.
+     * Carga la imagen del logo de la aplicación.
+     */
     @FXML
     public void initialize() {
         try {
@@ -44,6 +52,11 @@ public class LoginController {
         }
     }
 
+    /**
+     * Maneja el evento de clic en el botón de inicio de sesión.
+     * Valida las credenciales del usuario y, si son correctas,
+     * establece la sesión y navega al menú principal.
+     */
     @FXML
     protected void onLoginClick() {
         String user = usernameField.getText();
@@ -81,6 +94,12 @@ public class LoginController {
         }
     }
 
+    /**
+     * Maneja el evento de clic en el enlace o botón de registro.
+     * Navega a la pantalla de registro de nuevos usuarios.
+     *
+     * @param event El evento de acción que desencadenó este método
+     */
     @FXML
     public void onRegistrarseClick(ActionEvent event) {
         try {

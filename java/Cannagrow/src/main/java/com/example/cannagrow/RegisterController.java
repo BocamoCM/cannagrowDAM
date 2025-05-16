@@ -19,6 +19,9 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controlador para el registro de usuarios
+ */
 public class RegisterController implements Initializable {
 
     // Elementos comunes en ambos FXML
@@ -42,6 +45,13 @@ public class RegisterController implements Initializable {
     // Instancia del modelo de usuario
     private UsuarioModel usuarioModel;
 
+    /**
+     * Inicializa el controlador después de que su elemento raíz haya sido completamente procesado.
+     * Configura el logo, detecta el tipo de formulario actual y prepara los componentes necesarios.
+     *
+     * @param url URL de ubicación utilizada para resolver rutas relativas
+     * @param resourceBundle Recursos específicos de localización
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -72,6 +82,10 @@ public class RegisterController implements Initializable {
         }
     }
 
+    /**
+     * Detecta si el formulario actual es el formulario secundario, basado en la presencia
+     * de ciertos componentes de interfaz de usuario.
+     */
     private void detectFormType() {
         // Verificamos si los componentes del segundo formulario están presentes
         try {
@@ -81,6 +95,10 @@ public class RegisterController implements Initializable {
         }
     }
 
+    /**
+     * Configura los componentes específicos del segundo formulario, como los ComboBox de tipo
+     * de usuario y roles, incluyendo sus opciones iniciales y comportamiento.
+     */
     private void configureSecondFormComponents() {
         try {
             // Configurar las opciones iniciales del ComboBox de tipo de usuario
@@ -112,6 +130,12 @@ public class RegisterController implements Initializable {
         }
     }
 
+    /**
+     * Actualiza la interfaz de usuario según el tipo de usuario seleccionado ("Cliente" o "Empleado"),
+     * mostrando u ocultando componentes relevantes como el rol y salario.
+     *
+     * @param userType Tipo de usuario seleccionado
+     */
     private void updateUIBasedOnUserType(String userType) {
         try {
             boolean isEmpleado = "Empleado".equals(userType);
@@ -143,6 +167,12 @@ public class RegisterController implements Initializable {
         }
     }
 
+    /**
+     * Maneja el evento de clic en el botón de registro. Valida los campos,
+     * recoge los datos del formulario y llama al modelo para registrar al usuario.
+     *
+     * @param event Evento de acción asociado al clic del botón
+     */
     @FXML
     protected void onRegisterClick(ActionEvent event) {
         try {
@@ -223,6 +253,12 @@ public class RegisterController implements Initializable {
         }
     }
 
+    /**
+     * Valida los campos del formulario según reglas específicas como formato de email,
+     * coincidencia de contraseñas, mayoría de edad, entre otras.
+     *
+     * @return true si todos los campos son válidos; false en caso contrario
+     */
     private boolean validateFields() {
         // Validar campos obligatorios
         if (nombreField.getText().trim().isEmpty()) {
@@ -307,6 +343,12 @@ public class RegisterController implements Initializable {
         return true;
     }
 
+    /**
+     * Muestra un mensaje de estado (éxito o error) al usuario en la interfaz.
+     *
+     * @param message Mensaje a mostrar
+     * @param isError Indica si el mensaje es de error (true) o de éxito (false)
+     */
     private void showMessage(String message, boolean isError) {
         if (registerMessage != null) {
             registerMessage.setTextFill(isError ?
@@ -315,6 +357,10 @@ public class RegisterController implements Initializable {
         }
     }
 
+    /**
+     * Abre la pantalla de login reemplazando la vista actual.
+     * Se utiliza tras un registro exitoso o al navegar de regreso.
+     */
     private void abrirLogin() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/hello-view.fxml"));
@@ -330,6 +376,12 @@ public class RegisterController implements Initializable {
         }
     }
 
+    /**
+     * Maneja el evento de navegación cuando el usuario quiere regresar
+     * a la pantalla anterior desde el formulario de registro.
+     *
+     * @param event Evento de acción generado por la interacción del usuario
+     */
     @FXML
     protected void onRegisterDosClick(ActionEvent event) {
         // Navegar hacia atrás o a otra pantalla

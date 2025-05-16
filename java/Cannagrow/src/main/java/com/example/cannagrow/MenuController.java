@@ -24,6 +24,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+/**
+ * Controlador principal del menú de la aplicación CannaGrow.
+ * Gestiona la navegación y configuración de la interfaz según el rol del usuario.
+ */
 public class MenuController {
     @FXML
     private Label userText;
@@ -50,6 +54,10 @@ public class MenuController {
     // private static Parent carritoPaneCache = null;
     // private static Parent pedidosPaneCache = null;
 
+    /**
+     * Inicializa el controlador de la vista Menu.
+     * Configura los botones, carga información del usuario y prepara la vista inicial.
+     */
     @FXML
     public void initialize() {
         System.out.println("Iniciando inicialización de MenuController...");
@@ -89,7 +97,9 @@ public class MenuController {
     }
 
     /**
-     * Verifica que los componentes críticos de la UI existan
+     * Verifica que los componentes críticos de la UI existan antes de continuar.
+     *
+     * @return true si todos los componentes clave están disponibles, false en caso contrario.
      */
     private boolean verificarComponentesIU() {
         boolean todosDisponibles = true;
@@ -113,7 +123,9 @@ public class MenuController {
     }
 
     /**
-     * Configura la visibilidad de los botones según el rol del usuario
+     * Configura la visibilidad de botones y el texto del usuario según el rol.
+     *
+     * @param usuario UsuarioModel que contiene la información del usuario actual.
      */
     private void configurarBotonesPorRol(UsuarioModel usuario) {
         if (usuario == null) return;
@@ -189,7 +201,10 @@ public class MenuController {
     }
 
     /**
-     * Método para cargar la vista de inicio usando cache para evitar recargas
+     * Carga la vista de inicio desde cache si está disponible, para evitar recargas.
+     *
+     * @return El nodo raíz de la vista de inicio.
+     * @throws IOException Si ocurre un error al cargar el archivo FXML.
      */
     private Parent cargarInicioConCache() throws IOException {
         if (inicioPaneCache == null) {
@@ -220,6 +235,9 @@ public class MenuController {
         }
     }
 
+    /**
+     * Carga el nombre del usuario actual y lo muestra en la etiqueta correspondiente.
+     */
     private void cargarnombre() {
         try {
             System.out.println("Cargando nombre de usuario...");
@@ -244,6 +262,10 @@ public class MenuController {
         }
     }
 
+    /**
+     * Intenta cargar la foto de perfil del usuario actual.
+     * Si no está disponible, carga un logo por defecto.
+     */
     private void cargarFotoPerfil() {
         try {
             // Verificar que el componente existe antes de manipularlo
@@ -291,6 +313,9 @@ public class MenuController {
         }
     }
 
+    /**
+     * Carga una imagen por defecto si no se puede cargar la foto de perfil del usuario.
+     */
     private void cargarLogoPorDefecto() {
         try {
             // Verificar que el componente existe antes de manipularlo
@@ -324,11 +349,22 @@ public class MenuController {
         }
     }
 
+    /**
+     * Capitaliza la primera letra de una palabra.
+     *
+     * @param texto Texto a capitalizar.
+     * @return Texto con la primera letra en mayúscula.
+     */
     private String capitalizar(String texto) {
         if (texto == null || texto.isEmpty()) return texto;
         return texto.substring(0, 1).toUpperCase() + texto.substring(1).toLowerCase();
     }
 
+    /**
+     * Maneja el evento de clic en el botón de inicio.
+     *
+     * @param event Evento generado por el botón.
+     */
     @FXML
     private void onInicioClick(javafx.event.ActionEvent event) {
         try {
@@ -350,6 +386,9 @@ public class MenuController {
         }
     }
 
+    /**
+     * Restaura el estilo por defecto de los botones del menú lateral.
+     */
     private void resetearBotonesMenu() {
         String estiloNormal = "-fx-background-color: #555555; -fx-text-fill: white;";
         if (inicioButton != null) inicioButton.setStyle(estiloNormal);
@@ -358,6 +397,9 @@ public class MenuController {
         if (pedidosButton != null) pedidosButton.setStyle(estiloNormal);
     }
 
+    /**
+     * Maneja el evento de clic en el botón de productos.
+     */
     @FXML
     public void onProductosClick() {
         try {
@@ -389,6 +431,9 @@ public class MenuController {
         }
     }
 
+    /**
+     * Maneja el evento de clic en el botón del carrito.
+     */
     @FXML
     private void onCarritoClick() {
         try {
@@ -427,6 +472,9 @@ public class MenuController {
         }
     }
 
+    /**
+     * Maneja el evento de clic en el botón de pedidos.
+     */
     @FXML
     private void onPedidosClick() {
         try {
@@ -456,6 +504,10 @@ public class MenuController {
         }
     }
 
+    /**
+     * Maneja el evento de clic en el botón de cerrar sesión.
+     * Cierra la sesión y la ventana actual.
+     */
     @FXML
     private void onLogoutClick() {
         try {
@@ -473,11 +525,23 @@ public class MenuController {
         }
     }
 
+    /**
+     * Muestra una alerta informativa al usuario.
+     *
+     * @param titulo  Título de la ventana de alerta.
+     * @param mensaje Mensaje a mostrar.
+     */
     public void mostrarMensaje(String titulo, String mensaje) {
         mostrarMensaje(titulo, mensaje, Alert.AlertType.INFORMATION);
     }
 
-
+    /**
+     * Muestra una alerta informativa al usuario.
+     *
+     * @param titulo  Título de la ventana de alerta.
+     * @param mensaje Mensaje a mostrar.
+     * @param tipo Tipo de alerta.
+     */
     public void mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
@@ -486,7 +550,10 @@ public class MenuController {
         alert.showAndWait();
     }
 
-
+    /**
+     * Maneja el evento de clic en el botón de admin.
+     * Abre el menu de Admin.
+     */
     @FXML
     private void onAdminClick(ActionEvent event) {
         try {
