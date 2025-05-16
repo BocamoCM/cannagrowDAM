@@ -7,6 +7,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * Clase DBUtil
+ */
 public class DBUtil {
 	// Valores predeterminados, en caso de no encontrar el archivo properties
 	private static String URL = "jdbc:mysql://149.74.26.171:3306/CannaGrowBD?useSSL=false&allowPublicKeyRetrieval=true";

@@ -11,6 +11,14 @@ import java.util.List;
 
 public class PedidoAdminModel {
 
+    /**
+     * Construye un objeto {@link Pedido} a partir de un ResultSet de una consulta SQL.
+     *
+     * @param rs ResultSet con los datos del pedido.
+     * @return Objeto {@link Pedido} construido.
+     * @throws SQLException si ocurre un error al acceder a los datos del ResultSet.
+     */
+
     private static Pedido construirPedidoDesdeResultSet(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         Date fecha = rs.getTimestamp("fecha");
@@ -31,6 +39,14 @@ public class PedidoAdminModel {
         pedido.setId(id);
         return pedido;
     }
+
+    /**
+     * Obtiene todos los pedidos paginados según el offset y el límite especificados.
+     *
+     * @param offset Desplazamiento desde donde empezar a obtener los pedidos.
+     * @param limit  Número máximo de pedidos a obtener.
+     * @return Lista de objetos {@link Pedido}.
+     */
 
     public static List<Pedido> obtenerTodosPedidos(int offset, int limit) {
         List<Pedido> pedidos = new ArrayList<>();
@@ -70,6 +86,14 @@ public class PedidoAdminModel {
 
 
 
+    /**
+     * Obtiene una lista de pedidos filtrados por estado, de forma paginada.
+     *
+     * @param estado Estado del pedido a filtrar.
+     * @param pagina Número de página actual.
+     * @param limite Número de pedidos por página.
+     * @return Lista de pedidos con el estado especificado.
+     */
 
     public static List<Pedido> obtenerPedidosPorEstado(EstadoPedido estado, int pagina, int limite) {
         List<Pedido> pedidos = new ArrayList<>();
@@ -97,6 +121,14 @@ public class PedidoAdminModel {
         return pedidos;
     }
 
+    /**
+     * Actualiza el estado de un pedido específico.
+     *
+     * @param pedidoId    ID del pedido a actualizar.
+     * @param nuevoEstado Nuevo estado que se asignará al pedido.
+     * @return {@code true} si la actualización fue exitosa, {@code false} en caso contrario.
+     */
+
     public static boolean actualizarEstadoPedido(int pedidoId, EstadoPedido nuevoEstado) {
         String sql = "UPDATE Pedido SET estado = ? WHERE id = ?";
 
@@ -113,6 +145,12 @@ public class PedidoAdminModel {
             return false;
         }
     }
+
+    /**
+     * Devuelve el stock de los productos de un pedido cancelado.
+     *
+     * @param pedidoId ID del pedido cancelado.
+     */
 
     public static void devolverStockPedidoCancelado(int pedidoId) {
         String sqlDetalle = "SELECT producto_id, cantidad FROM ItemPedido WHERE pedido_id = ?";
@@ -148,6 +186,13 @@ public class PedidoAdminModel {
         }
     }
 
+    /**
+     * Obtiene el nombre del cliente a partir de su ID.
+     *
+     * @param clienteId ID del cliente.
+     * @return Nombre del cliente si se encuentra, o "Cliente desconocido" en caso contrario.
+     */
+
     public static String obtenerNombreClientePorId(int clienteId) {
         String nombre = "Cliente desconocido";
         String sql = "SELECT nombre FROM Cliente WHERE id = ?";
@@ -169,6 +214,12 @@ public class PedidoAdminModel {
 
         return nombre;
     }
+
+    /**
+     * Obtiene una lista de empleados disponibles, incluyendo aquellos con rol "Empleado" o "Repartidor".
+     *
+     * @return Lista de objetos {@link UsuarioModel} representando empleados disponibles.
+     */
 
     public static List<UsuarioModel> obtenerEmpleadosDisponibles() {
         List<UsuarioModel> empleados = new ArrayList<>();
@@ -200,6 +251,14 @@ public class PedidoAdminModel {
         return empleados;
     }
 
+    /**
+     * Asigna un empleado a un pedido determinado.
+     *
+     * @param pedidoId   ID del pedido.
+     * @param empleadoId ID del empleado que se asignará.
+     * @return {@code true} si se asignó correctamente, {@code false} si ocurrió un error.
+     */
+
     public static boolean asignarEmpleadoAPedido(int pedidoId, int empleadoId) {
         String sql = "UPDATE Pedido SET empleado_id = ? WHERE id = ?";
 
@@ -216,6 +275,13 @@ public class PedidoAdminModel {
             return false;
         }
     }
+
+    /**
+     * Obtiene todos los pedidos asignados a un empleado específico.
+     *
+     * @param empleadoId ID del empleado.
+     * @return Lista de objetos {@link Pedido} asignados al empleado.
+     */
 
     public static List<Pedido> obtenerPedidosPorEmpleado(int empleadoId) {
         List<Pedido> pedidos = new ArrayList<>();

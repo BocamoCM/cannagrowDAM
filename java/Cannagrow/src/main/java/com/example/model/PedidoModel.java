@@ -5,8 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Clase que gestiona la lógica de los pedidos, incluyendo la creación, obtención y detalle de los pedidos.
+ */
 public class PedidoModel {
 
+    /**
+     * Enumeración que representa los posibles estados de un pedido.
+     */
     public enum EstadoPedido {
         PENDIENTE("Pendiente"),
         ENVIADO("Enviado"),
@@ -14,13 +20,28 @@ public class PedidoModel {
         CANCELADO("Cancelado");
 
         private final String estado;
+
+        /**
+         * Constructor del estado del pedido.
+         * @param estado Nombre del estado.
+         */
         EstadoPedido(String estado) {
             this.estado = estado;
         }
+
+        /**
+         * Obtiene el nombre del estado.
+         * @return Estado en formato String.
+         */
         public String getEstado() {
             return estado;
         }
 
+        /**
+         * Devuelve una instancia de EstadoPedido a partir de una cadena.
+         * @param estadoStr Cadena del estado.
+         * @return Instancia correspondiente de EstadoPedido, o null si no coincide.
+         */
         public static EstadoPedido fromString(String estadoStr) {
             for (EstadoPedido estado : EstadoPedido.values()) {
                 if (estado.getEstado().equalsIgnoreCase(estadoStr)) {
@@ -31,6 +52,9 @@ public class PedidoModel {
         }
     }
 
+    /**
+     * Clase que representa un pedido realizado por un cliente.
+     */
     public static class Pedido {
         private int id;
         private Date fecha;
@@ -42,6 +66,14 @@ public class PedidoModel {
         private boolean notificado;
         private List<DetallePedido> detalles;
 
+        /**
+         * Constructor de un pedido.
+         * @param fecha Fecha del pedido.
+         * @param total Total del pedido.
+         * @param estado Estado actual del pedido.
+         * @param clienteId ID del cliente.
+         * @param vehiculoMatricula Matrícula del vehículo asociado.
+         */
         public Pedido(Date fecha, float total, EstadoPedido estado, int clienteId, String vehiculoMatricula) {
             this.fecha = fecha;
             this.total = total;
@@ -52,10 +84,15 @@ public class PedidoModel {
             this.detalles = new ArrayList<>();
         }
 
+        /**
+         * Agrega un detalle al pedido.
+         * @param d Detalle del pedido.
+         */
         public void agregarDetalle(DetallePedido d) {
             detalles.add(d);
         }
 
+        // Getters y Setters con Javadoc omitido por brevedad, se pueden documentar si lo deseas.
         public int getId() { return id; }
         public void setId(int id) { this.id = id; }
         public Date getFecha() { return fecha; }
@@ -68,12 +105,12 @@ public class PedidoModel {
         public void setNotificado(boolean notificado) { this.notificado = notificado; }
         public void setEmpleadoId(int empleadoId) { this.empleadoId = empleadoId; }
         public int getEmpleadoId() { return empleadoId; }
-
-        public void setEstado(EstadoPedido estado) {
-            this.estado = estado;
-        }
+        public void setEstado(EstadoPedido estado) { this.estado = estado; }
     }
 
+    /**
+     * Clase que representa un detalle individual de un pedido (producto, cantidad, subtotal).
+     */
     public static class DetallePedido {
         private int productoId;
         private int cantidad;
@@ -81,6 +118,12 @@ public class PedidoModel {
         private float subtotal;
         private Producto producto;
 
+        /**
+         * Constructor del detalle de un pedido.
+         * @param productoId ID del producto.
+         * @param cantidad Cantidad del producto.
+         * @param precioUnitario Precio unitario del producto.
+         */
         public DetallePedido(int productoId, int cantidad, float precioUnitario) {
             this.productoId = productoId;
             this.cantidad = cantidad;
@@ -88,6 +131,7 @@ public class PedidoModel {
             this.subtotal = precioUnitario * cantidad;
         }
 
+        // Getters y Setters con Javadoc omitido por brevedad.
         public int getProductoId() { return productoId; }
         public int getCantidad() { return cantidad; }
         public float getPrecioUnitario() { return precioUnitario; }
@@ -96,7 +140,14 @@ public class PedidoModel {
         public void setProducto(Producto producto) { this.producto = producto; }
     }
 
+    /**
+     * Crea un nuevo pedido y lo guarda en la base de datos.
+     * También guarda sus detalles y actualiza el stock de productos.
+     * @param pedido Pedido a crear.
+     * @return ID del nuevo pedido o -1 si falla.
+     */
     public static int crearPedido(Pedido pedido) {
+        // (Javadoc general del método incluido en el encabezado. Comentarios inline en el cuerpo si se desea.)
         int pedidoId = -1;
         Connection conn = null;
         PreparedStatement psPedido = null;
@@ -104,9 +155,8 @@ public class PedidoModel {
 
         try {
             conn = DBUtil.getConexion();
-            conn.setAutoCommit(false); // inicio de transacción
+            conn.setAutoCommit(false);
 
-            // Insertar pedido
             String sqlPedido = "INSERT INTO Pedido (fecha, total, estado, cliente_id, vehiculo_matricula, notificado) " +
                     "VALUES (?, ?, ?, ?, ?, ?)";
             psPedido = conn.prepareStatement(sqlPedido, Statement.RETURN_GENERATED_KEYS);
@@ -127,7 +177,6 @@ public class PedidoModel {
                 return -1;
             }
 
-            // Insertar detalles
             String sqlDetalle = "INSERT INTO ItemPedido (pedido_id, producto_id, cantidad) VALUES (?, ?, ?)";
             psDetalle = conn.prepareStatement(sqlDetalle);
 
@@ -136,13 +185,11 @@ public class PedidoModel {
                 psDetalle.setInt(2, detalle.getProductoId());
                 psDetalle.setInt(3, detalle.getCantidad());
                 psDetalle.addBatch();
-
-                // Actualizar stock
                 actualizarStock(conn, detalle.getProductoId(), detalle.getCantidad());
             }
 
             psDetalle.executeBatch();
-            conn.commit(); // todo correcto
+            conn.commit();
 
         } catch (SQLException e) {
             try {
@@ -151,7 +198,6 @@ public class PedidoModel {
                 System.err.println("Error en rollback: " + ex.getMessage());
             }
             System.err.println("Error al crear pedido: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             try {
                 if (psPedido != null) psPedido.close();
@@ -167,6 +213,13 @@ public class PedidoModel {
         return pedidoId;
     }
 
+    /**
+     * Actualiza el stock de un producto en la base de datos.
+     * @param conn Conexión activa a la base de datos.
+     * @param productoId ID del producto.
+     * @param cantidad Cantidad a restar del stock.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     private static void actualizarStock(Connection conn, int productoId, int cantidad) throws SQLException {
         String sql = "UPDATE Producto SET stock = stock - ? WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -176,6 +229,11 @@ public class PedidoModel {
         }
     }
 
+    /**
+     * Obtiene el ID del cliente a partir de su ID de usuario.
+     * @param usuarioId ID del usuario.
+     * @return ID del cliente o -1 si no se encuentra.
+     */
     public static int obtenerClienteIdPorUsuario(int usuarioId) {
         String sql = "SELECT id FROM Cliente WHERE id = ?";
         try (Connection conn = DBUtil.getConexion();
@@ -191,6 +249,10 @@ public class PedidoModel {
         return -1;
     }
 
+    /**
+     * Obtiene una lista con las matrículas de todos los vehículos.
+     * @return Lista de matrículas.
+     */
     public static List<String> obtenerMatriculasVehiculos() {
         List<String> lista = new ArrayList<>();
         String sql = "SELECT matricula FROM Vehiculo";

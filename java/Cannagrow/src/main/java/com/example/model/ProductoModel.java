@@ -153,6 +153,12 @@ public class ProductoModel {
 
         return productos;
     }
+
+    /**
+     * Busca productos por nombre
+     * @param producto Término de búsqueda
+     * @return Lista de productos que coinciden con la búsqueda
+     */
     public static boolean actualizarProducto(Producto producto) {
         String sql = "UPDATE Producto SET nombre=?, tipo=?, contenidoTHC=?, contenidoCBD=?, precio=?, stock=? WHERE id=?";
         try (Connection conn = DBUtil.getConexion();

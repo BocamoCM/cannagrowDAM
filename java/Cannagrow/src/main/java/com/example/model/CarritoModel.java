@@ -92,6 +92,10 @@ public class CarritoModel {
         return listaItems;
     }
 
+    /**
+     * Obtiene todos los items del carrito
+     * @return Lista con todos los items del carrito
+     */
     public static boolean crearPedidoDesdeCarrito(int clienteId, String vehiculoMatricula) {
         if (items.isEmpty()) return false;
 

@@ -4,6 +4,10 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 
+/**
+ * Clase que representa un usuario en la aplicación.
+ * Incluye métodos para autenticación, registro y actualización de datos del usuario.
+ */
 public class UsuarioModel {
     private String nombre;
     private String email;
@@ -13,6 +17,13 @@ public class UsuarioModel {
     private String fotoPerfilUrl; // Campo para la foto de perfil
     private String discordId; // Campo para el ID de Discord (en Java usamos camelCase)
 
+    /**
+     * Autentica a un usuario buscando primero en la tabla Empleado y luego en Cliente.
+     *
+     * @param nombre     Nombre del usuario.
+     * @param contrasena Contraseña ingresada.
+     * @return El objeto UsuarioModel si la autenticación fue exitosa, null si falló.
+     */
     public UsuarioModel autenticarUsuario(String nombre, String contrasena) {
         UsuarioModel usuario = autenticarDesdeTabla("Empleado", nombre, contrasena);
 
@@ -23,6 +34,14 @@ public class UsuarioModel {
         return usuario;
     }
 
+    /**
+     * Autentica a un usuario dentro de una tabla específica (Empleado o Cliente).
+     *
+     * @param tabla      Nombre de la tabla a consultar.
+     * @param nombre     Nombre del usuario.
+     * @param contrasena Contraseña ingresada.
+     * @return El objeto UsuarioModel si la autenticación fue exitosa, null si falló.
+     */
     private UsuarioModel autenticarDesdeTabla(String tabla, String nombre, String contrasena) {
         String query = "SELECT id, contrasena_hash, email, fotoPerfilUrl, discordid as discordId" + // Corregido: discordid en la BD
                 (tabla.equals("Empleado") ? ", rol, salario" : "") +
@@ -69,6 +88,17 @@ public class UsuarioModel {
         return null;
     }
 
+    /**
+     * Registra un nuevo usuario en la base de datos como Cliente o Empleado.
+     *
+     * @param nombre      Nombre del usuario.
+     * @param email       Correo electrónico.
+     * @param contrasena  Contraseña en texto plano (será hasheada).
+     * @param rol         Rol del usuario (Cliente o Empleado).
+     * @param salario     Salario del empleado (0 para Cliente).
+     * @param discordId   ID de Discord (opcional).
+     * @return true si el registro fue exitoso, false en caso contrario.
+     */
     public boolean registrarUsuario(String nombre, String email, String contrasena, String rol, double salario, String discordId) {
         String contrasenaHash = BCrypt.hashpw(contrasena, BCrypt.gensalt());
         String fotoPerfilPredeterminada = rol.equalsIgnoreCase("Cliente") ?
@@ -121,6 +151,16 @@ public class UsuarioModel {
         }
     }
 
+    /**
+     * Registra un nuevo cliente en la base de datos, incluyendo fecha de nacimiento.
+     *
+     * @param nombre           Nombre del cliente.
+     * @param email            Correo electrónico.
+     * @param contrasena       Contraseña en texto plano (será hasheada).
+     * @param fechaNacimiento  Fecha de nacimiento del cliente.
+     * @param discordId        ID de Discord (opcional).
+     * @return true si el registro fue exitoso, false en caso contrario.
+     */
     public boolean registrarCliente(String nombre, String email, String contrasena, Date fechaNacimiento, String discordId) {
         String contrasenaHash = BCrypt.hashpw(contrasena, BCrypt.gensalt());
         String fotoPerfilPredeterminada = "/com/example/cannagrow/img/perfil_cliente.png";
@@ -151,6 +191,13 @@ public class UsuarioModel {
         }
     }
 
+    /**
+     * Actualiza la URL de la foto de perfil del usuario en la base de datos.
+     *
+     * @param id              ID del usuario.
+     * @param fotoPerfilUrl   Nueva URL de la foto de perfil.
+     * @return true si la actualización fue exitosa, false en caso contrario.
+     */
     public boolean actualizarFotoPerfil(int id, String fotoPerfilUrl) {
         String tabla = rol.equalsIgnoreCase("Cliente") ? "Cliente" : "Empleado";
         String query = "UPDATE " + tabla + " SET fotoPerfilUrl = ? WHERE id = ?";
@@ -169,6 +216,13 @@ public class UsuarioModel {
         }
     }
 
+    /**
+     * Actualiza el ID de Discord del usuario en la base de datos.
+     *
+     * @param id         ID del usuario.
+     * @param discordId  Nuevo ID de Discord (puede ser null o vacío).
+     * @return true si la actualización fue exitosa, false en caso contrario.
+     */
     public boolean actualizarDiscordId(int id, String discordId) {
         String tabla = rol.equalsIgnoreCase("Cliente") ? "Cliente" : "Empleado";
         String query = "UPDATE " + tabla + " SET discordid = ? WHERE id = ?"; // Corregido: discordid
@@ -193,6 +247,13 @@ public class UsuarioModel {
         }
     }
 
+    /**
+     * Actualiza la contraseña de un usuario en caso de que el hash actual sea inválido.
+     *
+     * @param nombre           Nombre del usuario.
+     * @param nuevaContrasena  Nueva contraseña en texto plano.
+     * @param tabla            Tabla en la que se encuentra el usuario (Empleado o Cliente).
+     */
     private void actualizarContrasena(String nombre, String nuevaContrasena, String tabla) {
         String nuevaHash = BCrypt.hashpw(nuevaContrasena, BCrypt.gensalt());
         String query = "UPDATE " + tabla + " SET contrasena_hash = ? WHERE nombre = ?";
@@ -216,24 +277,81 @@ public class UsuarioModel {
     }
 
     // Getters y setters
+    /**
+     * @return Nombre del usuario.
+     */
     public String getNombre() { return nombre; }
+
+    /**
+     * Establece el nombre del usuario.
+     * @param nombre Nombre a asignar.
+     */
     public void setNombre(String nombre) { this.nombre = nombre; }
 
+    /**
+     * @return Correo electrónico del usuario.
+     */
     public String getEmail() { return email; }
+
+    /**
+     * Establece el correo electrónico del usuario.
+     * @param email Correo electrónico a asignar.
+     */
     public void setEmail(String email) { this.email = email; }
 
+    /**
+     * @return Rol del usuario (Cliente o Empleado).
+     */
     public String getRol() { return rol; }
+
+    /**
+     * Establece el rol del usuario.
+     * @param rol Rol a asignar.
+     */
     public void setRol(String rol) { this.rol = rol; }
 
+    /**
+     * @return Salario del usuario.
+     */
     public double getSalario() { return salario; }
+
+    /**
+     * Establece el salario del usuario.
+     * @param salario Salario a asignar.
+     */
     public void setSalario(double salario) { this.salario = salario; }
 
+    /**
+     * @return ID único del usuario.
+     */
     public int getId() { return id; }
+
+    /**
+     * Establece el ID del usuario.
+     * @param id ID a asignar.
+     */
     public void setId(int id) { this.id = id; }
 
+    /**
+     * @return URL de la foto de perfil del usuario.
+     */
     public String getFotoPerfilUrl() { return fotoPerfilUrl; }
+
+    /**
+     * Establece la URL de la foto de perfil del usuario.
+     * @param fotoPerfilUrl URL de la foto a asignar.
+     */
     public void setFotoPerfilUrl(String fotoPerfilUrl) { this.fotoPerfilUrl = fotoPerfilUrl; }
 
+    /**
+     * @return ID de Discord del usuario.
+     */
     public String getDiscordId() { return discordId; }
+
+    /**
+     * Establece el ID de Discord del usuario.
+     * @param discordId ID de Discord a asignar.
+     */
     public void setDiscordId(String discordId) { this.discordId = discordId; }
+
 }
