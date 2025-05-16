@@ -99,50 +99,101 @@ public class CarritoController {
         cargarCarrito();
 
         // Prellenar información del usuario si está disponible
-        prellenarInformacionUsuario(usuario);
     }
 
     /**
      * Carga el icono de carrito vacío
      */
     private void cargarIconoCarritoVacio() {
+        System.out.println("Intentando cargar icono de carrito vacío...");
         try {
             // Intentar múltiples rutas para encontrar la imagen
             String[] rutasCarrito = {
-                    "/com/example/cannagrow/img/cart.png",
+                    "/com/example/cannagrow/images/carrito_vacio2.png",
                     "/img/cart.png",
-                    "/images/cart.png",
+                    "/images/carrito_vacio2.png",
                     "/cart.png"
             };
 
-            boolean imagenCargada = false;
-
             for (String ruta : rutasCarrito) {
+                System.out.println("Intentando cargar desde: " + ruta);
                 InputStream iconStream = getClass().getResourceAsStream(ruta);
                 if (iconStream != null) {
+                    System.out.println("¡Imagen encontrada en: " + ruta);
                     carritoVacioIcon.setImage(new Image(iconStream));
-                    System.out.println("Imagen de carrito vacío cargada desde: " + ruta);
-                    imagenCargada = true;
-                    break;
+                    return;
+                } else {
+                    System.out.println("No se encontró imagen en: " + ruta);
                 }
             }
-
-            if (!imagenCargada) {
-                System.err.println("No se pudo cargar el icono del carrito vacío");
-            }
+            System.err.println("No se pudo cargar el icono del carrito vacío desde ninguna ruta");
         } catch (Exception e) {
             System.err.println("Error al cargar el icono del carrito: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     /**
      * Prellenar información del usuario en los campos de envío
      */
+    /**
+     * Prellenar información del usuario en los campos de envío
+     */
     private void prellenarInformacionUsuario(UsuarioModel usuario) {
-        // Si en el futuro se implementa guardar direcciones de envío, aquí se cargarían
-        // Por ahora se dejan los campos vacíos para que el usuario los llene
-    }
+        // Solo procedemos si es un cliente
+        if (!"Cliente".equals(usuario.getRol())) {
+            System.out.println("El usuario no es un cliente, no se cargarán datos de envío");
+            return;
+        }
 
+        try {
+            // Consultar información adicional del cliente desde la base de datos
+            String sql = "SELECT direccion, telefono FROM Cliente WHERE id = ?";
+
+            try (Connection conn = DBUtil.getConexion();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setInt(1, usuario.getId());
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    // Precargar dirección si existe
+                    String direccion = rs.getString("direccion");
+                    if (direccion != null && !direccion.isEmpty()) {
+                        direccionField.setText(direccion);
+
+                        // Si la dirección tiene formato "Calle, Ciudad", intentamos extraer la ciudad
+                        if (direccion.contains(",")) {
+                            String[] partes = direccion.split(",", 2);
+                            if (partes.length > 1) {
+                                ciudadField.setText(partes[1].trim());
+                            }
+                        }
+                    }
+
+                    // Precargar teléfono si existe
+                    String telefono = rs.getString("telefono");
+                    if (telefono != null && !telefono.isEmpty()) {
+                        telefonoField.setText(telefono);
+                    }
+
+                    // Precargar el email que ya tenemos en el objeto usuario
+                    // Esto podría servir si tienes un campo para email en el formulario
+                    if (usuario.getEmail() != null && !usuario.getEmail().isEmpty()) {
+                        // Si tienes un campo para email, descomentar la siguiente línea
+                        // emailField.setText(usuario.getEmail());
+                    }
+
+                    System.out.println("Información de envío precargada para el cliente: " + usuario.getId());
+                } else {
+                    System.out.println("No se encontró información adicional para el cliente: " + usuario.getId());
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al cargar información de envío: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
     /**
      * Carga los productos del carrito
      */

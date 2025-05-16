@@ -20,6 +20,15 @@ public class PedidoModel {
         public String getEstado() {
             return estado;
         }
+
+        public static EstadoPedido fromString(String estadoStr) {
+            for (EstadoPedido estado : EstadoPedido.values()) {
+                if (estado.getEstado().equalsIgnoreCase(estadoStr)) {
+                    return estado;
+                }
+            }
+            return null;
+        }
     }
 
     public static class Pedido {
@@ -56,6 +65,13 @@ public class PedidoModel {
         public String getVehiculoMatricula() { return vehiculoMatricula; }
         public boolean isNotificado() { return notificado; }
         public List<DetallePedido> getDetalles() { return detalles; }
+        public void setNotificado(boolean notificado) { this.notificado = notificado; }
+        public void setEmpleadoId(int empleadoId) { this.empleadoId = empleadoId; }
+        public int getEmpleadoId() { return empleadoId; }
+
+        public void setEstado(EstadoPedido estado) {
+            this.estado = estado;
+        }
     }
 
     public static class DetallePedido {
@@ -187,4 +203,127 @@ public class PedidoModel {
         }
         return lista;
     }
+
+    /**
+     * Obtiene todos los pedidos de un cliente específico
+     * @param clienteId ID del cliente
+     * @return Lista de pedidos del cliente
+     */
+    public static List<Pedido> obtenerPedidosPorCliente(int clienteId) {
+        List<Pedido> pedidos = new ArrayList<>();
+        String sql = "SELECT * FROM Pedido WHERE cliente_id = ? ORDER BY fecha DESC";
+
+        try (Connection conn = DBUtil.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, clienteId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    Date fecha = rs.getTimestamp("fecha");
+                    float total = rs.getFloat("total");
+                    String estadoStr = rs.getString("estado");
+                    String vehiculoMatricula = rs.getString("vehiculo_matricula");
+                    boolean notificado = rs.getBoolean("notificado");
+                    int empleadoId = rs.getInt("empleado_id");
+
+                    EstadoPedido estado = null;
+                    for (EstadoPedido e : EstadoPedido.values()) {
+                        if (e.getEstado().equals(estadoStr)) {
+                            estado = e;
+                            break;
+                        }
+                    }
+
+                    Pedido pedido = new Pedido(fecha, total, estado, clienteId, vehiculoMatricula);
+                    pedido.setId(id);
+
+                    pedidos.add(pedido);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener pedidos del cliente: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return pedidos;
+    }
+
+    /**
+     * Obtiene los pedidos de un cliente filtrados por estado
+     * @param clienteId ID del cliente
+     * @param estado Estado del pedido a filtrar
+     * @return Lista de pedidos filtrados
+     */
+    public static List<Pedido> obtenerPedidosPorClienteYEstado(int clienteId, EstadoPedido estado) {
+        List<Pedido> pedidos = new ArrayList<>();
+        String sql = "SELECT * FROM Pedido WHERE cliente_id = ? AND estado = ? ORDER BY fecha DESC";
+
+        try (Connection conn = DBUtil.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, clienteId);
+            ps.setString(2, estado.getEstado());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    Date fecha = rs.getTimestamp("fecha");
+                    float total = rs.getFloat("total");
+                    String vehiculoMatricula = rs.getString("vehiculo_matricula");
+                    boolean notificado = rs.getBoolean("notificado");
+                    int empleadoId = rs.getInt("empleado_id");
+
+                    Pedido pedido = new Pedido(fecha, total, estado, clienteId, vehiculoMatricula);
+                    pedido.setId(id);
+
+                    pedidos.add(pedido);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener pedidos del cliente por estado: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return pedidos;
+    }
+
+    /**
+     * Obtiene los detalles de un pedido específico
+     * @param pedidoId ID del pedido
+     * @return Lista de detalles del pedido
+     */
+    public static List<DetallePedido> obtenerDetallesPedido(int pedidoId) {
+        List<DetallePedido> detalles = new ArrayList<>();
+        String sql = "SELECT ip.*, p.precio FROM ItemPedido ip " +
+                "JOIN Producto p ON ip.producto_id = p.id " +
+                "WHERE ip.pedido_id = ?";
+
+        try (Connection conn = DBUtil.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, pedidoId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int productoId = rs.getInt("producto_id");
+                    int cantidad = rs.getInt("cantidad");
+                    float precioUnitario = rs.getFloat("precio");
+
+                    DetallePedido detalle = new DetallePedido(productoId, cantidad, precioUnitario);
+                    detalles.add(detalle);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener detalles del pedido: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return detalles;
+    }
 }
+

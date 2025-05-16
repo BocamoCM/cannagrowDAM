@@ -1,10 +1,15 @@
 package com.example.cannagrow;
 
 import com.example.model.Categoria;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,7 +39,16 @@ public class InicioController {
         Categoria[] categorias = {
                 new Categoria("Fertilizantes", "/com/example/cannagrow/img/fertilizantes.png"),
                 new Categoria("CBD", "/com/example/cannagrow/img/cbd.png"),
-                new Categoria("Crecimiento", "/com/example/cannagrow/img/armarios.png")
+                new Categoria("Crecimiento", "/com/example/cannagrow/img/armarios.png"),
+                new Categoria("Iluminacion","/com/example/cannagrow/img/iluminacion.png"),
+                new Categoria("Macetas","/com/example/cannagrow/img/macetas.png"),
+                new Categoria("Panes de seta","/com/example/cannagrow/img/pan.png"),
+                new Categoria("Peladoras","/com/example/cannagrow/img/peladoras.png"),
+                new Categoria("Semillas","/com/example/cannagrow/img/semillas.png"),
+
+
+
+
         };
 
         // Contador para verificar cuántas categorías se cargaron correctamente
@@ -86,6 +100,8 @@ public class InicioController {
             }
         }
 
+
         System.out.println("Total de categorías cargadas exitosamente en InicioController: " + categoriasExitosas + " de " + categorias.length);
     }
+
 }

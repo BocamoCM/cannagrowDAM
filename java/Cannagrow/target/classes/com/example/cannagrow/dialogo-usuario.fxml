@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.cannagrow.DialogoUsuarioController"
+            prefWidth="400" prefHeight="500"
+            style="-fx-background-color: #212121;">
+
+    <VBox spacing="15" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- Título -->
+        <Label fx:id="lblTituloDialogo" text="Agregar Usuario" textFill="white">
+            <font>
+                <Font name="System Bold" size="18"/>
+            </font>
+        </Label>
+
+        <Separator style="-fx-background-color: #424242;"/>
+
+        <!-- Formulario -->
+        <GridPane vgap="10" hgap="10">
+            <columnConstraints>
+                <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <!-- Nombre -->
+            <Label text="Nombre:" textFill="white" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtNombre" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <!-- Email -->
+            <Label text="Email:" textFill="white" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtEmail" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <!-- Contraseña -->
+            <Label text="Contraseña:" textFill="white" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <PasswordField fx:id="txtContrasena" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <!-- Rol -->
+            <Label text="Rol:" textFill="white" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="comboRol" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <!-- Salario (solo para empleados) -->
+            <Label fx:id="lblSalario" text="Salario:" textFill="white" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtSalario" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <!-- Fecha de nacimiento (solo para clientes) -->
+            <Label fx:id="lblFechaNacimiento" text="Fecha Nacimiento:" textFill="white" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="dpFechaNacimiento" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+            <!-- Foto de perfil -->
+            <Label text="Foto de perfil:" textFill="white" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+            <HBox spacing="10" GridPane.rowIndex="6" GridPane.columnIndex="1">
+                <TextField fx:id="txtFotoUrl" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnSeleccionarFoto" text="Seleccionar"
+                        style="-fx-background-color: #616161; -fx-text-fill: white;"/>
+            </HBox>
+        </GridPane>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <!-- Botones -->
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="btnCancelar" text="Cancelar"
+                    style="-fx-background-color: #757575; -fx-text-fill: white;"/>
+            <Button fx:id="btnGuardar" text="Guardar"
+                    style="-fx-background-color: #43a047; -fx-text-fill: white;"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

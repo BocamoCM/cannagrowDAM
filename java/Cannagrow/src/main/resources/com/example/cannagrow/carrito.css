@@ -1,0 +1,223 @@
+/* carrito.css - Estilos para la interfaz de carrito de CannaGrow */
+
+/* Estilos generales */
+.root {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-background-color: #121212;
+    -fx-text-fill: #e0e0e0;
+}
+
+/* Fondo para el StackPane central */
+#centerPane {
+    -fx-background-color: #121212;
+}
+
+/* Estilos para las vistas de carrito */
+.titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.subtitulo {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.subtexto {
+    -fx-font-size: 14px;
+    -fx-text-fill: #b0b0b0;
+}
+
+.subseccion {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #bebebe;
+    -fx-padding: 5 0 0 0;
+}
+
+/* Botones */
+.boton-verde {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.boton-verde:hover {
+    -fx-background-color: #43a047;
+}
+
+.boton-verde-grande {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-padding: 12 24;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.boton-verde-grande:hover {
+    -fx-background-color: #43a047;
+}
+
+.boton-rojo {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f44336;
+    -fx-border-color: #f44336;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.boton-rojo:hover {
+    -fx-background-color: rgba(244, 67, 54, 0.1);
+}
+
+.boton-secundario {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b0b0b0;
+    -fx-border-color: #b0b0b0;
+    -fx-border-width: 1;
+    -fx-padding: 12 24;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.boton-secundario:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Tabla de productos */
+.cabecera-tabla {
+    -fx-background-color: #1e1e1e;
+    -fx-padding: 10;
+    -fx-background-radius: 6 6 0 0;
+}
+
+.texto-tabla {
+    -fx-font-weight: bold;
+    -fx-text-fill: #e0e0e0;
+}
+
+/* Personalización de ScrollPane */
+.transparent-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+.transparent-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.transparent-scroll > .scroll-bar {
+    -fx-background-color: #1e1e1e;
+}
+
+.transparent-scroll > .scroll-bar > .thumb {
+    -fx-background-color: #4caf50;
+    -fx-background-radius: 3;
+}
+
+/* Separadores */
+.custom-separator .line {
+    -fx-border-color: #333333;
+    -fx-border-width: 1;
+}
+
+/* Estilos para el resumen */
+.resumen-box {
+    -fx-background-color: #1e1e1e;
+    -fx-padding: 20;
+    -fx-background-radius: 6;
+}
+
+.campo-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #b0b0b0;
+}
+
+.campo-valor {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+.campo-total {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.valor-total {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4caf50;
+}
+
+/* Campos de texto */
+.text-field {
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #b0b0b0;
+    -fx-background-radius: 4;
+    -fx-padding: 8;
+}
+
+.text-field:focused {
+    -fx-background-color: #424242;
+    -fx-border-color: #4caf50;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+}
+
+/* Estilo para el item de producto en el carrito */
+.producto-item {
+    -fx-background-color: #1e1e1e;
+    -fx-padding: 10;
+    -fx-background-radius: 6;
+}
+
+.nombre-producto {
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.precio-producto {
+    -fx-text-fill: #4caf50;
+}
+
+.spinner {
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-background-color: #4caf50;
+    -fx-background-radius: 0;
+}
+
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: white;
+}
+
+.boton-eliminar {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f44336;
+    -fx-background-radius: 50%;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-cursor: hand;
+}
+
+.boton-eliminar:hover {
+    -fx-background-color: rgba(244, 67, 54, 0.1);
+}
