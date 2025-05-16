@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/8"
+            fx:controller="com.example.cannagrow.AdminProductosController"
+            prefWidth="800" prefHeight="600"
+            style="-fx-background-color: #121212;">
+
+    <!-- Tabla de productos -->
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Gestión de Productos" textFill="white">
+                <font>
+                    <Font size="24" />
+                </font>
+            </Label>
+
+            <!-- Barra de búsqueda -->
+            <HBox spacing="10">
+                <TextField fx:id="buscarField" promptText="Buscar por nombre..." prefWidth="300" />
+                <Button text="Buscar" onAction="#buscarProductos" />
+                <Button text="Recargar" onAction="#recargarProductos" />
+            </HBox>
+
+            <!-- Tabla -->
+            <TableView fx:id="tablaProductos" prefHeight="300">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="40" />
+                    <TableColumn fx:id="colNombre" text="Nombre" prefWidth="120" />
+                    <TableColumn fx:id="colTipo" text="Tipo" prefWidth="100" />
+                    <TableColumn fx:id="colTHC" text="THC" prefWidth="60" />
+                    <TableColumn fx:id="colCBD" text="CBD" prefWidth="60" />
+                    <TableColumn fx:id="colPrecio" text="Precio" prefWidth="80" />
+                    <TableColumn fx:id="colStock" text="Stock" prefWidth="60" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <!-- Formulario de edición -->
+    <bottom>
+        <VBox spacing="10" style="-fx-background-color: #1e1e1e;">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Editar Producto" textFill="white">
+                <font>
+                    <Font size="18" />
+                </font>
+            </Label>
+
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="20" />
+                    <ColumnConstraints percentWidth="80" />
+                </columnConstraints>
+
+                <Label text="ID:" textFill="white" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="idField" editable="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Nombre:" textFill="white" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="nombreField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Tipo:" textFill="white" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="tipoField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Contenido THC:" textFill="white" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="thcField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="Contenido CBD:" textFill="white" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextField fx:id="cbdField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                <Label text="Precio:" textFill="white" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                <TextField fx:id="precioField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                <Label text="Stock:" textFill="white" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                <TextField fx:id="stockField" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <Button text="Guardar Cambios" fx:id="guardarButton" onAction="#guardarCambios" maxWidth="200"/>
+        </VBox>
+    </bottom>
+</BorderPane>

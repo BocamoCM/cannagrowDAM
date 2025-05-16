@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #121212;"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javaafx.com/fxml/1"
+            fx:controller="com.example.cannagrow.InicioController">
+    <content>
+        <VBox alignment="TOP_CENTER" maxWidth="9999" spacing="30" style="-fx-background-color: #121212;">
+
+            <padding>
+                <Insets bottom="30" left="30" right="30" top="30" />
+            </padding>
+
+            <!-- Sección de bienvenida -->
+            <VBox maxWidth="800" spacing="15" style="-fx-background-color: #1f1f1f; -fx-padding: 30; -fx-background-radius: 16;">
+                <Label style="-fx-font-size: 28px; -fx-font-weight: bold;" text="Bienvenido a CannaGrow" textFill="white" />
+                <Label maxWidth="700" style="-fx-font-size: 15px;" textFill="#cccccc" wrapText="true">
+                    Explora nuestro amplio catálogo de productos para el cultivo y consumo responsable de cannabis.
+                    Desde semillas y fertilizantes hasta productos con CBD, ofrecemos soluciones para cultivadores novatos y expertos.
+                    ¡Calidad, discreción y servicio profesional garantizados!
+                </Label>
+            </VBox>
+
+            <!-- Categorías -->
+            <VBox alignment="TOP_CENTER" maxWidth="1000" spacing="10">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Categorías Destacadas" textFill="white" />
+
+                <!-- FlowPane que mostrará las categorías -->
+                <FlowPane fx:id="contenedorCategorias" alignment="CENTER" hgap="25" prefWrapLength="900" vgap="25">
+                    <padding>
+                        <Insets bottom="10" left="10" right="10" top="10" />
+                    </padding>
+                </FlowPane>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

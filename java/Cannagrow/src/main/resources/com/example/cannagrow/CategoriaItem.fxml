@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.cannagrow.CategoriaItemController"
+      alignment="CENTER" spacing="10"
+      style="-fx-background-color: #1f1f1f; -fx-padding: 15; -fx-background-radius: 12; -fx-cursor: hand;"
+      prefWidth="200">
+
+    <ImageView fx:id="imageView" fitWidth="120" fitHeight="80" preserveRatio="true"/>
+    <Label fx:id="nombreLabel"
+           textFill="#dddddd"
+           style="-fx-font-size: 14px; -fx-font-weight: bold;"
+           wrapText="true"
+           maxWidth="180"/>
+</VBox>
