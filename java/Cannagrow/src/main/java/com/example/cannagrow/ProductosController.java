@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controlador para la visualización y gestión de productos en la interfaz gráfica.
+ * Implementa funcionalidades de filtrado, búsqueda, lazy loading y caché de imágenes
+ * para optimizar el rendimiento en la visualización del catálogo de productos.
+ */
 public class ProductosController {
 
     @FXML
@@ -60,6 +65,11 @@ public class ProductosController {
         }
     }
 
+    /**
+     * Inicializa la interfaz de usuario y configura los componentes necesarios.
+     * Establece el título, configura los filtros, la búsqueda, el scroll listener
+     * y carga los productos iniciales.
+     */
     @FXML
     public void initialize() {
         System.out.println("Inicializando ProductosController...");
@@ -94,6 +104,10 @@ public class ProductosController {
         cargarProductos();
     }
 
+    /**
+     * Configura un listener para el ScrollPane que detecta cuando el usuario
+     * se acerca al final del scroll para cargar más productos (lazy loading).
+     */
     private void configurarScrollListener() {
         scrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
             // Si el usuario ha llegado cerca del final del scroll y no estamos ya cargando productos
@@ -104,6 +118,9 @@ public class ProductosController {
         });
     }
 
+    /**
+     * Configura el campo de búsqueda para filtrar productos por nombre.
+     */
     private void configurarBusqueda() {
         buscarTextField.setOnAction(event -> {
             String termino = buscarTextField.getText().trim();
@@ -118,6 +135,9 @@ public class ProductosController {
         });
     }
 
+    /**
+     * Configura el campo de búsqueda para filtrar productos por nombre.
+     */
     private void buscarProductos(String termino) {
         System.out.println("Buscando productos con: " + termino);
 
@@ -140,6 +160,9 @@ public class ProductosController {
         cargarMasProductos();
     }
 
+    /**
+     * Configura los botones de filtro disponibles según los tipos de productos existentes.
+     */
     private void configurarFiltros() {
         // Limpiar filtros existentes
         filtrosContainer.getChildren().clear();
@@ -161,6 +184,11 @@ public class ProductosController {
         }
     }
 
+    /**
+     * Crea un botón de filtro para un tipo específico de producto.
+     *
+     * @param tipo El tipo de producto para el filtro
+     */
     private void crearBotonFiltro(String tipo) {
         Button filtroBtn = new Button(tipo);
         filtroBtn.getStyleClass().add("filtro-btn");
@@ -202,6 +230,10 @@ public class ProductosController {
         filtrosContainer.getChildren().add(filtroBtn);
     }
 
+    /**
+     * Carga todos los productos disponibles en la base de datos.
+     * Limpia la vista actual y muestra los productos en el contenedor.
+     */
     private void cargarProductos() {
         System.out.println("Cargando productos iniciales...");
 
@@ -227,6 +259,11 @@ public class ProductosController {
         cargarMasProductos();
     }
 
+    /**
+     * Carga los productos filtrados por un tipo específico.
+     *
+     * @param tipo El tipo de producto para filtrar
+     */
     private void cargarProductosPorTipo(String tipo) {
         System.out.println("Cargando productos de tipo: " + tipo);
 
@@ -251,6 +288,10 @@ public class ProductosController {
         cargarMasProductos();
     }
 
+    /**
+     * Implementa la funcionalidad de lazy loading para cargar más productos
+     * a medida que el usuario hace scroll en la interfaz.
+     */
     private void cargarMasProductos() {
         if (cargandoProductos || totalProductosCargados >= productosActuales.size()) {
             return; // Ya estamos cargando o ya cargamos todo
@@ -274,6 +315,12 @@ public class ProductosController {
         cargandoProductos = false;
     }
 
+    /**
+     * Muestra un mensaje informativo cuando no hay productos disponibles
+     * según los filtros o términos de búsqueda actuales.
+     *
+     * @param texto El mensaje a mostrar
+     */
     private void mostrarMensaje(String texto) {
         VBox mensajeBox = new VBox(20);
         mensajeBox.setAlignment(Pos.CENTER);
@@ -305,6 +352,12 @@ public class ProductosController {
         contenedorProductos.getChildren().add(mensajeBox);
     }
 
+    /**
+     * Crea una tarjeta visual para un producto con todos sus detalles.
+     *
+     * @param producto El producto para el cual crear la tarjeta
+     * @return Un contenedor VBox con la información y controles del producto
+     */
     private VBox crearTarjetaProducto(Producto producto) {
         // Contenedor principal
         VBox tarjeta = new VBox(8);
@@ -425,12 +478,24 @@ public class ProductosController {
         return tarjeta;
     }
 
+    /**
+     * Determina si un producto es de cannabis basado en su tipo.
+     *
+     * @param tipo El tipo de producto
+     * @return true si es un producto de cannabis, false en caso contrario
+     */
     private boolean esProductoCannabis(String tipo) {
         // Estos tipos de productos normalmente tienen valores THC/CBD relevantes
         return tipo.equals("Flor") || tipo.equals("Aceite") ||
                 tipo.equals("Comestible") || tipo.equals("Extracto");
     }
 
+    /**
+     * Crea una etiqueta visual para mostrar el tipo de producto.
+     *
+     * @param tipo El tipo de producto
+     * @return Una etiqueta estilizada según el tipo
+     */
     private Label crearEtiquetaTipo(String tipo) {
         Label tipoLabel = new Label(tipo);
         tipoLabel.getStyleClass().add("category-label");
@@ -463,6 +528,12 @@ public class ProductosController {
         return tipoLabel;
     }
 
+    /**
+     * Crea una etiqueta que muestra el estado del stock del producto.
+     *
+     * @param stock La cantidad disponible del producto
+     * @return Una etiqueta estilizada según el nivel de stock
+     */
     private Label crearEtiquetaStock(int stock) {
         Label stockLabel = new Label();
 
@@ -482,8 +553,9 @@ public class ProductosController {
 
     /**
      * Obtiene una imagen de la caché o la carga y almacena si no existe.
+     *
      * @param ruta La ruta de la imagen
-     * @return La imagen cargada o null si no se pudo cargar
+     * @return La imagen cargada o una imagen por defecto si no se pudo cargar
      */
     private Image getImagenCache(String ruta) {
         // Si la ruta es nula o vacía, devolver la imagen por defecto
@@ -541,10 +613,23 @@ public class ProductosController {
         return DEFAULT_IMAGE;
     }
 
+    /**
+     * Carga una imagen en un ImageView utilizando la caché.
+     *
+     * @param url La URL o ruta de la imagen
+     * @param imageView El componente ImageView donde mostrar la imagen
+     */
     private void cargarImagen(String url, ImageView imageView) {
         Image imagen = getImagenCache(url);
         imageView.setImage(imagen);
     }
+
+    /**
+     * Añade un producto al carrito del usuario actual.
+     * Verifica la sesión y el stock antes de agregar.
+     *
+     * @param producto El producto a añadir al carrito
+     */
 
     private void agregarAlCarrito(Producto producto) {
         // Verificar si hay un usuario en sesión
@@ -575,6 +660,13 @@ public class ProductosController {
         }
     }
 
+    /**
+     * Muestra una alerta con la información proporcionada.
+     *
+     * @param titulo El título de la alerta
+     * @param mensaje El mensaje a mostrar
+     * @param tipo El tipo de alerta (información, advertencia, error)
+     */
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
@@ -583,7 +675,10 @@ public class ProductosController {
         alert.showAndWait();
     }
 
-    // Método para recargar productos cuando sea necesario (por ejemplo, después de cambiar un filtro)
+    /**
+     * Recarga los productos en la interfaz según el filtro actual.
+     * Útil después de realizar cambios en los datos.
+     */
     public void recargarProductos() {
         terminoBusquedaActual = "";
         buscarTextField.setText("");

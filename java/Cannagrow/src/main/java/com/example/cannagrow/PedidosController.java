@@ -22,6 +22,10 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Controlador de la vista de pedidos del cliente en la aplicación.
+ * Gestiona la visualización, filtrado y detalle de los pedidos realizados.
+ */
 public class PedidosController implements Initializable {
 
     @FXML
@@ -74,6 +78,13 @@ public class PedidosController implements Initializable {
     private NumberFormat formatoMoneda = NumberFormat.getCurrencyInstance();
     private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
+    /**
+     * Método de inicialización llamado automáticamente al cargar el controlador.
+     * Configura tablas, filtros y carga los pedidos del usuario actual.
+     *
+     * @param url no se utiliza.
+     * @param resourceBundle no se utiliza.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Configurar la tabla de pedidos
@@ -89,6 +100,9 @@ public class PedidosController implements Initializable {
         cargarPedidosUsuario();
     }
 
+    /**
+     * Configura las columnas y celdas de la tabla de pedidos.
+     */
     private void configurarTablaPedidos() {
         // Configurar las columnas de la tabla
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -147,6 +161,9 @@ public class PedidosController implements Initializable {
         pedidosTableView.setItems(listaPedidos);
     }
 
+    /**
+     * Agrega botones personalizados en la columna de acciones de la tabla de pedidos.
+     */
     private void configurarColumnaBotones() {
         Callback<TableColumn<Pedido, Void>, TableCell<Pedido, Void>> cellFactory = new Callback<>() {
             @Override
@@ -161,7 +178,9 @@ public class PedidosController implements Initializable {
                             mostrarDetallesPedido(pedido);
                         });
                     }
-
+                    /**
+                     * Actualizar item
+                     */
                     @Override
                     public void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -178,7 +197,9 @@ public class PedidosController implements Initializable {
         accionesColumn.setCellFactory(cellFactory);
     }
 
-
+    /**
+     * Configura el ComboBox de filtro de estados de pedido.
+     */
     private void configurarFiltroEstados() {
         // Agregar la opción "Todos" y los estados disponibles
         ObservableList<String> opcionesFiltro = FXCollections.observableArrayList();
@@ -195,7 +216,9 @@ public class PedidosController implements Initializable {
         filtroEstadoComboBox.setOnAction(event -> filtrarPedidosPorEstado());
     }
 
-
+    /**
+     * Configura las columnas y el contenido de la tabla de detalles del pedido.
+     */
     private void configurarTablaDetalles() {
         productoColumn.setCellValueFactory(cellData -> {
             DetallePedido detalle = cellData.getValue();
@@ -238,6 +261,10 @@ public class PedidosController implements Initializable {
         detallesTableView.setItems(listaDetalles);
     }
 
+    /**
+     * Carga los pedidos del cliente asociado al usuario actual.
+     * Si no hay cliente asociado, se muestra un mensaje de error.
+     */
     private void cargarPedidosUsuario() {
         // Obtener el ID del usuario actual
         int usuarioId = Session.getUsuarioActual().getId();
@@ -260,6 +287,9 @@ public class PedidosController implements Initializable {
         }
     }
 
+    /**
+     * Aplica el filtro de estado seleccionado para mostrar solo los pedidos con ese estado.
+     */
     private void filtrarPedidosPorEstado() {
         String filtro = filtroEstadoComboBox.getValue();
 
@@ -292,6 +322,11 @@ public class PedidosController implements Initializable {
         }
     }
 
+    /**
+     * Muestra en pantalla los detalles de un pedido específico.
+     *
+     * @param pedido el pedido del cual se deben mostrar los detalles.
+     */
     private void mostrarDetallesPedido(Pedido pedido) {
         // Cargar los detalles del pedido
         List<DetallePedido> detalles = PedidoModel.obtenerDetallesPedido(pedido.getId());
@@ -318,6 +353,9 @@ public class PedidosController implements Initializable {
         detallesPedidoPane.setVisible(true);
     }
 
+    /**
+     * Oculta el panel lateral de detalles del pedido.
+     */
     @FXML
     private void onCerrarDetallesClick() {
         // Ocultar el panel de detalles

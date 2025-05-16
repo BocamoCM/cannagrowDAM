@@ -12,7 +12,20 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Clase principal de la aplicación Cannagrow.
+ * Inicializa la interfaz gráfica y gestiona el ciclo de vida de la aplicación.
+ */
 public class Main extends Application {
+
+    /**
+     * Método principal que inicia la aplicación JavaFX.
+     * Carga la interfaz inicial, establece estilos, configura la ventana
+     * y maneja posibles errores de inicialización.
+     *
+     * @param stage El escenario principal de la aplicación
+     * @throws IOException Si hay problemas al cargar los recursos FXML
+     */
     @Override
     public void start(Stage stage) throws IOException {
         try {
@@ -76,6 +89,12 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Configura el comportamiento de cierre de la aplicación.
+     * Intercepta el evento de cierre para mostrar un diálogo de confirmación.
+     *
+     * @param stage El escenario principal de la aplicación
+     */
     private void configureCloseRequest(Stage stage) {
         stage.setOnCloseRequest(event -> {
             // Prevenir el cierre automático
@@ -86,6 +105,12 @@ public class Main extends Application {
         });
     }
 
+    /**
+     * Muestra un diálogo de confirmación antes de cerrar la aplicación.
+     * Si el usuario confirma, cierra la sesión y finaliza el programa.
+     *
+     * @param stage El escenario principal de la aplicación
+     */
     private void mostrarDialogoCerrar(Stage stage) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar Cierre");
@@ -103,6 +128,12 @@ public class Main extends Application {
         });
     }
 
+    /**
+     * Método que se ejecuta al finalizar la aplicación.
+     * Garantiza que la sesión se cierre correctamente antes de terminar.
+     *
+     * @throws Exception Si ocurre algún error durante el cierre de la aplicación
+     */
     @Override
     public void stop() throws Exception {
         // Método de respaldo para asegurar cierre de sesión
@@ -115,6 +146,11 @@ public class Main extends Application {
         super.stop();
     }
 
+    /**
+     * Punto de entrada principal de la aplicación.
+     *
+     * @param args Argumentos de línea de comandos (no utilizados)
+     */
     public static void main(String[] args) {
         launch();
     }

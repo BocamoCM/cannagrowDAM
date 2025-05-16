@@ -35,6 +35,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+
+/**
+ * Controlador para la gestión administrativa de pedidos.
+ * Permite visualizar, filtrar y gestionar los pedidos del sistema.
+ * Implementa carga asíncrona y paginación para mejorar el rendimiento con grandes volúmenes de datos.
+ */
 public class AdminPedidosController implements Initializable {
 
     @FXML
@@ -118,6 +124,17 @@ public class AdminPedidosController implements Initializable {
     private String filtroActual = "Todos";
     private EstadoPedido estadoFiltrado = null;
 
+
+
+    // Campos FXML y variables de clase omitidas para brevedad...
+
+    /**
+     * Inicializa el controlador de administración de pedidos.
+     * Configura las tablas, filtros, y carga inicial de datos.
+     *
+     * @param url La ubicación utilizada para resolver rutas relativas para el objeto raíz.
+     * @param resourceBundle El recurso usado para localizar el objeto raíz.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Verificar si el usuario es administrador
@@ -149,6 +166,10 @@ public class AdminPedidosController implements Initializable {
         cargarPedidosIniciales();
     }
 
+    /**
+     * Verifica que el usuario actual tenga los permisos necesarios para acceder a esta sección.
+     * Muestra una alerta si el usuario no es administrador o gerente.
+     */
     private void verificarPermisos() {
         UsuarioModel usuario = Session.getUsuarioActual();
         if (usuario == null || (!usuario.getRol().equalsIgnoreCase("gerente") && !usuario.getRol().equalsIgnoreCase("administrador"))) {
@@ -160,6 +181,11 @@ public class AdminPedidosController implements Initializable {
         }
     }
 
+    /**
+     * Configura la tabla principal de pedidos.
+     * Define el comportamiento de las columnas y establece optimizaciones de rendimiento.
+     * Incluye formato personalizado para fechas, moneda y estados.
+     */
     private void configurarTablaPedidos() {
         // Configurar las columnas de la tabla
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -243,6 +269,10 @@ public class AdminPedidosController implements Initializable {
         pedidosTableView.setCache(true); // Activar cache para mejorar rendimiento
     }
 
+    /**
+     * Configura la columna de botones de acción para cada pedido.
+     * Añade un botón "Ver Detalles" que permite mostrar información detallada del pedido seleccionado.
+     */
     private void configurarColumnaBotones() {
         Callback<TableColumn<Pedido, Void>, TableCell<Pedido, Void>> cellFactory = new Callback<>() {
             @Override
@@ -278,6 +308,11 @@ public class AdminPedidosController implements Initializable {
         accionesColumn.setCellFactory(cellFactory);
     }
 
+    /**
+     * Configura el combobox de filtro de estados.
+     * Permite filtrar los pedidos según su estado actual (Pendiente, Enviado, Entregado, Cancelado).
+     * Incluye una opción "Todos" para mostrar pedidos en cualquier estado.
+     */
     private void configurarFiltroEstados() {
         // Agregar la opción "Todos" y los estados disponibles
         ObservableList<String> opcionesFiltro = FXCollections.observableArrayList();
@@ -298,6 +333,10 @@ public class AdminPedidosController implements Initializable {
         });
     }
 
+    /**
+     * Configura el combobox para cambiar el estado de un pedido.
+     * Establece el convertidor para mostrar correctamente los valores de estado.
+     */
     private void configurarCambioEstado() {
         // Configurar las opciones del combo de cambio de estado
         ObservableList<EstadoPedido> opcionesEstado = FXCollections.observableArrayList(EstadoPedido.values());
@@ -322,6 +361,11 @@ public class AdminPedidosController implements Initializable {
         });
     }
 
+    /**
+     * Configura la tabla de detalles de pedido.
+     * Define el comportamiento de las columnas para mostrar productos, cantidades,
+     * precios unitarios y subtotales.
+     */
     private void configurarTablaDetalles() {
         productoColumn.setCellValueFactory(cellData -> {
             DetallePedido detalle = cellData.getValue();
@@ -360,6 +404,11 @@ public class AdminPedidosController implements Initializable {
         detallesTableView.setItems(listaDetalles);
     }
 
+    /**
+     * Configura el sistema de paginación basado en scroll.
+     * Implementa detección de scroll para cargar más pedidos automáticamente
+     * cuando el usuario se acerca al final de la lista.
+     */
     private void configurarPaginacion() {
         // Instead of finding the ScrollBar directly at initialization,
         // add a listener to the scene property of the TableView
@@ -414,6 +463,13 @@ public class AdminPedidosController implements Initializable {
         });
     }
 
+    /**
+     * Busca la barra de desplazamiento vertical en la tabla de pedidos.
+     * Utiliza múltiples estrategias de búsqueda para mayor compatibilidad.
+     *
+     * @param tableView La tabla donde se buscará la barra de desplazamiento.
+     * @return La barra de desplazamiento vertical si se encuentra, null en caso contrario.
+     */
     private ScrollBar findScrollBar(TableView<?> tableView) {
         // Try different lookup approaches
 
@@ -444,6 +500,13 @@ public class AdminPedidosController implements Initializable {
         return null;
     }
 
+    /**
+     * Busca una fila específica en la tabla por su índice.
+     *
+     * @param tableView La tabla donde se buscará la fila.
+     * @param index El índice de la fila a buscar.
+     * @return La fila encontrada, o null si no se encuentra.
+     */
     private TableRow<?> findTableRow(TableView<?> tableView, int index) {
         for (Node node : tableView.lookupAll(".table-row-cell")) {
             if (node instanceof TableRow) {
@@ -456,6 +519,12 @@ public class AdminPedidosController implements Initializable {
         return null;
     }
 
+    /**
+     * Obtiene el índice de la última fila visible en la tabla.
+     *
+     * @param tableView La tabla a examinar.
+     * @return El índice de la última fila visible o -1 si no hay filas visibles.
+     */
     private int getLastVisibleIndex(TableView<?> tableView) {
         int lastIndex = -1;
         for (Node node : tableView.lookupAll(".table-row-cell")) {
@@ -469,12 +538,20 @@ public class AdminPedidosController implements Initializable {
         return lastIndex;
     }
 
+    /**
+     * Reinicia la paginación al cambiar los filtros.
+     * Limpia la lista actual de pedidos y establece la página actual a 1.
+     */
     private void resetearPaginacion() {
         // Reiniciar la paginación cuando cambia el filtro
         paginaActual = 1;
         listaPedidos.clear();
     }
 
+    /**
+     * Carga los pedidos iniciales de forma asíncrona.
+     * Aplica filtros si están configurados y utiliza el sistema de caché para optimizar el rendimiento.
+     */
     private void cargarPedidosIniciales() {
         estaCargando.set(true); // Corregido el error tipográfico
         mostrarEstadoCarga(true, "Cargando pedidos iniciales...");
@@ -524,6 +601,10 @@ public class AdminPedidosController implements Initializable {
         executorService.submit(task);
     }
 
+    /**
+     * Carga más pedidos cuando el usuario se desplaza hacia el final de la lista.
+     * Implementa carga asíncrona para no bloquear la interfaz.
+     */
     private void cargarMasPedidos() {
         if (estaCargando.get()) return; // Corregido el error tipográfico
 
@@ -582,6 +663,10 @@ public class AdminPedidosController implements Initializable {
         executorService.submit(task);
     }
 
+    /**
+     * Filtra los pedidos según el estado seleccionado en el combobox.
+     * Utiliza tareas asíncronas para mantener la interfaz responsiva durante la carga.
+     */
     private void filtrarPedidosPorEstado() {
         if (estaCargando.get()) return; // Corregido el error tipográfico
 
@@ -640,6 +725,12 @@ public class AdminPedidosController implements Initializable {
         executorService.submit(task);
     }
 
+    /**
+     * Convierte el valor de texto del filtro al enum correspondiente de EstadoPedido.
+     *
+     * @param filtro El texto del filtro seleccionado.
+     * @return El valor del enum EstadoPedido correspondiente, o null si es "Todos".
+     */
     private EstadoPedido obtenerEstadoFiltro(String filtro) {
         if ("Todos".equals(filtro)) {
             return null;
@@ -655,6 +746,12 @@ public class AdminPedidosController implements Initializable {
         return null;
     }
 
+    /**
+     * Precarga los datos de un cliente para mejorar el rendimiento.
+     * Añade la información del cliente al caché si no está presente.
+     *
+     * @param clienteId El ID del cliente cuyos datos se precargarán.
+     */
     private void preCargarDatosCliente(int clienteId) {
         // Este método asegura que los datos del cliente estén en caché
         if (!UsuarioCache.existeCliente(clienteId)) {
@@ -663,6 +760,12 @@ public class AdminPedidosController implements Initializable {
         }
     }
 
+    /**
+     * Actualiza los elementos visuales de la interfaz para mostrar el estado de carga.
+     *
+     * @param mostrar Indica si se deben mostrar los indicadores de carga.
+     * @param mensaje El mensaje que se mostrará durante la carga.
+     */
     private void mostrarEstadoCarga(boolean mostrar, String mensaje) {
         Platform.runLater(() -> {
             if (progressBar != null) {
@@ -681,6 +784,12 @@ public class AdminPedidosController implements Initializable {
         });
     }
 
+    /**
+     * Muestra los detalles de un pedido seleccionado.
+     * Carga asíncronamente la información detallada y actualiza el panel de detalles.
+     *
+     * @param pedido El pedido cuyos detalles se mostrarán.
+     */
     private void mostrarDetallesPedido(Pedido pedido) {
         // Mostrar una indicación de carga
         mostrarEstadoCarga(true, "Cargando detalles del pedido...");
@@ -750,12 +859,20 @@ public class AdminPedidosController implements Initializable {
         executorService.submit(task);
     }
 
+    /**
+     * Maneja el evento de clic en el botón de refrescar.
+     * Reinicia la paginación y vuelve a cargar los pedidos iniciales.
+     */
     @FXML
     private void onRefrescarClick() {
         resetearPaginacion();
         cargarPedidosIniciales();
     }
 
+    /**
+     * Maneja el evento de clic en el botón de cerrar detalles.
+     * Oculta el panel de detalles del pedido y limpia la selección actual.
+     */
     @FXML
     private void onCerrarDetallesClick() {
         // Ocultar el panel de detalles
@@ -764,7 +881,10 @@ public class AdminPedidosController implements Initializable {
     }
 
 
-
+    /**
+     * Maneja el evento de clic en el botón de cambiar estado.
+     * Verifica que haya un pedido seleccionado antes de proceder.
+     */
     @FXML
     private void onCambiarEstadoClick() {
         if (pedidoSeleccionado == null) {
@@ -776,7 +896,14 @@ public class AdminPedidosController implements Initializable {
 
 
 
-
+    /**
+     * Muestra una alerta con la información especificada.
+     *
+     * @param titulo El título de la alerta.
+     * @param encabezado El texto de encabezado de la alerta.
+     * @param contenido El contenido principal de la alerta.
+     * @param tipo El tipo de alerta (información, advertencia, error, etc.).
+     */
     private void mostrarAlerta(String titulo, String encabezado, String contenido, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
@@ -784,6 +911,11 @@ public class AdminPedidosController implements Initializable {
         alerta.setContentText(contenido);
         alerta.showAndWait();
     }
+
+    /**
+     * Maneja el evento de clic en el botón de asignar empleado.
+     * Muestra un diálogo para seleccionar un empleado disponible y asignarlo al pedido seleccionado.
+     */
     @FXML
     private void onAsignarEmpleadoClick() {
         if (pedidoSeleccionado == null) {
@@ -857,7 +989,11 @@ public class AdminPedidosController implements Initializable {
         });
     }
 
-    // Método para liberar recursos al cerrar la ventana
+    /**
+     * Libera los recursos utilizados por el controlador.
+     * Cierra el ExecutorService para detener las tareas asíncronas pendientes.
+     * Este método debe llamarse al cerrar la ventana.
+     */
     public void shutdown() {
         if (executorService != null && !executorService.isShutdown()) {
             executorService.shutdown();

@@ -11,6 +11,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.List;
 
+/**
+ * Controlador para la administración de productos.
+ * Permite visualizar, buscar y editar la información de los productos del sistema.
+ * Facilita la gestión del inventario a los administradores.
+ */
 public class AdminProductosController {
 
     @FXML
@@ -67,6 +72,11 @@ public class AdminProductosController {
 
     private ObservableList<Producto> productosObservable;
 
+    /**
+     * Inicializa el controlador de administración de productos.
+     * Configura las columnas de la tabla, carga los productos iniciales y
+     * establece los listeners para la selección de productos.
+     */
     @FXML
     public void initialize() {
         // Configurar columnas de la tabla
@@ -88,12 +98,23 @@ public class AdminProductosController {
         });
     }
 
+    /**
+     * Carga todos los productos desde la base de datos y los muestra en la tabla.
+     * Utiliza el modelo ProductoModel para obtener la lista de productos y
+     * actualiza la tabla con los datos obtenidos.
+     */
     private void cargarProductos() {
         List<Producto> productos = ProductoModel.obtenerTodos();
         productosObservable = FXCollections.observableArrayList(productos);
         tablaProductos.setItems(productosObservable);
     }
 
+    /**
+     * Muestra los datos de un producto en los campos de edición.
+     * Permite la visualización y edición de la información del producto seleccionado.
+     *
+     * @param p El producto cuyos datos se mostrarán en los campos de edición.
+     */
     private void mostrarProducto(Producto p) {
         idField.setText(String.valueOf(p.getId()));
         nombreField.setText(p.getNombre());
@@ -104,6 +125,13 @@ public class AdminProductosController {
         stockField.setText(String.valueOf(p.getStock()));
     }
 
+    /**
+     * Maneja el evento de búsqueda de productos.
+     * Filtra los productos según el término de búsqueda introducido por el usuario.
+     * Si el campo de búsqueda está vacío, muestra todos los productos.
+     *
+     * @param event El evento de acción que desencadena la búsqueda.
+     */
     @FXML
     public void buscarProductos(ActionEvent event) {
         String termino = buscarField.getText().trim();
@@ -116,6 +144,14 @@ public class AdminProductosController {
         productosObservable.setAll(resultados);
     }
 
+    /**
+     * Maneja el evento de guardar cambios en un producto.
+     * Recoge los datos de los campos de edición, valida los formatos numéricos y
+     * actualiza el producto en la base de datos.
+     * Muestra alertas informativas sobre el resultado de la operación.
+     *
+     * @param event El evento de acción que desencadena el guardado de cambios.
+     */
     @FXML
     public void guardarCambios(ActionEvent event) {
         try {
@@ -144,12 +180,25 @@ public class AdminProductosController {
         }
     }
 
+    /**
+     * Actualiza la información de un producto en la base de datos.
+     * Utiliza el modelo ProductoModel para realizar la actualización.
+     *
+     * @param producto El producto con la información actualizada que se guardará en la base de datos.
+     * @return true si la actualización fue exitosa, false en caso contrario.
+     */
     private boolean actualizarProductoEnBD(Producto producto) {
         // Aquí debes implementar la lógica para actualizar el producto en la BD,
         // por ejemplo, con un método estático en ProductoModel:
         return ProductoModel.actualizarProducto(producto);
     }
 
+    /**
+     * Recarga todos los productos desde la base de datos.
+     * Actualiza la tabla con los datos más recientes de los productos.
+     *
+     * @param event El evento de acción que desencadena la recarga.
+     */
     @FXML
     public void recargarProductos(ActionEvent event) {
         cargarProductos();
