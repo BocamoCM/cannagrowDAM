@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"com.example.cannagrow","l":"com.example.cannagrow"},{"m":"com.example.cannagrow","l":"com.example.model"}];updateSearchResults();
