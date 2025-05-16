@@ -25,6 +25,16 @@ import java.util.function.Predicate;
 
 import com.example.model.DBUtil;
 
+/**
+ * Controlador para la vista de administración de usuarios.
+ * Permite a un gerente gestionar empleados y clientes mediante filtros, edición, eliminación y estadísticas.
+ *
+ * Carga datos desde la base de datos y presenta una interfaz interactiva con filtros y botones de acción.
+ *
+ * Acceso limitado a usuarios con rol "Gerente".
+ *
+ * FXML asociado: /com/example/cannagrow/admin-usuarios.fxml
+ */
 public class AdminUsuariosController {
 
     @FXML
@@ -78,6 +88,10 @@ public class AdminUsuariosController {
     private ObservableList<UsuarioTablaModel> listaUsuarios = FXCollections.observableArrayList();
     private FilteredList<UsuarioTablaModel> listaFiltrada;
 
+    /**
+     * Inicializa la interfaz de administración de usuarios.
+     * Verifica permisos, configura la tabla, filtros, eventos y carga los datos iniciales.
+     */
     @FXML
     public void initialize() {
         // Verificar permisos
@@ -107,6 +121,9 @@ public class AdminUsuariosController {
         actualizarEstadisticas();
     }
 
+    /**
+     * Configura las columnas de la tabla de usuarios, incluyendo nombre, email, rol, salario, foto y botones de acción.
+     */
     private void configurarColumnas() {
         colId.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
         colNombre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
@@ -164,7 +181,9 @@ public class AdminUsuariosController {
                     confirmarEliminacion(usuario);
                 });
             }
-
+            /**
+             * Actualizar item
+             */
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -173,6 +192,9 @@ public class AdminUsuariosController {
         });
     }
 
+    /**
+     * Asocia eventos a botones como agregar, buscar y limpiar filtros, así como a cambios en el combo de rol.
+     */
     private void configurarEventos() {
         btnAgregarUsuario.setOnAction(event -> abrirDialogoAgregar());
 
@@ -188,11 +210,17 @@ public class AdminUsuariosController {
         comboFiltroRol.setOnAction(event -> aplicarFiltros());
     }
 
+    /**
+     * Aplica filtros a la lista de usuarios según el texto ingresado y el rol seleccionado.
+     */
     private void configurarFiltros() {
         listaFiltrada = new FilteredList<>(listaUsuarios, p -> true);
         tablaUsuarios.setItems(listaFiltrada);
     }
 
+    /**
+     * Configura la lista filtrada para aplicar filtros dinámicos sobre la tabla de usuarios.
+     */
     private void aplicarFiltros() {
         String textoBusqueda = txtBuscar.getText().toLowerCase().trim();
         String rolSeleccionado = comboFiltroRol.getValue();
@@ -212,6 +240,9 @@ public class AdminUsuariosController {
         actualizarEstadisticas();
     }
 
+    /**
+     * Carga todos los usuarios desde la base de datos, incluyendo empleados y clientes.
+     */
     private void cargarUsuarios() {
         listaUsuarios.clear();
 
@@ -222,6 +253,11 @@ public class AdminUsuariosController {
         cargarDesdeTabla("Cliente");
     }
 
+    /**
+     * Carga usuarios desde una tabla específica (Empleado o Cliente) de la base de datos.
+     *
+     * @param tabla Nombre de la tabla ("Empleado" o "Cliente").
+     */
     private void cargarDesdeTabla(String tabla) {
         String query = "SELECT id, nombre, email, fotoPerfilUrl, discordid" +
                 (tabla.equals("Empleado") ? ", rol, salario" : "") +
@@ -258,6 +294,10 @@ public class AdminUsuariosController {
         }
     }
 
+    /**
+     * Abre el diálogo de formulario para agregar un nuevo usuario.
+     * Se invoca el guardado según el tipo (empleado o cliente).
+     */
     private void actualizarEstadisticas() {
         int totalUsuarios = listaFiltrada.size();
         int totalEmpleados = 0;
@@ -276,6 +316,11 @@ public class AdminUsuariosController {
         lblTotalClientes.setText("Clientes: " + totalClientes);
     }
 
+    /**
+     * Abre el diálogo de edición de usuario con los datos prellenados.
+     *
+     *
+     */
     private void abrirDialogoAgregar() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/dialogo-usuario.fxml"));
@@ -329,6 +374,12 @@ public class AdminUsuariosController {
         }
     }
 
+    /**
+     * Actualiza los datos de un usuario existente en la base de datos.
+     *
+     * @param usuario Usuario con los nuevos datos.
+     * @return true si se actualizó correctamente, false en caso contrario.
+     */
     private void abrirDialogoEdicion(UsuarioTablaModel usuario) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/dialogo-usuario.fxml"));
@@ -361,6 +412,11 @@ public class AdminUsuariosController {
         }
     }
 
+    /**
+     * Muestra una confirmación antes de eliminar un usuario, y realiza la eliminación si se aprueba.
+     *
+     * @param usuario Usuario a eliminar.
+     */
     private boolean actualizarUsuario(UsuarioTablaModel usuario, boolean esEmpleado) {
         String tabla = esEmpleado ? "Empleado" : "Cliente";
         String query = "UPDATE " + tabla + " SET nombre = ?, email = ?, fotoPerfilUrl = ?, discordid = ?";
@@ -403,6 +459,12 @@ public class AdminUsuariosController {
         }
     }
 
+    /**
+     * Elimina un usuario de la base de datos según su tipo (Empleado o Cliente).
+     *
+     * @param usuario Usuario a eliminar.
+     * @return true si la eliminación fue exitosa, false en caso contrario.
+     */
     private void confirmarEliminacion(UsuarioTablaModel usuario) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar eliminación");
@@ -419,6 +481,11 @@ public class AdminUsuariosController {
         }
     }
 
+    /**
+     * Muestra una alerta de error con un mensaje personalizado.
+     *
+     * @param usuario
+     */
     private boolean eliminarUsuario(UsuarioTablaModel usuario) {
         String tabla = usuario.isEsEmpleado() ? "Empleado" : "Cliente";
         String query = "DELETE FROM " + tabla + " WHERE id = ?";
@@ -437,6 +504,12 @@ public class AdminUsuariosController {
         }
     }
 
+    /**
+     * Muestra una alerta de error con un mensaje personalizado.
+     *
+     * @param titulo Título de la ventana.
+     * @param mensaje Mensaje de error.
+     */
     private void mostrarMensajeError(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(titulo);
@@ -445,6 +518,12 @@ public class AdminUsuariosController {
         alert.showAndWait();
     }
 
+    /**
+     * Muestra una alerta informativa con un mensaje personalizado.
+     *
+     * @param titulo Título de la ventana.
+     * @param mensaje Mensaje informativo.
+     */
     private void mostrarMensajeInfo(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
@@ -453,7 +532,9 @@ public class AdminUsuariosController {
         alert.showAndWait();
     }
 
-    // Clase interna para manejar los datos de la tabla
+    /**
+     * Modelo de datos utilizado para mostrar los usuarios en la tabla de administración.
+     */
     public static class UsuarioTablaModel {
         private int id;
         private String nombre;

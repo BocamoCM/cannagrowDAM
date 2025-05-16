@@ -13,10 +13,18 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Controlador de la vista principal de la aplicación CannaGrow.
+ * Se encarga de cargar y mostrar las categorías disponibles en la interfaz inicial.
+ */
 public class InicioController {
     @FXML
     private FlowPane contenedorCategorias;
 
+    /**
+     * Método que se ejecuta al inicializar el controlador.
+     * Verifica la existencia del contenedor de categorías y carga las categorías si está presente.
+     */
     @FXML
     public void initialize() {
         System.out.println("Iniciando inicialización de InicioController...");
@@ -29,6 +37,11 @@ public class InicioController {
         }
     }
 
+    /**
+     * Carga las categorías disponibles y sus imágenes correspondientes en el contenedor.
+     * Verifica la existencia de las imágenes y busca rutas alternativas si no se encuentran.
+     * Utiliza la vista FXML `CategoriaItem.fxml` para cada elemento.
+     */
     private void cargarCategorias() {
         System.out.println("Iniciando carga de categorías en InicioController...");
 

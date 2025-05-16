@@ -20,6 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+/**
+ * Controlador del panel de administración de la aplicación CannaGrow.
+ * Permite a los administradores gestionar usuarios, pedidos y productos,
+ * además de controlar la sesión actual.
+ */
 public class MenuAdminController {
     @FXML
     private Button registerButton;
@@ -44,6 +49,9 @@ public class MenuAdminController {
     private static Parent registroPaneCache = null;
     private static Parent pedidosPaneCache = null;
     private static Parent productosPaneCache = null;
+    /**
+     * Inicializa el controlador
+     */
     @FXML
     public void initialize() {
         System.out.println("Iniciando inicialización de MenuAdminController...");
@@ -151,6 +159,9 @@ public class MenuAdminController {
         }
     }
 
+    /**
+     * Carga la foto de perfil del usuario actual o una imagen por defecto si no se encuentra.
+     */
     private void cargarFotoPerfil() {
         try {
             // Verificar que el componente existe antes de manipularlo
@@ -198,6 +209,9 @@ public class MenuAdminController {
         }
     }
 
+    /**
+     * Carga una imagen por defecto si no se pudo cargar la foto de perfil del usuario.
+     */
     private void cargarLogoPorDefecto() {
         try {
             // Verificar que el componente existe antes de manipularlo
@@ -231,6 +245,9 @@ public class MenuAdminController {
         }
     }
 
+    /**
+     * Reinicia el estilo de los botones del menú a su estado original.
+     */
     private void resetearBotonesMenu() {
         String estiloNormal = "-fx-background-color: #555555; -fx-text-fill: white;";
         if (registerButton != null) registerButton.setStyle(estiloNormal);
@@ -243,6 +260,11 @@ public class MenuAdminController {
         if (inicioButton != null) inicioButton.setStyle(negativeStyle);
     }
 
+    /**
+     * Maneja el evento del botón de registro de usuarios.
+     *
+     * @param event Evento de acción del botón.
+     */
     @FXML
     public void onRegisterClick(ActionEvent event) {
         try {
@@ -266,6 +288,11 @@ public class MenuAdminController {
         }
     }
 
+    /**
+     * Maneja el evento del botón de administración de pedidos.
+     *
+     * @param event Evento de acción del botón.
+     */
     @FXML
     public void onPedidoClick(ActionEvent event) {
         try {
@@ -289,6 +316,11 @@ public class MenuAdminController {
         }
     }
 
+    /**
+     * Maneja el evento del botón de administración de usuarios.
+     *
+     * @param event Evento de acción del botón.
+     */
     @FXML
     public void onUsuariosClick(ActionEvent event) {
         try {
@@ -312,6 +344,11 @@ public class MenuAdminController {
         }
     }
 
+    /**
+     * Cierra la sesión del usuario y la ventana actual.
+     *
+     * @param event Evento de acción del botón.
+     */
     @FXML
     public void onLogoutClick(ActionEvent event) {
         try {
@@ -329,6 +366,11 @@ public class MenuAdminController {
         }
     }
 
+    /**
+     * Vuelve a la vista principal de la aplicación.
+     *
+     * @param event Evento de acción del botón.
+     */
     @FXML
     public void onInicioClick(ActionEvent event) {
         try {
@@ -349,11 +391,23 @@ public class MenuAdminController {
         }
     }
 
-
+    /**
+     * Muestra un mensaje al usuario con un título y cuerpo dado.
+     *
+     * @param titulo Título del mensaje.
+     * @param mensaje Contenido del mensaje.
+     */
     public void mostrarMensaje(String titulo, String mensaje) {
         mostrarMensaje(titulo, mensaje, Alert.AlertType.INFORMATION);
     }
 
+    /**
+     * Muestra un mensaje al usuario con tipo personalizado.
+     *
+     * @param titulo Título del mensaje.
+     * @param mensaje Contenido del mensaje.
+     * @param tipo Tipo de alerta a mostrar.
+     */
     public void mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
@@ -361,6 +415,12 @@ public class MenuAdminController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
+    /**
+     * Maneja el evento del botón de administración de productos.
+     *
+     * @param event Evento de acción del botón.
+     */
     @FXML
     public void onProductosClick(ActionEvent event) {
         try {

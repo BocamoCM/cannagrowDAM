@@ -23,6 +23,9 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Clase carrito
+ */
 public class CarritoController {
 
     @FXML
@@ -76,6 +79,9 @@ public class CarritoController {
     // Formato para mostrar precios
     private final DecimalFormat formatoPrecio = new DecimalFormat("€#,##0.00");
 
+    /**
+     *inicializa el carrito model
+     */
     @FXML
     public void initialize() {
         System.out.println("Inicializando CarritoController...");
