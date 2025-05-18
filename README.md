@@ -1,106 +1,143 @@
-[![24/7 Support](https://img.shields.io/badge/24%2F7%20Support-✔️-34495E)](#)  
-.
-## Tienda de Cannabis Legal de Confianza
-
-**Especialistas en productos para el cultivo y consumo de cannabis dentro del marco legl**
+[![24/7 Support](https://img.shields.io/badge/24%2F7%20Support-✔️-34495E)](#)
+[![Visión](https://img.shields.io/badge/Visi%C3%B3n-Referente%20nacional-brightgreen)](#)  
+[![Misión](https://img.shields.io/badge/Misi%C3%B3n-Calidad%20y%20legalidad-blue)](#)  
+[![Semillas y Genéticas](https://img.shields.io/badge/Semillas%20y%20Gen%C3%A9ticas-Feminizadas%20%7C%20Autoflorecientes-green)](#)  
+[![Sistemas de Cultivo](https://img.shields.io/badge/Sistemas%20de%20Cultivo-HIDRO%20%7C%20LED%20%7C%20Ventilaci%C3%B3n-blue)](#)  
+[![Productos de Consumo](https://img.shields.io/badge/Productos%20de%20Consumo-COA%20Certificado%20%7C%20Accesorios-orange)](#)
 
 ---
 
-### Nuestra Misión
-Ofrecer a nuestros clientes productos de la más alta calidad para el cultivo y consumo de cannabis, garantizando siempre el pleno cumplimiento de las leyes y normativas locales.
+## Tienda Legal de Cannabis de Confianza
 
-### ¿Qué Encontrarás en Nuestra Tienda?
+**Especialistas en productos para el cultivo y consumo de cannabis dentro del marco legal**
+
+---
+
+### Nuestra Visión  
+Ser el referente nacional en productos y asesoramiento para el cultivo y consumo de cannabis, fomentando una cultura responsable, sostenible y respetuosa con la normativa vigente.
+
+### Nuestra Misión  
+Ofrecer a nuestros clientes productos de la más alta calidad, garantizando siempre el pleno cumplimiento de las leyes y normativas locales, y brindar experiencia y soporte personalizados en cada paso de su proyecto.
+
+---
+
+### ¿Qué encontrarás en nuestra tienda?
+
 - **Semillas y Genéticas**  
   - Variedades feminizadas, autoflorecientes y regulares  
   - Genéticas de criadores nacionales e internacionales  
+  - Semillas de CBD y CBG de alta pureza  
+
 - **Sustratos y Fertilizantes**  
   - Tierra especializada, coco y mezclas orgánicas  
   - Nutrientes para fase de crecimiento y floración  
+  - Aditivos orgánicos y bioestimulantes  
+
 - **Sistemas de Cultivo**  
-  - Armarios de cultivo de diferentes tamaños  
-  - Sistemas hidropónicos completos  
-  - Lámparas LED de alta eficiencia  
-  - Ventilación, filtros y control de ambiente  
+  - Armarios y grow boxes de diferentes tamaños  
+  - Sistemas hidropónicos, aeropónicos y acuapónicos  
+  - Lámparas LED de alta eficiencia y espectro completo  
+  - Ventilación, filtros de carbono y control de ambiente  
+
 - **Productos de Consumo**  
-  - Flores seleccionadas con certificado de análisis (COA)  
-  - Aceites, extractos y resinas  
-  - Vaporizadores, bongs y accesorios para consumo responsable  
+  - Flores selectas con certificado de análisis (COA)  
+  - Aceites, extractos, resinas y concentrados  
+  - Vaporizadores, bongs, pipas y accesorios para consumo responsable  
+
 - **Tratamientos y Protectores**  
-  - Control biológico de plagas (trichodermas, nematodos)  
+  - Control biológico de plagas (Trichoderma, nematodos, ácaros beneficiosos)  
+  - Fungicidas y bactericidas ecológicos  
   - Estimuladores de raíces y potenciadores de floración  
   - Aditivos para mejorar aroma, sabor y rendimiento  
 
+---
+
 ### Calidad y Cumplimiento
+
 - **Calidad Garantizada**  
-  Garantizamos la pureza y potencia de todos nuestros productos mediante análisis periódicos en laboratorios homologados.
-- **Normativa Legal**  
-  Asesoramiento personalizado sobre la legislación vigente en tu comunidad autónoma y cumplimiento estricto de los límites legales de THC.
-- **Transparencia y Confianza**  
-  Etiquetado claro con toda la información de origen, composición y dosificación recomendada.
+  Realizamos análisis periódicos en laboratorios homologados para asegurar pureza, potencia y ausencia de contaminantes.
+
+- **Asesoramiento Legal**  
+  Información y acompañamiento sobre la legislación en tu comunidad autónoma, límites de THC y requisitos para autoconsumo.
+
+- **Transparencia Total**  
+  Etiquetado claro con origen, composición, dosis recomendada y fecha de análisis.
 
 ---
 
-### ¿Por Qué Elegirnos?
+### ¿Por qué elegirnos?
+
 1. **Experiencia y Profesionalidad**  
-   Más de 10 años en el sector del cultivo y consumo legal de cannabis.
-2. **Atención al Cliente**  
-   Soporte especializado para ayudarte a resolver cualquier duda técnica o legal.
+   Más de 10 años en el sector, colaborando con expertos y cultivadores reconocidos.  
+2. **Atención al Cliente 24/7**  
+   Soporte técnico y legal disponible en cualquier momento, por chat en vivo, teléfono o correo.  
 3. **Envío Discreto y Seguro**  
-   Empaques opacos y envío con seguimiento para tu total privacidad.
-   El envío te es 100% seguro ja que el envío lo hacen nuestros repartidores de nuestra misma empresa lo que nos garantiza un 100% de privacidad en tus datos ja que tus datos no pasan a terceros para el envío y de seguridad de llegada por que garantizamos el envío hasta la puerta de tu casa.
+   Embalaje opaco, reparto con personal propio y seguimiento en tiempo real.  
+4. **Formación y Comunidad**  
+   Acceso gratuito a tutoriales, guías paso a paso y webinars con especialistas.  
 
 ---
 
-**Visítanos** en nuestra tienda física o explora nuestro catálogo online y descubre todos los productos que necesitas para tu proyecto de cultivo o consumo de cannabis de forma 100% legal y segura.
+### Proceso de Compra
+
+1. **En la Web**  
+   - Consulta ficha detallada de cada producto.  
+   - Lee artículos y guías: cultivo indoor/outdoor, extracción de aceites, normas de seguridad.  
+   - Únete a nuestra comunidad en Discord directamente desde la web.  
+
+2. **En la App**  
+   - Descarga nuestra app (Android | iOS).  
+   - Inicia sesión y accede a tu carrito, historial de pedidos y seguimiento de envíos.  
+   - Recibe notificaciones de oferta, lanzamientos y consejos de cultivo.  
+
+3. **En Discord**  
+   - Foro de debate con usuarios y moderadores especializados.  
+   - Sección de soporte para reportar errores y sugerencias.  
+   - Canales dedicados a cultivo, técnicas de extracción, novedades de legislación.  
 
 ---
 
-### ¿Cómo se compra?
+### 🚀 Tecnología Utilizada
 
-1. **Web**  
-    En nuestra web podrás ver los beneficios del **CBD**, información sobre nuestros productos, tutoriales y videotutoriales de cómo funciona nuestra aplicación, podras tambien entrar a nuestra comunidad de Discord. También podrás descargarte el ejecutable de nuestra aplicación o contactarnos, y te ayudaremos en todo lo que podamos y un poco más de lo que podamos, si es que eso es posible. Y harémos todo lo posible e incluso lo imposible, si es que lo imposible es posible.
-
-2. **APP**  
-    Una vez en nuestra aplicación, solo tendrás que iniciar sesión y comprar. Gracias de nuestra funcion de carrito y poder ver todos nuestro productos en el apartado de productos.
-   
-3. **Comunidad Discord**
-   En nuestra Comunidad podras preguntar todo lo que quieras y te responderan la gente de nuestra comunidad podra responderte y tambien nuestros moduladores que estan para poder contestarte a todas las dudas. Tambien 
-
----
-### 🚀 Tecnología utilizada
-
-1. **HTML y CSS**  
-   Utilizadas para el diseño y estructura de la página web. 🎨
-
-2. **Java**  
-   Lenguaje principal para el desarrollo de la aplicación. ☕
-
+1. **HTML5, CSS3, JavaScript (React)**  
+2. **Java (Spring Boot)**  
 3. **MySQL**  
-   Base de datos utilizada para almacenar y gestionar la información del proyecto. 🗄️
-
 4. **Docker**  
-   Usado para contenerizar y gestionar la base de datos de forma eficiente. 🐳
-
-5. **Raspberry Pi**  
-   Utilizada como servidor físico para el despliegue del proyecto. 🍓🖥️
-
-6. **Git**  
-   Sistema de control de versiones que nos permite trabajar en equipo de manera organizada. 🛠️
+5. **Raspberry Pi (cluster H₂Zero)**  
+6. **Git + GitHub Actions (CI/CD)**  
 
 ---
 
 ### 📄 Licencia
 
-**Licencia:** GPL (General Public License) 🔓
+Este proyecto se publica bajo licencia **GPL (General Public License)**.
 
 ---
 
-### 👨‍💻 Creadores
+### 📌 Preguntas Frecuentes (FAQ)
 
-Los **creadores** de este **proyecto** son:
+**¿Puedo comprar semillas si vivo en…?**  
+Sí, siempre que la legislación autonómica lo permita. Consulta tu normativa local o contacta con nuestro equipo.
 
-- Andreu Rosell  
-- Joaquín Tena  
-- Borja Carreres  
-- Mario Mas  
-- Ignacio Piles
+**¿Cuál es el plazo de entrega?**  
+En península 24–48 h; Baleares 48–72 h; Canarias y Ceuta/Melilla 3–5 días hábiles.
+
+**¿Métodos de pago?**  
+Tarjeta, PayPal, transferencia bancaria y criptomonedas (Bitcoin, Ethereum).
+
+**¿Qué garantía ofrecen?**  
+Si tu pedido llega dañado o no conforme, podrás solicitar cambio o devolución íntegra hasta 14 días tras la recepción.
+
+---
+
+### 👨‍💻 Equipo de Desarrollo
+
+- **Andreu Rosell** – Arquitectura y Backend  
+- **Joaquín Tena** – Frontend y UX/UI  
+- **Borja Carreres** – DevOps y Contenerización  
+- **Mario Mas** – Base de Datos y Integraciones  
+- **Ignacio Piles** – QA, Pruebas y Documentación  
+
+---
+
+**Visítanos** en nuestra tienda física u **explora** el catálogo online. ¡Empieza hoy tu proyecto de cultivo o consumo responsable, 100 % legal y seguro!
