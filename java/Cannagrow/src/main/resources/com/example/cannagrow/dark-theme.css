@@ -1,0 +1,54 @@
+/* Estilo general para el fondo y texto */
+.root {
+    -fx-background-color: #1f1f1f;
+    -fx-text-fill: white;
+}
+
+/* Estilo para los campos de texto */
+.text-field {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #bbbbbb;
+    -fx-border-color: #444444;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+/* Estilo para los botones */
+.button {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: white;
+    -fx-border-color: #555555;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+/* Estilo para la tabla */
+.table-view {
+    -fx-background-color: #1f1f1f;
+    -fx-table-cell-border-color: #444444;
+    -fx-control-inner-background: #1f1f1f;
+    -fx-text-fill: white;
+}
+
+/* Estilo para las filas de la tabla */
+.table-row-cell {
+    -fx-background-color: #1f1f1f;
+    -fx-text-fill: white;
+}
+
+/* Estilo para las celdas de la tabla */
+.table-cell {
+    -fx-background-color: #1f1f1f;
+    -fx-text-fill: white;
+}
+
+/* Estilo para los encabezados de las columnas */
+.table-view .column-header-background {
+    -fx-background-color: #2a2a2a;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

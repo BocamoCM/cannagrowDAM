@@ -2,6 +2,7 @@ package com.example.cannagrow;
 
 import com.example.model.Producto;
 import com.example.model.ProductoModel;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -73,9 +74,7 @@ public class AdminProductosController {
     private ObservableList<Producto> productosObservable;
 
     /**
-     * Inicializa el controlador de administración de productos.
-     * Configura las columnas de la tabla, carga los productos iniciales y
-     * establece los listeners para la selección de productos.
+        COSITAS
      */
     @FXML
     public void initialize() {
@@ -88,7 +87,10 @@ public class AdminProductosController {
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
         colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
 
+
+
         cargarProductos();
+
 
         // Listener para seleccionar un producto de la tabla y mostrar datos en campos
         tablaProductos.getSelectionModel().selectedItemProperty().addListener((obs, viejo, nuevo) -> {
@@ -97,6 +99,7 @@ public class AdminProductosController {
             }
         });
     }
+
 
     /**
      * Carga todos los productos desde la base de datos y los muestra en la tabla.
@@ -107,6 +110,27 @@ public class AdminProductosController {
         List<Producto> productos = ProductoModel.obtenerTodos();
         productosObservable = FXCollections.observableArrayList(productos);
         tablaProductos.setItems(productosObservable);
+    }
+
+    /**
+     * Configura el estilo de celda para una columna específica.
+     * @param <T> El tipo de dato de la columna
+     * @param column La columna a configurar
+     * @param style El estilo CSS a aplicar
+     */
+    private <T> void configurarEstiloCelda(TableColumn<Producto, T> column, String style) {
+        column.setCellFactory(col -> new TableCell<Producto, T>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                }
+                setStyle(style);
+            }
+        });
     }
 
     /**
