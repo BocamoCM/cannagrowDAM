@@ -155,6 +155,8 @@ public class AdminPedidosController implements Initializable {
         // Configurar paginación basada en scroll
         configurarPaginacion();
 
+
+
         // Ocultar el panel de detalles al inicio
         detallesPedidoPane.setVisible(false);
 
@@ -164,6 +166,23 @@ public class AdminPedidosController implements Initializable {
 
         // Cargar pedidos iniciales de forma asíncrona
         cargarPedidosIniciales();
+        configurarEstiloEncabezados();
+    }
+
+    /**
+     * Configura el estilo de los encabezados de columna
+     * para que muestren texto blanco sobre el fondo oscuro.
+     */
+    private void configurarEstiloEncabezados() {
+        // Aplicar estilo a los encabezados de columnas de la tabla principal
+        for (TableColumn<?, ?> column : pedidosTableView.getColumns()) {
+            column.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+        }
+
+        // Aplicar estilo a los encabezados de columnas de la tabla de detalles
+        for (TableColumn<?, ?> column : detallesTableView.getColumns()) {
+            column.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+        }
     }
 
     /**
@@ -190,11 +209,22 @@ public class AdminPedidosController implements Initializable {
         // Configurar las columnas de la tabla
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
+        // Estilo para la columna de ID
+        idColumn.setCellFactory(column -> new TableCell<Pedido, Integer>() {
+            @Override
+            protected void updateItem(Integer id, boolean empty) {
+                super.updateItem(id, empty);
+                this.setStyle("-fx-text-fill: white;");
+                setText(empty ? null : id.toString());
+            }
+        });
+
         fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         fechaColumn.setCellFactory(column -> new TableCell<Pedido, Date>() {
             @Override
             protected void updateItem(Date fecha, boolean empty) {
                 super.updateItem(fecha, empty);
+                this.setStyle("-fx-text-fill: white;");
                 if (empty || fecha == null) {
                     setText(null);
                 } else {
@@ -211,11 +241,22 @@ public class AdminPedidosController implements Initializable {
             return new SimpleStringProperty(nombreCliente);
         });
 
+        // Estilo para la columna de cliente
+        clienteColumn.setCellFactory(column -> new TableCell<Pedido, String>() {
+            @Override
+            protected void updateItem(String cliente, boolean empty) {
+                super.updateItem(cliente, empty);
+                this.setStyle("-fx-text-fill: white;");
+                setText(empty ? null : cliente);
+            }
+        });
+
         totalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
         totalColumn.setCellFactory(column -> new TableCell<Pedido, Float>() {
             @Override
             protected void updateItem(Float total, boolean empty) {
                 super.updateItem(total, empty);
+                this.setStyle("-fx-text-fill: white;");
                 if (empty || total == null) {
                     setText(null);
                 } else {
@@ -231,7 +272,7 @@ public class AdminPedidosController implements Initializable {
                 super.updateItem(estado, empty);
                 if (empty || estado == null) {
                     setText(null);
-                    setStyle("");
+                    setStyle("-fx-text-fill: white;");
                 } else {
                     setText(estado.getEstado());
                     // Asignar colores según el estado
@@ -240,16 +281,16 @@ public class AdminPedidosController implements Initializable {
                             setStyle("-fx-text-fill: orange;");
                             break;
                         case ENVIADO:
-                            setStyle("-fx-text-fill: blue;");
+                            setStyle("-fx-text-fill: #38b6ff;"); // Azul más claro para mejor contraste
                             break;
                         case ENTREGADO:
-                            setStyle("-fx-text-fill: green;");
+                            setStyle("-fx-text-fill: #5cff5c;"); // Verde más claro para mejor contraste
                             break;
                         case CANCELADO:
-                            setStyle("-fx-text-fill: red;");
+                            setStyle("-fx-text-fill: #ff6b6b;"); // Rojo más claro para mejor contraste
                             break;
                         default:
-                            setStyle("");
+                            setStyle("-fx-text-fill: white;");
                             break;
                     }
                 }
@@ -257,6 +298,14 @@ public class AdminPedidosController implements Initializable {
         });
 
         vehiculoColumn.setCellValueFactory(new PropertyValueFactory<>("vehiculoMatricula"));
+        vehiculoColumn.setCellFactory(column -> new TableCell<Pedido, String>() {
+            @Override
+            protected void updateItem(String vehiculo, boolean empty) {
+                super.updateItem(vehiculo, empty);
+                this.setStyle("-fx-text-fill: white;");
+                setText(empty ? null : vehiculo);
+            }
+        });
 
         // Configurar la columna de acciones con botones
         configurarColumnaBotones();
@@ -267,6 +316,13 @@ public class AdminPedidosController implements Initializable {
         // Optimización: configurar prefetch de 20 filas para mejorar rendimiento de scroll
         pedidosTableView.setFixedCellSize(40); // Altura fija para cada celda
         pedidosTableView.setCache(true); // Activar cache para mejorar rendimiento
+
+        // Establecer estilo para las filas
+        pedidosTableView.setRowFactory(tv -> {
+            TableRow<Pedido> row = new TableRow<>();
+            row.setStyle("-fx-background-color: #1f1f1f;");
+            return row;
+        });
     }
 
     /**
@@ -290,11 +346,14 @@ public class AdminPedidosController implements Initializable {
                         });
 
                         pane.getChildren().add(verDetallesBtn);
+                        // Establecer el fondo del contenedor de botones para que coincida con la tabla
+                        pane.setStyle("-fx-background-color: transparent;");
                     }
 
                     @Override
                     public void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
+                        this.setStyle("-fx-background-color: #1f1f1f;");
                         if (empty) {
                             setGraphic(null);
                         } else {
@@ -373,13 +432,31 @@ public class AdminPedidosController implements Initializable {
             return new SimpleStringProperty(producto != null ? producto.getNombre() : "");
         });
 
+        productoColumn.setCellFactory(column -> new TableCell<DetallePedido, String>() {
+            @Override
+            protected void updateItem(String producto, boolean empty) {
+                super.updateItem(producto, empty);
+                this.setStyle("-fx-text-fill: white;");
+                setText(empty ? null : producto);
+            }
+        });
+
         cantidadColumn.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+        cantidadColumn.setCellFactory(column -> new TableCell<DetallePedido, Integer>() {
+            @Override
+            protected void updateItem(Integer cantidad, boolean empty) {
+                super.updateItem(cantidad, empty);
+                this.setStyle("-fx-text-fill: white;");
+                setText(empty ? null : cantidad.toString());
+            }
+        });
 
         precioColumn.setCellValueFactory(new PropertyValueFactory<>("precioUnitario"));
         precioColumn.setCellFactory(column -> new TableCell<DetallePedido, Float>() {
             @Override
             protected void updateItem(Float precio, boolean empty) {
                 super.updateItem(precio, empty);
+                this.setStyle("-fx-text-fill: white;");
                 if (empty || precio == null) {
                     setText(null);
                 } else {
@@ -393,6 +470,7 @@ public class AdminPedidosController implements Initializable {
             @Override
             protected void updateItem(Float subtotal, boolean empty) {
                 super.updateItem(subtotal, empty);
+                this.setStyle("-fx-text-fill: white;");
                 if (empty || subtotal == null) {
                     setText(null);
                 } else {
@@ -402,6 +480,13 @@ public class AdminPedidosController implements Initializable {
         });
 
         detallesTableView.setItems(listaDetalles);
+
+        // Establecer estilo para las filas de la tabla de detalles
+        detallesTableView.setRowFactory(tv -> {
+            TableRow<DetallePedido> row = new TableRow<>();
+            row.setStyle("-fx-background-color: #1f1f1f;");
+            return row;
+        });
     }
 
     /**

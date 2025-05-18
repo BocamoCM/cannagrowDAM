@@ -33,9 +33,9 @@
     </HBox>
 
     <!-- Tabla principal de pedidos -->
-    <TableView fx:id="pedidosTableView" VBox.vgrow="ALWAYS">
+    <TableView fx:id="pedidosTableView" VBox.vgrow="ALWAYS" style="-fx-background-color: #1f1f1f;">
         <columns>
-            <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="idColumn" text="ID" style="-fx-text-fill: white;" prefWidth="60"/>
             <TableColumn fx:id="fechaColumn" text="Fecha" prefWidth="150"/>
             <TableColumn fx:id="clienteColumn" text="Cliente" prefWidth="150"/>
             <TableColumn fx:id="totalColumn" text="Total" prefWidth="100"/>
@@ -56,7 +56,7 @@
                     style="-fx-background-color: #d32f2f; -fx-text-fill: white;"/>
         </HBox>
 
-        <TableView fx:id="detallesTableView" prefHeight="200">
+        <TableView fx:id="detallesTableView" prefHeight="200" style="-fx-background-color: #1f1f1f;">
             <columns>
                 <TableColumn fx:id="productoColumn" text="Producto" prefWidth="200"/>
                 <TableColumn fx:id="cantidadColumn" text="Cantidad" prefWidth="100"/>
@@ -66,7 +66,7 @@
         </TableView>
 
         <!-- Panel para cambiar estado del pedido -->
-        <HBox spacing="10" alignment="CENTER_LEFT">
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #1f1f1f;">
             <Label text="Cambiar estado:" style="-fx-text-fill: white;"/>
             <ComboBox fx:id="cambioEstadoComboBox" prefWidth="150"/>
             <Button text="Actualizar estado" fx:id="btnCambiarEstado"
