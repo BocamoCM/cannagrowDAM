@@ -130,7 +130,7 @@ body {
 .carousel-item {
   opacity: 0;
   transform: translateX(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transition: opacity 1s ease, transform 1s ease;
 }
 
 .carousel-item.active {
