@@ -105,11 +105,6 @@ Etiquetado completo y detallado con origen, composición exacta, dosis recomenda
 - Centro de conocimiento con guías especializadas
 - Comunidad activa con expertos y usuarios
 
-### Aplicación Móvil
-- Disponible para Android e iOS
-- Gestión completa de pedidos y preferencias
-- Notificaciones personalizadas de ofertas y lanzamientos
-
 ### Comunidad Discord
 - Foros temáticos moderados por especialistas
 - Soporte técnico en tiempo real
