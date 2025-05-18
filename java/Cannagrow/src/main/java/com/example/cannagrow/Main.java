@@ -50,7 +50,7 @@ public class Main extends Application {
                 System.err.println("Error al cargar el CSS: " + e.getMessage());
             }
 
-            stage.setTitle("Cannagroww");
+            stage.setTitle("Cannagrow");
 
             // Cargar el icono
             try {
