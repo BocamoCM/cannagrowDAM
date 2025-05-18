@@ -370,3 +370,33 @@ body {
 .footer-social a:hover {
   color: white;
 }
+
+/* Media Queries */
+@media (max-width: 992px) {
+  .hero {
+    min-height: auto;
+    padding: 3rem 1rem;
+  }
+  .overlay {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  #benefits .col-md-4,
+  #products .col-md-4 {
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero h1 {
+    font-size: 1.75rem;
+  }
+  .btn-ver-productos {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
