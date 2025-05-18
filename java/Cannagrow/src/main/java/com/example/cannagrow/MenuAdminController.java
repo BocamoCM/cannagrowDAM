@@ -273,7 +273,7 @@ public class MenuAdminController {
 
             // Implementación para cargar la vista de registro de usuarios
             if (registroPaneCache == null) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/registro-usuario.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cannagrow/registro.fxml"));
                 registroPaneCache = loader.load();
             }
 
