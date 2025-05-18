@@ -4,6 +4,7 @@
 [![Semillas y Genéticas](https://img.shields.io/badge/Semillas%20y%20Gen%C3%A9ticas-Feminizadas%20%7C%20Autoflorecientes-green)](#)  
 [![Sistemas de Cultivo](https://img.shields.io/badge/Sistemas%20de%20Cultivo-HIDRO%20%7C%20LED%20%7C%20Ventilaci%C3%B3n-blue)](#)  
 [![Productos de Consumo](https://img.shields.io/badge/Productos%20de%20Consumo-COA%20Certificado%20%7C%20Accesorios-orange)](#)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/BocamoCMFlorida/cannagrowDAM)
 
 ---
 
