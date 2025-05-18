@@ -297,6 +297,11 @@ body {
   color: white;
 }
 
+.contact-section spline-viewer {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
 .contact-section input,
 .contact-section textarea {
   border-radius: 0.5rem;
