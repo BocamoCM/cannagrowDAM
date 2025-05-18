@@ -115,10 +115,10 @@ Etiquetado completo y detallado con origen, composición exacta, dosis recomenda
 ## 🚀 Stack Tecnológico
 
 ```
-Frontend: HTML5, CSS3, JavaScript (React)
-Backend: Java (Spring Boot)
+Frontend: HTML5, CSS3, Bootstap
+Backend: Java 
 Base de Datos: MySQL
-Infraestructura: Docker + Raspberry Pi (cluster H₂Zero)
+Infraestructura: Docker + Raspberry Pi 
 CI/CD: Git + GitHub Actions
 ```
 
