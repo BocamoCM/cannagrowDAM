@@ -34,16 +34,16 @@
                 </font>
             </Label>
 
-            <TextField fx:id="nombreField" maxWidth="250" promptText="Nombre" style="-fx-background-radius: 10; -fx-padding: 10;" />
+            <TextField fx:id="nombreField" maxWidth="250" promptText="Nombre" style="-fx-background-radius: 10; -fx-padding: 10;" stylesheets="@dark-theme.css" />
 
-            <TextField fx:id="emailField" maxWidth="250" promptText="Correo electrónico" style="-fx-background-radius: 10; -fx-padding: 10;" />
+            <TextField fx:id="emailField" maxWidth="250" promptText="Correo electrónico" style="-fx-background-radius: 10; -fx-padding: 10;" stylesheets="@dark-theme.css" />
 
-            <PasswordField fx:id="passwordField" maxWidth="250" promptText="Contraseña" style="-fx-background-radius: 10; -fx-padding: 10;" />
+            <PasswordField fx:id="passwordField" maxWidth="250" promptText="Contraseña" style="-fx-background-radius: 10; -fx-padding: 10;" stylesheets="@dark-theme.css" />
 
-            <PasswordField fx:id="confirmPasswordField" maxWidth="250" promptText="Confirmar contraseña" style="-fx-background-radius: 10; -fx-padding: 10;" />
-            <TextField fx:id="discordIdField" maxWidth="250" promptText="Discord ID" style="-fx-background-radius: 10; -fx-padding: 10;" />
+            <PasswordField fx:id="confirmPasswordField" maxWidth="250" promptText="Confirmar contraseña" style="-fx-background-radius: 10; -fx-padding: 10;" stylesheets="@dark-theme.css" />
+            <TextField fx:id="discordIdField" maxWidth="250" promptText="Discord ID" style="-fx-background-radius: 10; -fx-padding: 10;" stylesheets="@dark-theme.css" />
 
-            <DatePicker fx:id="fechaNacimientoPicker" maxWidth="250" promptText="Fecha de nacimiento" style="-fx-background-radius: 10; -fx-padding: 10;" />
+            <DatePicker fx:id="fechaNacimientoPicker" maxWidth="250" promptText="Fecha de nacimiento" style="-fx-background-radius: 10; -fx-padding: 10;" stylesheets="@dark-theme.css" />
 
             <!-- Corrección del campo Discord -->
 
