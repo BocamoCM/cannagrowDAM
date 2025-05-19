@@ -3,11 +3,12 @@ name: Build and Package Cannagrow
 on:
   workflow_dispatch:
     branches:
-      - java  # <- Solo se ejecuta si el workflow se lanza desde la rama 'java'
+      - java
 
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -34,15 +35,20 @@ jobs:
       - name: Create executable with jpackage
         run: |
           $jmodsPath = Get-ChildItem -Path "./jmods" -Directory | Select-Object -ExpandProperty FullName
-          jlink --add-modules java.base,java.desktop,java.logging,java.sql,java.naming,javafx.controls,javafx.fxml `
-                --module-path "$jmodsPath" `
-                --output runtime `
-                --strip-debug --no-header-files --no-man-pages --compress=2
+          
+          # Incluye los módulos necesarios para HTTPS
+          jlink --add-modules `
+            java.base,java.desktop,java.logging,java.sql,java.naming,javafx.controls,javafx.fxml,java.net.http,jdk.crypto.ec `
+            --module-path "$jmodsPath" `
+            --output runtime `
+            --strip-debug --no-header-files --no-man-pages --compress=2
+
           $jar = Get-ChildItem -Path "./target" -Filter "*with-dependencies*.jar" | Select-Object -First 1
           if (-not $jar) {
             Write-Host "No se encontró el JAR con dependencias. Abortando."
             exit 1
           }
+
           jpackage --input ./target `
                    --name CannagrowApp `
                    --main-jar $jar.Name `
