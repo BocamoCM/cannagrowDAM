@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  # Servicio de MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: tienda
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-db:/docker-entrypoint-initdb.d
+    networks:
+      - app_network
+
+  # Servicio de Python
+  python:
+    build:
+      context: ./python_app
+    container_name: python_container
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: tienda
+      DISCORD_WEBHOOK_URL: "https://discord.com/api/webhooks/1369565431265890334/sWKBOQrAK-2y1TmdCz8amlEI_FSDCk8pwLjyXINEPU4-kXUkt30YYmcD9FViSxN53ROV"
+      CHECK_INTERVAL: 300 # Intervalo en segundos para verificar nuevos pedidos
+    volumes:
+      - ./python_app:/app
+    networks:
+      - app_network
+
+  # Servicio de Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_container
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/html:/usr/share/nginx/html
+    depends_on:
+      - python
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
