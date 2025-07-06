@@ -237,7 +237,7 @@ public class AdminPedidosController implements Initializable {
                     // Asignar colores según el estado
                     switch (estado) {
                         case PENDIENTE:
-                            setStyle("-fx-text-fill: orange;");
+                            setStyle("-fx-text-fill: brown;");
                             break;
                         case ENVIADO:
                             setStyle("-fx-text-fill: blue;");
