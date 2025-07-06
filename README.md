@@ -21,7 +21,7 @@
 ## 🔍 Quiénes Somos
 
 ### Nuestra Visión
-> Ser el referente nacional en productos y asesoramiento para el cultivo y consumo de cannabis, fomentando una cultura responsable, sostenible y respetuosa con la normativa vigente.
+> Ser  referentes nacional en productos y asesoramiento para el cultivo y consumo de cannabis, fomentando una cultura responsable, sostenible y respetuosa con la normativa vigente.
 
 ### Nuestra Misión
 > Ofrecer a nuestros cliente productos de la más alta calidad, garantizando siempre el pleno cumplimiento de las leyes y normativas locales, y brindar experiencia y soporte personalizados en cada paso de su proyecto.
