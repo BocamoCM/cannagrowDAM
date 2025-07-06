@@ -11,7 +11,7 @@
 .button {
     -fx-background-color: #388e3c;
     -fx-text-fill: white;
-    -fx-background-radius: 4px;
+    -fx-background-radius: 2px;
     -fx-padding: 8px 15px;
     -fx-cursor: hand;
 }
