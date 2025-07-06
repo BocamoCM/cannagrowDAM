@@ -13,7 +13,7 @@
 </div>
 
 <p align="center">
-<strong>Especialistas en productos para el cultivo y consumo de cannabis dentro del marco legal</strong>
+<strong>Especialista en productos para el cultivo y consumo de cannabis dentro del marco legal</strong>
 </p>
 
 ---
